@@ -32,6 +32,8 @@ Os SVGs editáveis estão na mesma pasta. As ilustrações são projeções de m
 
 As imagens no texto usam URLs públicas do GitHub e são independentes da galeria de anexos do catálogo. As estimativas de impressão e desempenho não são anunciadas como garantias.
 
+Em **18/11/2026**, a descrição bilíngue foi aplicada e salva no OrcaCloud. A página confirmou a atualização, e as oito imagens foram verificadas carregadas com resolução original de 1600 × 900. Nome, versão 1.1.1, wheel e os três anexos existentes foram preservados. Os links públicos das oito artes também passaram pela comparação de conteúdo com os arquivos locais.
+
 ## Reproduzir
 
 Com Python 3.12+, NumPy e ferramentas locais de autoria Node.js/Playwright/Chromium:
