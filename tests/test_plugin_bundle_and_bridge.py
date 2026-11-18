@@ -1060,6 +1060,7 @@ class TestPluginBundleAndBridge(unittest.TestCase):
                             [node_bin, "--check", str(js_file)],
                             capture_output=True,
                             text=True,
+                            encoding="utf-8",
                             timeout=15,
                         )
                         self.assertEqual(
@@ -1484,6 +1485,7 @@ console.log(JSON.stringify({ ok: true, evaluator: evaluator.name + ' [' + evalua
             [node_bin, str(runner_path), str(ui_js_path), str(payload_path)],
             capture_output=True,
             text=True,
+            encoding="utf-8",
             timeout=20,
         )
         self.assertEqual(
@@ -1969,6 +1971,7 @@ console.log(JSON.stringify({ ok: true, evaluator: evaluator.name + ' [' + evalua
             env=clean_env,
             capture_output=True,
             text=True,
+            encoding="utf-8",
             timeout=20,
         )
         self.assertEqual(proc.returncode, 0, f"Isolated bundle load failed:\n{proc.stderr}")
@@ -2402,6 +2405,7 @@ console.log(JSON.stringify({
                 [node_bin, str(runner_js), str(ui_js_path)],
                 capture_output=True,
                 text=True,
+                encoding="utf-8",
                 timeout=15,
             )
             self.assertEqual(proc.returncode, 0, f"Node printer sync runner failed:\n{proc.stderr}")
@@ -2608,7 +2612,13 @@ console.log(JSON.stringify({ bootLight, switchedDark }));
         probe_runner.write_text(theme_probe_js, encoding="utf-8")
         node_bin = shutil.which("node")
         if node_bin:
-            proc = subprocess.run([node_bin, str(probe_runner), str(ui_js_path)], capture_output=True, text=True, timeout=15)
+            proc = subprocess.run(
+                [node_bin, str(probe_runner), str(ui_js_path)],
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                timeout=15,
+            )
             self.assertEqual(proc.returncode, 0, proc.stderr)
             theme_out = json.loads(proc.stdout.strip().splitlines()[-1])
             self.assertEqual(theme_out["bootLight"], "light")

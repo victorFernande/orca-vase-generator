@@ -10,6 +10,9 @@ on:
 permissions:
   contents: write
 
+env:
+  PYTHONUTF8: "1"
+
 jobs:
   test-cross-platform:
     name: Test & Verify (${{ matrix.os }})
