@@ -86,6 +86,7 @@ O **Orca Vase Studio (`orca-vase-studio` v1.1.1)** é um plugin nativo em Python
 | [**`docs/MANUAL_EN.md`**](docs/MANUAL_EN.md) | Complete Quick User Manual in English (Installation, 2D Curve, Textures, X-Ray/Z-Slice, Hollow vs. Spiral, Drainage & 1-Click Plater). |
 | [**`docs/MANUAL_PT-BR.md`**](docs/MANUAL_PT-BR.md) | Mini Manual de Uso completo em Português (Instalação, Curva 2D, Texturas, Raio-X/Fatia Z, Vaso Oco vs. Espiral, Drenagem e Envio à Mesa). |
 | [**`docs/COMMUNITY_LISTING.md`**](docs/COMMUNITY_LISTING.md) | Ready-to-paste PT-BR & EN Marketplace descriptions, Reddit/Discord/MakerWorld announcements, GitHub Topics, and step-by-step release checklist. |
+| [**`docs/orcacloud/README.md`**](docs/orcacloud/README.md) | Illustrated PT/EN OrcaCloud presentation, eight 1600×900 banners, and ready-to-paste bilingual description. |
 
 ---
 
