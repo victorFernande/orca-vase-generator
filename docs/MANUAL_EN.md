@@ -1,4 +1,4 @@
-# Quick User Manual — Orca Vase Studio (`v1.2.0`)
+# Quick User Manual — Orca Vase Studio (`v1.3.0`)
 
 The language selector in the header offers Português, English, Español, Italiano, Français, Deutsch and 日本語. Your choice is saved and synchronized between page and dock; see [languages and optimization](MULTILINGUAL_AND_PERFORMANCE.md).
 
@@ -55,7 +55,20 @@ Inside **Silhouette & 2D Curve**, choose your preferred sculpting workflow:
 
 ---
 
-## 4. Customizing Texture Dimensions (4 Combinable Layers)
+## 4. Customizing Texture Dimensions (Combinable Layers)
+
+**Geometric Relief:** expand this new layer to choose diamonds, leaf scales,
+crater cells, folded petals, spiral bloom, ripple rings or coral. Adjust depth,
+columns, rows, twist and independent bottom/middle/top strength. Disable the
+other effects to isolate the pattern or combine the layers. See the
+[controls, limits and tests](GEOMETRIC_PATTERNS.md).
+
+**Folded Petals** builds curled ribbons around a round hollow cup. Adjust
+width, thickness, curl, overlap, stretch and stagger; select Draft, Normal,
+Fine or Adaptive quality. Fine is the final default. Spiral mode and other
+textures are unavailable for this style. Inspect the overlapping solids in
+the sliced preview; the estimate includes overlap volume.
+
 
 You can enable **any single texture or stack all four simultaneously** — radial displacements are summed in exact millimeters with `< 1e-12 mm` parity between the WebGL2 preview and the exported 2-manifold mesh!
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 import copy
 import math
 from typing import Any
+from .geometric_patterns import GEOMETRIC_DEFAULTS, GEOMETRIC_PATTERNS
 
 SCHEMA_VERSION = "1.0"
 
@@ -39,6 +40,7 @@ DEFAULT_PARAMS: dict[str, Any] = {
 
     # Combinable Surface Texture Layers (summed radial displacement in mm)
     "textures": {
+        "geometric": copy.deepcopy(GEOMETRIC_DEFAULTS),
         "ribbed": {
             "enabled": False,
             "depth_mm": 2.6,         # [-15.0, 15.0]
@@ -304,6 +306,31 @@ def normalize_params(raw: dict[str, Any] | None) -> dict[str, Any]:
     out["bottom_thickness_mm"] = _to_float(out["bottom_thickness_mm"], d["bottom_thickness_mm"], 1.0, 25.0)
     out["auto_clamp_overhang"] = _to_bool(out["auto_clamp_overhang"], d["auto_clamp_overhang"])
     out["max_safe_overhang_deg"] = _to_float(out["max_safe_overhang_deg"], d["max_safe_overhang_deg"], 35.0, 65.0)
+
+    geo = tex["geometric"]
+    geo["enabled"] = _to_bool(geo["enabled"], False)
+    if geo["pattern"] not in GEOMETRIC_PATTERNS:
+        geo["pattern"] = GEOMETRIC_DEFAULTS["pattern"]
+    geo["depth_mm"] = _to_float(geo["depth_mm"], 3.0, -8.0, 8.0)
+    geo["cells_around"] = _to_int(geo["cells_around"], 14, 3, 36)
+    geo["cells_vertical"] = _to_int(geo["cells_vertical"], 10, 2, 24)
+    geo["twist_deg"] = _to_float(geo["twist_deg"], 0.0, -720.0, 720.0)
+    geo["phase_deg"] = _to_float(geo["phase_deg"], 0.0, 0.0, 360.0)
+    for zone in ("bottom", "middle", "top"):
+        key = "strength_" + zone
+        geo[key] = _to_float(geo[key], 1.0, 0.0, 2.0)
+    for key, low, high in (("ribbon_width_mm", 8, 80), ("ribbon_thickness_mm", 0.4, 4),
+                          ("ribbon_curl_deg", 180, 430), ("ribbon_overlap_mm", 0, 4),
+                          ("ribbon_stretch_pct", 0, 25), ("ribbon_stagger", 0, 1),
+                          ("ribbon_nozzle_mm", 0.2, 1.2)):
+        geo[key] = _to_float(geo[key], GEOMETRIC_DEFAULTS[key], low, high)
+    if geo["ribbon_quality"] not in ("draft", "normal", "fine", "adaptive"):
+        geo["ribbon_quality"] = "fine"
+    if geo["enabled"] and geo["pattern"] == "folded_petals":
+        out["print_mode"] = "shelled_hollow"
+        out["polygon_sides"] = 0
+        for layer in ("ribbed", "waves", "origami", "cellular"):
+            tex[layer]["enabled"] = False
 
     # Drainage
     dr = out["drainage"]

@@ -120,6 +120,11 @@ UI_MESSAGES = {'btn_surprise': 'Surprise Me',
  'btn_off': 'Off'}
 
 
+UI_MESSAGES.update({'tex_geometric': 'Geometric Relief', 'lbl_geometric_pattern': 'Sidewall Pattern', 'pattern_diamond': 'Diamond Facets', 'pattern_leaf_scales': 'Leaf Scales', 'pattern_crater_cells': 'Crater Cells', 'pattern_folded_petals': 'Folded Petals', 'pattern_spiral_bloom': 'Spiral Bloom', 'pattern_ripple': 'Ripple Rings', 'pattern_coral': 'Coral Lattice', 'hint_geometric': 'Relief is part of the wall. Combine layers or disable other textures for a clean pattern.'})
+
+UI_MESSAGES.update({'lbl_ribbon_quality': 'Ribbon Quality', 'quality_draft': 'Draft', 'quality_normal': 'Normal', 'quality_fine': 'Fine', 'quality_adaptive': 'Adaptive', 'hint_ribbons': 'Round hollow cup with closed overlapping ribbons. Check the sliced result. Spiral mode and other textures are unavailable.'})
+
+
 def discovered_language_packs() -> dict:
     return load_language_packs()[0]
 

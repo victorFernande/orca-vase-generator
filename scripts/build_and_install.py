@@ -39,7 +39,9 @@ ICON_SRC_PATH = SRC_PKG_DIR / "icon.svg"
 MODULE_ORDER: list[str] = [
     "language_packs.py",
     "locale_catalog.py",
+    "geometric_patterns.py",
     "schema.py",
+    "ribbon_geometry.py",
     "mesh_generator.py",
     "printability.py",
     "exporters.py",
@@ -48,7 +50,7 @@ MODULE_ORDER: list[str] = [
     "plugin_main.py",
 ]
 
-DEFAULT_PLUGIN_VERSION = "1.2.0"
+DEFAULT_PLUGIN_VERSION = "1.3.0"
 PLUGIN_VERSION = os.environ.get("ORCA_PLUGIN_VERSION", "").strip().lstrip("v") or DEFAULT_PLUGIN_VERSION
 
 PEP723_HEADER = f"""\

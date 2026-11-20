@@ -16,6 +16,8 @@ from typing import Any
 from html import escape as _escape_language_label
 from .locale_catalog import locale_payload, discovered_language_packs
 from .language_packs import resolve_language
+from .geometric_patterns import GEOMETRIC_JS
+from .ribbon_geometry import RIBBON_JS
 
 if "DEFAULT_PARAMS" not in globals():
     try:
@@ -1719,6 +1721,50 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
           </div>
 
           <!-- 1. Ribbed / Canelado (collapsed by default so Wall + Textures fit above the fold) -->
+          <div class="tex-card" data-tex-card="geometric">
+            <div class="tex-head" data-tex-toggle-expand="geometric">
+              <div class="tex-title-wrap"><span class="tex-chevron">▶</span> <span data-i18n="tex_geometric">Geometric Relief</span></div>
+              <label class="toggle-switch" onclick="event.stopPropagation();"><input id="chk-tex-geometric" type="checkbox" /><span class="toggle-track"></span></label>
+            </div>
+            <div class="tex-body">
+              <label class="ctrl-label" for="sel-geometric-pattern" data-i18n="lbl_geometric_pattern">Sidewall Pattern</label>
+              <select id="sel-geometric-pattern" class="vp-select">
+                <option value="diamond" data-i18n="pattern_diamond">Diamond Facets</option>
+                <option value="leaf_scales" data-i18n="pattern_leaf_scales">Leaf Scales</option>
+                <option value="crater_cells" data-i18n="pattern_crater_cells">Crater Cells</option>
+                <option value="folded_petals" data-i18n="pattern_folded_petals">Folded Petals</option>
+                <option value="spiral_bloom" data-i18n="pattern_spiral_bloom">Spiral Bloom</option>
+                <option value="ripple" data-i18n="pattern_ripple">Ripple Rings</option>
+                <option value="coral" data-i18n="pattern_coral">Coral Lattice</option>
+              </select>
+              <div data-slider="textures.geometric.depth_mm"></div>
+              <div data-slider="textures.geometric.cells_around"></div>
+              <div data-slider="textures.geometric.cells_vertical"></div>
+              <div data-slider="textures.geometric.twist_deg"></div>
+              <div data-slider="textures.geometric.phase_deg"></div>
+              <div id="box-ribbon-opts" style="display:none;flex-direction:column;gap:6px;">
+                <label for="sel-ribbon-quality" class="ctrl-label" data-i18n="lbl_ribbon_quality">Ribbon Quality</label>
+                <select id="sel-ribbon-quality" class="vp-select">
+                  <option value="draft" data-i18n="quality_draft">Draft</option>
+                  <option value="normal" data-i18n="quality_normal">Normal</option>
+                  <option value="fine" data-i18n="quality_fine">Fine</option>
+                  <option value="adaptive" data-i18n="quality_adaptive">Adaptive</option>
+                </select>
+                <div data-slider="textures.geometric.ribbon_width_mm"></div>
+                <div data-slider="textures.geometric.ribbon_thickness_mm"></div>
+                <div data-slider="textures.geometric.ribbon_curl_deg"></div>
+                <div data-slider="textures.geometric.ribbon_overlap_mm"></div>
+                <div data-slider="textures.geometric.ribbon_stretch_pct"></div>
+                <div data-slider="textures.geometric.ribbon_stagger"></div>
+                <div class="helper-note" data-i18n="hint_ribbons">Round hollow cup with closed overlapping ribbons. Check the sliced result. Spiral mode and other textures are unavailable.</div>
+              </div>
+              <div data-slider="textures.geometric.strength_bottom"></div>
+              <div data-slider="textures.geometric.strength_middle"></div>
+              <div data-slider="textures.geometric.strength_top"></div>
+              <div id="hint-geometric" class="helper-note" data-i18n="hint_geometric">Relief is part of the wall. Combine layers or disable other textures for a clean pattern.</div>
+            </div>
+          </div>
+
           <div class="tex-card" data-tex-card="ribbed">
             <div class="tex-head" data-tex-toggle-expand="ribbed">
               <div class="tex-title-wrap">
@@ -1945,6 +1991,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     top_fade_mm: 6.0,
     global_twist_deg: 0.0,
     textures: {
+      geometric: {enabled: false, pattern: "leaf_scales", depth_mm: 3.0, cells_around: 14, cells_vertical: 10, twist_deg: 0, phase_deg: 0, strength_bottom: 1, strength_middle: 1, strength_top: 1, ribbon_width_mm: 34, ribbon_thickness_mm: 1.2, ribbon_curl_deg: 382, ribbon_overlap_mm: 1.4, ribbon_stretch_pct: 8, ribbon_stagger: 0.5, ribbon_quality: "fine"},
       ribbed: {
         enabled: false,
         depth_mm: 2.6,
@@ -2088,6 +2135,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     const wavSrc = (texSrc.waves && typeof texSrc.waves === "object") ? texSrc.waves : {};
     const oriSrc = (texSrc.origami && typeof texSrc.origami === "object") ? texSrc.origami : {};
     const celSrc = (texSrc.cellular && typeof texSrc.cellular === "object") ? texSrc.cellular : {};
+    const geoSrc = (texSrc.geometric && typeof texSrc.geometric === "object") ? texSrc.geometric : {};
     const drnSrc = (src.drainage && typeof src.drainage === "object") ? src.drainage : {};
     const sauSrc = (src.saucer && typeof src.saucer === "object") ? src.saucer : {};
 
@@ -2099,7 +2147,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
 
     const cleanName = String(src.name !== undefined ? src.name : JS_DEFAULT_PARAMS.name).trim().slice(0, 80) || "Ondas Organicas";
 
-    return {
+    const normalized = {
       name: cleanName,
       height_mm: clampFloat(src.height_mm, 160.0, 30.0, 500.0),
       base_diameter_mm: clampFloat(src.base_diameter_mm, 76.0, 20.0, 450.0),
@@ -2120,6 +2168,26 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       top_fade_mm: clampFloat(src.top_fade_mm, 6.0, 0.0, 60.0),
       global_twist_deg: clampFloat(src.global_twist_deg, 0.0, -720.0, 720.0),
       textures: {
+        geometric: {
+          enabled: toBool(geoSrc.enabled, false),
+          pattern: ["diamond", "leaf_scales", "crater_cells", "folded_petals", "spiral_bloom", "ripple", "coral"].includes(geoSrc.pattern) ? geoSrc.pattern : "leaf_scales",
+          depth_mm: clampFloat(geoSrc.depth_mm, 3, -8, 8),
+          cells_around: clampInt(geoSrc.cells_around, 14, 3, 36),
+          cells_vertical: clampInt(geoSrc.cells_vertical, 10, 2, 24),
+          twist_deg: clampFloat(geoSrc.twist_deg, 0, -720, 720),
+          phase_deg: clampFloat(geoSrc.phase_deg, 0, 0, 360),
+          strength_bottom: clampFloat(geoSrc.strength_bottom, 1, 0, 2),
+          strength_middle: clampFloat(geoSrc.strength_middle, 1, 0, 2),
+          strength_top: clampFloat(geoSrc.strength_top, 1, 0, 2),
+          ribbon_width_mm: clampFloat(geoSrc.ribbon_width_mm,34,8,80),
+          ribbon_thickness_mm: clampFloat(geoSrc.ribbon_thickness_mm,1.2,0.4,4),
+          ribbon_curl_deg: clampFloat(geoSrc.ribbon_curl_deg,382,180,430),
+          ribbon_overlap_mm: clampFloat(geoSrc.ribbon_overlap_mm,1.4,0,4),
+          ribbon_stretch_pct: clampFloat(geoSrc.ribbon_stretch_pct,8,0,25),
+          ribbon_stagger: clampFloat(geoSrc.ribbon_stagger,0.5,0,1),
+          ribbon_quality: ['draft','normal','fine','adaptive'].includes(geoSrc.ribbon_quality)?geoSrc.ribbon_quality:'fine',
+          ribbon_nozzle_mm: clampFloat(geoSrc.ribbon_nozzle_mm,0.4,0.2,1.2)
+        },
         ribbed: {
           enabled: toBool(ribSrc.enabled, false),
           depth_mm: clampFloat(ribSrc.depth_mm, 2.6, -15.0, 15.0),
@@ -2181,6 +2249,12 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
         match_vase_texture: toBool(sauSrc.match_vase_texture, true)
       }
     };
+    if(normalized.textures.geometric.enabled && normalized.textures.geometric.pattern==='folded_petals') {
+      normalized.print_mode='shelled_hollow';
+      normalized.polygon_sides=0;
+      for(const name of ['ribbed','waves','origami','cellular']) normalized.textures[name].enabled=false;
+    }
+    return normalized;
   }
 
   // ==========================================================================
@@ -2382,6 +2456,9 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     return total / Math.max(ampSum, 1e-9);
   }
 
+  __GEOMETRIC_JS__
+  __RIBBON_JS__
+
   function computeTextureDisplacementScalar(z, zNorm, theta, thetaG, textures, globalTwistRad) {
     let dr = 0.0;
 
@@ -2454,6 +2531,10 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       dr += Number(cel.depth_mm) * val;
     }
 
+    const geo = textures.geometric;
+    if (geo && geo.enabled && Math.abs(geo.depth_mm) > 1e-9) {
+      dr += geometricDisplacement(zNorm, thetaG, geo);
+    }
     return dr;
   }
 
@@ -2605,6 +2686,8 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
   globalThis.evaluateSurfaceRadius = evaluateSurfaceRadius;
   globalThis.normalizeParams = normalizeParams;
   globalThis.VaseStudioMath = {
+    ribbonPlan: ribbonPlan,
+    buildRibbonMesh: buildRibbonMesh,
     normalizeParams: normalizeParams,
     evaluateRadiusGrid: evaluateRadiusGrid,
     evaluateSurfaceRadius: evaluateSurfaceRadius,
@@ -2702,6 +2785,21 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     { path: "bottom_fade_mm", min: 0, max: 60, step: 1, unit: "mm", en: "Bottom Texture Fade" },
     { path: "top_fade_mm", min: 0, max: 60, step: 1, unit: "mm", en: "Top Texture Fade" },
     { path: "global_twist_deg", min: -720, max: 720, step: 5, unit: "°", en: "Global Helical Twist" },
+
+    { path: "textures.geometric.ribbon_width_mm", min: 8, max: 80, step: 0.5, unit: "mm", en: "Ribbon Width" },
+    { path: "textures.geometric.ribbon_thickness_mm", min: 0.4, max: 4, step: 0.1, unit: "mm", en: "Ribbon Thickness" },
+    { path: "textures.geometric.ribbon_curl_deg", min: 180, max: 430, step: 1, unit: "°", en: "Ribbon Curl" },
+    { path: "textures.geometric.ribbon_overlap_mm", min: 0, max: 4, step: 0.1, unit: "mm", en: "Ribbon Overlap" },
+    { path: "textures.geometric.ribbon_stretch_pct", min: 0, max: 25, step: 1, unit: "%", en: "Ribbon Stretch" },
+    { path: "textures.geometric.ribbon_stagger", min: 0, max: 1, step: 0.05, unit: "", en: "Ribbon Stagger" },
+    { path: "textures.geometric.depth_mm", min: -8, max: 8, step: 0.1, unit: "mm", en: "Relief Depth" },
+    { path: "textures.geometric.cells_around", min: 3, max: 36, step: 1, unit: "", en: "Pattern Columns" },
+    { path: "textures.geometric.cells_vertical", min: 2, max: 24, step: 1, unit: "", en: "Pattern Rows" },
+    { path: "textures.geometric.twist_deg", min: -720, max: 720, step: 5, unit: "°", en: "Pattern Twist" },
+    { path: "textures.geometric.phase_deg", min: 0, max: 360, step: 5, unit: "°", en: "Pattern Phase" },
+    { path: "textures.geometric.strength_bottom", min: 0, max: 2, step: 0.05, unit: "×", en: "Bottom Relief Strength" },
+    { path: "textures.geometric.strength_middle", min: 0, max: 2, step: 0.05, unit: "×", en: "Middle Relief Strength" },
+    { path: "textures.geometric.strength_top", min: 0, max: 2, step: 0.05, unit: "×", en: "Top Relief Strength" },
 
     { path: "textures.ribbed.depth_mm", min: -15, max: 15, step: 0.2, unit: "mm", en: "Rib Depth" },
     { path: "textures.ribbed.count", min: 3, max: 180, step: 1, unit: "un", en: "Rib Count (Density)" },
@@ -3380,11 +3478,12 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       (t.ribbed.enabled && Math.abs(t.ribbed.depth_mm) > 0.05) ||
       (t.waves.enabled && Math.abs(t.waves.depth_mm) > 0.05) ||
       (t.origami.enabled && Math.abs(t.origami.depth_mm) > 0.05) ||
-      (t.cellular.enabled && Math.abs(t.cellular.depth_mm) > 0.05)
+      (t.cellular.enabled && Math.abs(t.cellular.depth_mm) > 0.05) ||
+      (t.geometric.enabled && Math.abs(t.geometric.depth_mm) > 0.05 && Math.max(t.geometric.strength_bottom, t.geometric.strength_middle, t.geometric.strength_top) > 0)
     );
   }
 
-  function buildFullStudioGeometry(p, fastInteractive) {
+  function buildCupStudioGeometry(p, fastInteractive) {
     const collector = createChunkCollector();
     const targetNz = fastInteractive ? Math.min(p.resolution_vertical, 128) : Math.min(p.resolution_vertical, 220);
     const targetNt = fastInteractive ? Math.min(p.resolution_angular, 144) : Math.min(p.resolution_angular, 240);
@@ -3888,6 +3987,59 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       spiralCapIndices: new Uint32Array(spiralCapCollector.idx),
       grid: grid
     };
+  }
+
+  function buildFullStudioGeometry(rawParams, fastInteractive) {
+    const p=normalizeParams(rawParams),g=p.textures.geometric;
+    const cup=buildCupStudioGeometry(p,fastInteractive);
+    if (!(g.enabled && g.pattern==='folded_petals')) {
+      state.lastRibbonGeometry=null;
+      return cup;
+    }
+    const plan=ribbonPlan(p,fastInteractive);
+    if (ribbonPlan(p,false).triangles>3000000) throw Error('Ribbon mesh is too large. Reduce ribbon count or choose a lower ribbon quality.');
+    const radii=evaluateRadiusGrid(p,plan.nz+1,3).radii.map(row=>row[0]);
+    if(Math.min(...radii)-p.wall_thickness_mm<=2) throw Error('The cup is too narrow for its wall. Increase the profile diameter or reduce wall thickness.');
+    const ribbons=buildRibbonMesh(p,radii,fastInteractive),offset=cup.positions.length/3;
+    const baseDims=state.clientMetrics.dims.slice();
+    const localMin=[-baseDims[0]/2,-baseDims[1]/2,0],localMax=[baseDims[0]/2,baseDims[1]/2,p.height_mm];
+    const placement=state.lastGeoData;
+    for(let i=0;i<ribbons.positions.length;i+=3) {
+      for(let j=0;j<3;j++) {localMin[j]=Math.min(localMin[j],ribbons.positions[i+j]);localMax[j]=Math.max(localMax[j],ribbons.positions[i+j]);}
+      ribbons.positions[i]+=placement.vaseOffsetX;
+      ribbons.positions[i+2]+=placement.vaseLiftZ;
+    }
+    state.lastRibbonGeometry=ribbons;
+    const join=(a,b,Type)=>{const out=new Type(a.length+b.length);out.set(a);out.set(b,a.length);return out;};
+    for(const key of ['positions','normals','overhangs','parts','roles']) cup[key]=join(cup[key],ribbons[key],Float32Array);
+    const shifted=new Uint32Array(ribbons.indices.length);
+    for(let i=0;i<shifted.length;i++) shifted[i]=ribbons.indices[i]+offset;
+    cup.indices=join(cup.indices,shifted,Uint32Array);
+    if (state.wireframe) {
+      const lines=plan.count*2*((plan.nz+1)*plan.nu+plan.nz*(plan.nu+1));
+      const wire=new Float32Array(lines*6);
+      let w=0;
+      const perSide=(plan.nz+1)*(plan.nu+1);
+      const line=(a,b)=>{for(let j=0;j<3;j++) wire[w++]=ribbons.positions[a*3+j];for(let j=0;j<3;j++) wire[w++]=ribbons.positions[b*3+j];};
+      for(let strip=0;strip<plan.count;strip++) for(let side=0;side<2;side++) for(let iz=0;iz<=plan.nz;iz++) for(let iu=0;iu<=plan.nu;iu++) {
+        const a=(strip*2+side)*perSide+iz*(plan.nu+1)+iu;
+        if(iu<plan.nu) line(a,a+1);
+        if(iz<plan.nz) line(a,a+plan.nu+1);
+      }
+      cup.wirePositions=join(cup.wirePositions,wire,Float32Array);
+    }
+    const min=[Infinity,Infinity,Infinity],max=[-Infinity,-Infinity,-Infinity];
+    for(let i=0;i<cup.positions.length;i+=3) for(let j=0;j<3;j++) {min[j]=Math.min(min[j],cup.positions[i+j]);max[j]=Math.max(max[j],cup.positions[i+j]);}
+    state.clientMetrics.dims=localMax.map((v,j)=>v-localMin[j]);
+    state.clientMetrics.tris+=ribbonPlan(p,false).triangles;
+    state.clientMetrics.weightG+=ribbons.volumeCm3*1.24;
+    const bx=Number(state.printer.bed_x)||220,by=Number(state.printer.bed_y)||220;
+    let maxRadius=0;
+    for(let i=0;i<cup.positions.length;i+=3) maxRadius=Math.max(maxRadius,Math.hypot(cup.positions[i],cup.positions[i+1]));
+    const fit=String(state.printer.bed_shape||'').toLowerCase()==='circular'?2*maxRadius<=Math.min(bx,by):(max[0]-min[0]<=bx&&max[1]-min[1]<=by);
+    state.clientMetrics.fitsBed=state.clientMetrics.fitsBed&&fit;
+    for(let i=0;i<ribbons.overhangs.length;i++) state.clientMetrics.maxOverhang=Math.max(state.clientMetrics.maxOverhang,ribbons.overhangs[i]);
+    return cup;
   }
 
   function sampleGeoAtHeight(zLocalMm) {
@@ -5113,9 +5265,17 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
 
   function fitCameraToVase() {
     const h = state.params.height_mm;
-    const maxD = Math.max(state.params.base_diameter_mm, state.params.belly_diameter_mm, state.params.neck_diameter_mm);
-    camera.target = [0.0, 0.0, h * 0.46];
-    camera.distance = Math.max(170.0, Math.max(h * 1.65, maxD * 2.25));
+    const dims = state.clientMetrics.dims;
+    const canvas = document.getElementById("gl-canvas");
+    const aspect = canvas && canvas.clientHeight > 0 ? canvas.clientWidth / canvas.clientHeight : 1;
+    const halfVertical = 19 * DEG2RAD;
+    const halfHorizontal = Math.atan(Math.tan(halfVertical) * Math.max(0.05, aspect));
+    const halfFov = Math.min(halfVertical, halfHorizontal);
+    // A bounding sphere fits every camera angle, including custom profiles and
+    // relief extending beyond the nominal silhouette. Leave space for the HUD.
+    const radius = Math.hypot(dims[0], dims[1], dims[2]) * 0.5;
+    camera.target = [0.0, 0.0, h * 0.5];
+    camera.distance = Math.max(170.0, radius / Math.sin(halfFov) * 1.15);
     requestRender();
   }
 
@@ -5945,6 +6105,25 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       polyBadge.textContent = n < 3 ? tr("poly_circle") : tr("poly_sides_fmt").replace("{n}", String(n));
     }
 
+    const ribbonMode=state.params.textures.geometric.enabled && state.params.textures.geometric.pattern==='folded_petals';
+    const ribbonBox=document.getElementById('box-ribbon-opts');
+    if(ribbonBox) ribbonBox.style.display=ribbonMode?'flex':'none';
+    const reliefHint=document.getElementById('hint-geometric');
+    if(reliefHint) reliefHint.style.display=ribbonMode?'none':'block';
+    const ribbonQuality=document.getElementById('sel-ribbon-quality');
+    if(ribbonQuality) ribbonQuality.value=state.params.textures.geometric.ribbon_quality;
+    const depthControl=document.querySelector('[data-slider="textures.geometric.depth_mm"]');
+    if(depthControl) depthControl.style.display=ribbonMode?'none':'flex';
+    for(const name of ['ribbed','waves','origami','cellular']) {
+      const toggle=document.getElementById('chk-tex-'+name);
+      if(toggle) toggle.disabled=ribbonMode;
+    }
+    const spiralChoice=document.getElementById('btn-mode-spiral');
+    if(spiralChoice) spiralChoice.disabled=ribbonMode;
+    for(const [path,label] of [['cells_around','Ribbon Count'],['cells_vertical','Ribbon Loops'],['strength_bottom','Bottom Ribbon Strength'],['strength_middle','Middle Ribbon Strength'],['strength_top','Top Ribbon Strength']]) {
+      const ref=sliderRefs['textures.geometric.'+path];
+      if(ref?.labelEl) ref.labelEl.textContent=ribbonMode?localizedText(label):sliderLabel(ref.spec);
+    }
     const activeTexBadge = document.getElementById("active-tex-badge");
     if (activeTexBadge) {
       let c = 0;
@@ -5953,10 +6132,11 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       if (t.waves.enabled) c++;
       if (t.origami.enabled) c++;
       if (t.cellular.enabled) c++;
+      if (t.geometric.enabled) c++;
       activeTexBadge.textContent = tr("active_tex_fmt").replace("{n}", String(c));
     }
 
-    const texNames = ["ribbed", "waves", "origami", "cellular"];
+    const texNames = ["ribbed", "waves", "origami", "cellular", "geometric"];
     for (let i = 0; i < texNames.length; i++) {
       const k = texNames[i];
       const card = document.querySelector('[data-tex-card="' + k + '"]');
@@ -6087,6 +6267,9 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     setChk("chk-tex-waves", state.params.textures.waves.enabled);
     setChk("chk-tex-origami", state.params.textures.origami.enabled);
     setChk("chk-tex-cellular", state.params.textures.cellular.enabled);
+    setChk("chk-tex-geometric", state.params.textures.geometric.enabled);
+    const geoSelect = document.getElementById("sel-geometric-pattern");
+    if (geoSelect) geoSelect.value = state.params.textures.geometric.pattern;
     setChk("chk-cel-ridge", state.params.textures.cellular.ridge_mode);
     setChk("chk-stl-open-hollow", state.params.stl_always_open_hollow);
     setChk("chk-auto-slicer", state.params.auto_configure_slicer);
@@ -6196,7 +6379,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
           state.includeSaucer = true;
         }
         // Expand enabled texture cards automatically
-        const texKeys = ["ribbed", "waves", "origami", "cellular"];
+        const texKeys = ["ribbed", "waves", "origami", "cellular", "geometric"];
         for (let t = 0; t < texKeys.length; t++) {
           const tk = texKeys[t];
           const tc = document.querySelector('[data-tex-card="' + tk + '"]');
@@ -6366,7 +6549,30 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
   }
 
   function rebuildScene(fastInteractive) {
-    const geo = buildFullStudioGeometry(state.params, Boolean(fastInteractive));
+    state.params=normalizeParams(state.params);
+    state.params.textures.geometric.ribbon_nozzle_mm=clampFloat(state.printer.nozzle_mm,0.4,0.2,1.2);
+    syncControlsFromState();
+    let geo;
+    const wasInvalid=Boolean(state.geometryError);
+    const previousGeometry={data:state.lastGeoData,metrics:state.clientMetrics,ribbons:state.lastRibbonGeometry};
+    try {
+      geo = buildFullStudioGeometry(state.params, Boolean(fastInteractive));
+      state.geometryError=null;
+      if(wasInvalid) {
+        const banner=document.getElementById('toast-banner');
+        if(banner) banner.classList.remove('visible','error');
+        if(toastTimer) clearTimeout(toastTimer);
+      }
+    } catch(error) {
+      state.lastGeoData=previousGeometry.data;
+      state.clientMetrics=previousGeometry.metrics;
+      state.lastRibbonGeometry=previousGeometry.ribbons;
+      state.geometryError=String(error.message||error);
+      setActionButtonsBusy(false);
+      showToast(localizedText(state.geometryError),true);
+      return;
+    }
+    setActionButtonsBusy(state.busyAction);
     uploadMeshToGPU(geo);
     updateDerivedBadges();
     draw2DCurveEditor();
@@ -6385,7 +6591,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     state.busyAction = busy;
     const btns = document.querySelectorAll("[data-action]");
     for (let i = 0; i < btns.length; i++) {
-      btns[i].disabled = busy;
+      btns[i].disabled = busy || Boolean(state.geometryError);
     }
   }
 
@@ -6811,6 +7017,26 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     bindTexChk("chk-tex-waves", "waves");
     bindTexChk("chk-tex-origami", "origami");
     bindTexChk("chk-tex-cellular", "cellular");
+    bindTexChk("chk-tex-geometric", "geometric");
+    on("sel-geometric-pattern", "change", function (e) {
+      pushUndoSnapshot(state.params);
+      state.params.textures.geometric.pattern = e.target.value;
+      state.params.textures.geometric.enabled = true;
+      if(e.target.value==='folded_petals') {
+        state.params.textures.geometric.cells_around=8;
+        state.params.textures.geometric.cells_vertical=4;
+      }
+      state.params=normalizeParams(state.params);
+      syncControlsFromState();
+      rebuildScene(false);
+      scheduleHostAnalyze();
+    });
+    on("sel-ribbon-quality", "change", function(e) {
+      pushUndoSnapshot(state.params);
+      state.params.textures.geometric.ribbon_quality=e.target.value;
+      rebuildScene(false);
+      scheduleHostAnalyze();
+    });
 
     on("chk-cel-ridge", "change", function (e) {
       pushUndoSnapshot(state.params);
@@ -7024,6 +7250,8 @@ def get_studio_html(mode: str = "page", initial_context: dict[str, Any] | None =
     }
 
     html = _STUDIO_UI_HTML_TEMPLATE
+    html = html.replace("__GEOMETRIC_JS__", GEOMETRIC_JS)
+    html = html.replace("__RIBBON_JS__", RIBBON_JS)
     html = html.replace("__VASE_LOCALE_PACKS__", _studio_ui_safe_json(locale_payload(packs)))
     options = "".join('<option value="' + _escape_language_label(code, quote=True) + '">' + _escape_language_label(pack["native_name"]) + '</option>' for code, pack in packs.items())
     html = html.replace("__LANGUAGE_OPTIONS__", options)

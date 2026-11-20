@@ -41,7 +41,9 @@ class TestLanguagePacks(unittest.TestCase):
         proof = json.loads((ROOT / "tests/fixtures/multilingual_catalog_reference.json").read_text(encoding="utf8"))
         vocabulary = locale_catalog.locale_vocabulary()
         for code, expected in proof["locale_translation_sha256"].items():
-            digest = hashlib.sha256(json.dumps(vocabulary[code], sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode()).hexdigest()
+            # New feature strings may be added while every published entry stays exact.
+            baseline = {key: vocabulary[code][key] for key in proof["locale_translation_keys"]}
+            digest = hashlib.sha256(json.dumps(baseline, sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode()).hexdigest()
             self.assertEqual(digest, expected, code)
         for code, messages in proof["ui"].items():
             for key, (english, translated) in messages.items():

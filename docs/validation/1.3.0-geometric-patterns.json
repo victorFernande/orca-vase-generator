@@ -1,0 +1,1052 @@
+{
+  "version": "1.3.0",
+  "scope": "Current six radial families and actual reference-style curled ribbon construction. Local isolated browser and production Python controller; no native-app or physical-print certification.",
+  "resolution": [
+    240,
+    220
+  ],
+  "patterns": [
+    {
+      "pattern": "diamond",
+      "milliseconds": [
+        75.97,
+        82.15,
+        85.2
+      ],
+      "median_ms": 82.15,
+      "triangles": 209760
+    },
+    {
+      "pattern": "leaf_scales",
+      "milliseconds": [
+        83.33,
+        84.23,
+        94.69
+      ],
+      "median_ms": 84.23,
+      "triangles": 209760
+    },
+    {
+      "pattern": "crater_cells",
+      "milliseconds": [
+        80.05,
+        80.55,
+        89.05
+      ],
+      "median_ms": 80.55,
+      "triangles": 209760
+    },
+    {
+      "pattern": "spiral_bloom",
+      "milliseconds": [
+        98.35,
+        83.37,
+        82.12
+      ],
+      "median_ms": 83.37,
+      "triangles": 209760
+    },
+    {
+      "pattern": "ripple",
+      "milliseconds": [
+        89.16,
+        82.85,
+        82.65
+      ],
+      "median_ms": 82.85,
+      "triangles": 209760
+    },
+    {
+      "pattern": "coral",
+      "milliseconds": [
+        76.81,
+        79.1,
+        74.67
+      ],
+      "median_ms": 76.81,
+      "triangles": 209760
+    }
+  ],
+  "artifacts": {
+    "orca_vase_generator-1.3.0-py3-none-any.whl": {
+      "bytes": 187977,
+      "sha256": "3cbc4eba2cdbb753ef2d0a7d66da656785b2b4a8f89dd4f7a83209b989ba1641"
+    },
+    "orca_vase_generator.py": {
+      "bytes": 372894,
+      "sha256": "06504e8bcd4bcde4bb4cac540589ca03952d5b293966c31df2e623e8f93639af"
+    },
+    "orca_vase_generator_any.py": {
+      "bytes": 372894,
+      "sha256": "06504e8bcd4bcde4bb4cac540589ca03952d5b293966c31df2e623e8f93639af"
+    }
+  },
+  "wheel_members": [
+    "vase_studio/__init__.py",
+    "vase_studio/language_packs.py",
+    "vase_studio/locale_catalog.py",
+    "vase_studio/geometric_patterns.py",
+    "vase_studio/schema.py",
+    "vase_studio/ribbon_geometry.py",
+    "vase_studio/mesh_generator.py",
+    "vase_studio/printability.py",
+    "vase_studio/exporters.py",
+    "vase_studio/presets_catalog.py",
+    "vase_studio/studio_ui.py",
+    "vase_studio/plugin_main.py",
+    "vase_studio/icon.svg",
+    "vase_studio/locales/de.json",
+    "vase_studio/locales/en.json",
+    "vase_studio/locales/es.json",
+    "vase_studio/locales/fr.json",
+    "vase_studio/locales/it.json",
+    "vase_studio/locales/ja.json",
+    "vase_studio/locales/pt.json",
+    "orca_vase_generator-1.3.0.dist-info/LICENSE",
+    "orca_vase_generator-1.3.0.dist-info/METADATA",
+    "orca_vase_generator-1.3.0.dist-info/WHEEL",
+    "orca_vase_generator-1.3.0.dist-info/top_level.txt",
+    "orca_vase_generator-1.3.0.dist-info/RECORD"
+  ],
+  "ui": {
+    "ok": true,
+    "cases": [
+      {
+        "mode": "page",
+        "pattern": "diamond",
+        "gl": true,
+        "tris": 211200,
+        "selectionMs": 181,
+        "completeControlFlowMs": 382
+      },
+      {
+        "mode": "page",
+        "pattern": "leaf_scales",
+        "gl": true,
+        "tris": 211200,
+        "selectionMs": 154,
+        "completeControlFlowMs": 290
+      },
+      {
+        "mode": "page",
+        "pattern": "crater_cells",
+        "gl": true,
+        "tris": 211200,
+        "selectionMs": 139,
+        "completeControlFlowMs": 288
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "gl": true,
+        "tris": 889600,
+        "selectionMs": 378,
+        "completeControlFlowMs": 7574
+      },
+      {
+        "mode": "page",
+        "pattern": "spiral_bloom",
+        "gl": true,
+        "tris": 211200,
+        "selectionMs": 80,
+        "completeControlFlowMs": 195
+      },
+      {
+        "mode": "page",
+        "pattern": "ripple",
+        "gl": true,
+        "tris": 211200,
+        "selectionMs": 75,
+        "completeControlFlowMs": 200
+      },
+      {
+        "mode": "page",
+        "pattern": "coral",
+        "gl": true,
+        "tris": 211200,
+        "selectionMs": 86,
+        "completeControlFlowMs": 215
+      },
+      {
+        "mode": "dock",
+        "pattern": "diamond",
+        "gl": true,
+        "tris": 211200,
+        "selectionMs": 141,
+        "completeControlFlowMs": 284
+      },
+      {
+        "mode": "dock",
+        "pattern": "leaf_scales",
+        "gl": true,
+        "tris": 211200,
+        "selectionMs": 94,
+        "completeControlFlowMs": 214
+      },
+      {
+        "mode": "dock",
+        "pattern": "crater_cells",
+        "gl": true,
+        "tris": 211200,
+        "selectionMs": 85,
+        "completeControlFlowMs": 213
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "gl": true,
+        "tris": 889600,
+        "selectionMs": 295,
+        "completeControlFlowMs": 6841
+      },
+      {
+        "mode": "dock",
+        "pattern": "spiral_bloom",
+        "gl": true,
+        "tris": 211200,
+        "selectionMs": 76,
+        "completeControlFlowMs": 206
+      },
+      {
+        "mode": "dock",
+        "pattern": "ripple",
+        "gl": true,
+        "tris": 211200,
+        "selectionMs": 66,
+        "completeControlFlowMs": 184
+      },
+      {
+        "mode": "dock",
+        "pattern": "coral",
+        "gl": true,
+        "tris": 211200,
+        "selectionMs": 73,
+        "completeControlFlowMs": 191
+      }
+    ],
+    "errors": [],
+    "exports": [
+      {
+        "mode": "page",
+        "pattern": "diamond",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 10488084,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "page",
+        "pattern": "diamond",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 2095077,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "page",
+        "pattern": "leaf_scales",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 10488084,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "page",
+        "pattern": "leaf_scales",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 2101530,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "page",
+        "pattern": "crater_cells",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 10488084,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "page",
+        "pattern": "crater_cells",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 2102382,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 44408084,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 11609417,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "quality": "draft",
+        "includeSaucer": false,
+        "bytes": 13424084,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "quality": "draft",
+        "includeSaucer": false,
+        "bytes": 2891350,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "quality": "normal",
+        "includeSaucer": false,
+        "bytes": 22166484,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "quality": "normal",
+        "includeSaucer": false,
+        "bytes": 5360672,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 44408084,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 11629316,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "quality": "adaptive",
+        "includeSaucer": false,
+        "bytes": 20777684,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "quality": "adaptive",
+        "includeSaucer": false,
+        "bytes": 4992805,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "quality": "adaptive",
+        "includeSaucer": false,
+        "bytes": 13294484,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "quality": "adaptive",
+        "includeSaucer": false,
+        "bytes": 2854345,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": true,
+        "bytes": 44408084,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": true,
+        "bytes": 11945327,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "spiral_bloom",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 10488084,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "page",
+        "pattern": "spiral_bloom",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 2262992,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "page",
+        "pattern": "ripple",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 10488084,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "page",
+        "pattern": "ripple",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 2262312,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "page",
+        "pattern": "coral",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 10488084,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "page",
+        "pattern": "coral",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 2264799,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "dock",
+        "pattern": "diamond",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 10488084,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "dock",
+        "pattern": "diamond",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 2095077,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "dock",
+        "pattern": "leaf_scales",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 10488084,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "dock",
+        "pattern": "leaf_scales",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 2101526,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "dock",
+        "pattern": "crater_cells",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 10488084,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "dock",
+        "pattern": "crater_cells",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 2102386,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 44408084,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 11609404,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "quality": "draft",
+        "includeSaucer": false,
+        "bytes": 13424084,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "quality": "draft",
+        "includeSaucer": false,
+        "bytes": 2891345,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "quality": "normal",
+        "includeSaucer": false,
+        "bytes": 22166484,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "quality": "normal",
+        "includeSaucer": false,
+        "bytes": 5360686,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 44408084,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 11629309,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "quality": "adaptive",
+        "includeSaucer": false,
+        "bytes": 20777684,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "quality": "adaptive",
+        "includeSaucer": false,
+        "bytes": 4992795,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "quality": "adaptive",
+        "includeSaucer": false,
+        "bytes": 13294484,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "quality": "adaptive",
+        "includeSaucer": false,
+        "bytes": 2854337,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": true,
+        "bytes": 44408084,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": true,
+        "bytes": 11945322,
+        "surfaceParity": true,
+        "ribbonParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "spiral_bloom",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 10488084,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "dock",
+        "pattern": "spiral_bloom",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 2262989,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "dock",
+        "pattern": "ripple",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 10488084,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "dock",
+        "pattern": "ripple",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 2262311,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "dock",
+        "pattern": "coral",
+        "format": "stl",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 10488084,
+        "surfaceParity": true,
+        "ribbonParity": false
+      },
+      {
+        "mode": "dock",
+        "pattern": "coral",
+        "format": "3mf",
+        "quality": "fine",
+        "includeSaucer": false,
+        "bytes": 2264802,
+        "surfaceParity": true,
+        "ribbonParity": false
+      }
+    ],
+    "limitations": "Isolated Chromium and real Python controller. No native OrcaSlicer or physical print validation."
+  },
+  "previous_preset_arrays": "Exact published mesh hashes checked by test_multilingual.TestMultilingual.test_all_published_manufacturing_arrays_remain_identical",
+  "python_tests": {
+    "count": 52,
+    "warnings_as_errors": true,
+    "passed": true,
+    "isolated_distribution_formats": 3,
+    "reference_ribbon_coordinate_samples": 24
+  },
+  "multilingual_ui": {
+    "ok": true,
+    "locales": [
+      "pt",
+      "en",
+      "es",
+      "it",
+      "fr",
+      "de",
+      "ja"
+    ],
+    "checks": [
+      {
+        "mode": "page",
+        "language": "pt",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "page",
+        "language": "en",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "page",
+        "language": "es",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "page",
+        "language": "it",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "page",
+        "language": "fr",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "page",
+        "language": "de",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "page",
+        "language": "ja",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "dock",
+        "language": "pt",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "dock",
+        "language": "en",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "dock",
+        "language": "es",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "dock",
+        "language": "it",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "dock",
+        "language": "fr",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "dock",
+        "language": "de",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "dock",
+        "language": "ja",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      }
+    ],
+    "dynamicDataOnly": [
+      {
+        "mode": "page",
+        "language": "nl",
+        "host_region_fallback": true,
+        "context_override": true,
+        "english_fallback": true,
+        "added_json_only": true
+      },
+      {
+        "mode": "dock",
+        "language": "nl",
+        "host_region_fallback": true,
+        "context_override": true,
+        "english_fallback": true,
+        "added_json_only": true
+      }
+    ],
+    "consoleErrors": [],
+    "limitations": "Isolated Chromium; no native OrcaSlicer or native speaker certification."
+  },
+  "radial_benchmark_note": "Initial radial-family timings; these six equations remain unchanged. Folded-relief timings were removed because the style now uses a different ribbon mesh.",
+  "ribbon_performance": {
+    "scope": "Local NumPy complete cup+ribbons, 150 mm, 8 ribbons, 4 loops; not a native-app or reference runtime benchmark.",
+    "quality_results": [
+      {
+        "quality": "draft",
+        "milliseconds": [
+          166.52,
+          159.73,
+          173.75
+        ],
+        "vertices": 132354,
+        "triangles": 264672,
+        "ribbon_plan": {
+          "nz": 100,
+          "nu": 16,
+          "count": 8,
+          "vertices": 27472,
+          "triangles": 54912
+        },
+        "minimum_double_face_area_mm2": 0.26502183079719543,
+        "bounds_mm": {
+          "min": [
+            -68.57576751708984,
+            -68.57576751708984,
+            0.0
+          ],
+          "max": [
+            68.57576751708984,
+            68.57576751708984,
+            150.0
+          ],
+          "size": [
+            137.1515350341797,
+            137.1515350341797,
+            150.0
+          ]
+        }
+      },
+      {
+        "quality": "normal",
+        "milliseconds": [
+          323.71,
+          304.92,
+          247.02
+        ],
+        "vertices": 214482,
+        "triangles": 428928,
+        "ribbon_plan": {
+          "nz": 273,
+          "nu": 24,
+          "count": 8,
+          "vertices": 109600,
+          "triangles": 219168
+        },
+        "minimum_double_face_area_mm2": 0.14140935242176056,
+        "bounds_mm": {
+          "min": [
+            -68.5770263671875,
+            -68.5770263671875,
+            0.0
+          ],
+          "max": [
+            68.5770263671875,
+            68.5770263671875,
+            150.0
+          ],
+          "size": [
+            137.154052734375,
+            137.154052734375,
+            150.0
+          ]
+        }
+      },
+      {
+        "quality": "fine",
+        "milliseconds": [
+          539.55,
+          349.59,
+          354.82
+        ],
+        "vertices": 422786,
+        "triangles": 845536,
+        "ribbon_plan": {
+          "nz": 536,
+          "nu": 36,
+          "count": 8,
+          "vertices": 317904,
+          "triangles": 635776
+        },
+        "minimum_double_face_area_mm2": 0.05565134808421135,
+        "bounds_mm": {
+          "min": [
+            -68.58052062988281,
+            -68.58052062988281,
+            0.0
+          ],
+          "max": [
+            68.58052062988281,
+            68.58052062988281,
+            150.0
+          ],
+          "size": [
+            137.16104125976562,
+            137.16104125976562,
+            150.0
+          ]
+        }
+      },
+      {
+        "quality": "adaptive",
+        "milliseconds": [
+          197.89,
+          204.21,
+          213.64
+        ],
+        "vertices": 197250,
+        "triangles": 394464,
+        "ribbon_plan": {
+          "nz": 250,
+          "nu": 22,
+          "count": 8,
+          "vertices": 92368,
+          "triangles": 184704
+        },
+        "minimum_double_face_area_mm2": 0.1573275774717331,
+        "bounds_mm": {
+          "min": [
+            -68.57732391357422,
+            -68.57732391357422,
+            0.0
+          ],
+          "max": [
+            68.57732391357422,
+            68.57732391357422,
+            150.0
+          ],
+          "size": [
+            137.15464782714844,
+            137.15464782714844,
+            150.0
+          ]
+        }
+      }
+    ]
+  }
+}

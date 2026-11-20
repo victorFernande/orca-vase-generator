@@ -54,12 +54,22 @@ jobs:
           ORCA_TEST_PYTHON: python
         run: node scripts/check_multilingual.cjs
 
+      - name: Verify geometric patterns and real STL/3MF exports
+        if: runner.os == 'Linux'
+        env:
+          ORCA_PLAYWRIGHT_MODULE: ${{ runner.temp }}/orca-ui-tools/node_modules/playwright
+          ORCA_TEST_PYTHON: python
+        run: node scripts/check_geometric_patterns.cjs
+
       - name: Preserve multilingual UI evidence
         if: always() && runner.os == 'Linux'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: vase-multilingual-ui
-          path: test-output/multilingual/
+          path: |
+            test-output/multilingual/
+            test-output/geometric-patterns/report.json
+            test-output/geometric-patterns/*.png
           if-no-files-found: ignore
           retention-days: 14
 

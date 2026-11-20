@@ -1,4 +1,4 @@
-# Mini Manual de Uso — Orca Vase Studio (`v1.2.0`)
+# Mini Manual de Uso — Orca Vase Studio (`v1.3.0`)
 
 O seletor do cabeçalho oferece Português, English, Español, Italiano, Français, Deutsch e 日本語. A escolha é salva e sincronizada entre aba e painel; veja [idiomas e otimização](MULTILINGUAL_AND_PERFORMANCE.md).
 
@@ -55,7 +55,21 @@ Na seção **Silhueta & Curva 2D**, você escolhe como esculpir o corpo do vaso:
 
 ---
 
-## 4. Personalizando as 4 Texturas Combináveis
+## 4. Personalizando as Texturas Combináveis
+
+**Relevo geométrico:** abra essa nova camada para escolher losangos, escamas,
+crateras, pétalas dobradas, flor em espiral, anéis ou coral. Ajuste profundidade,
+colunas, fileiras, torção e a intensidade na base, no meio e no topo.
+Desligue os outros efeitos para isolar o padrão ou combine as camadas.
+Veja os [controles, limites e testes](GEOMETRIC_PATTERNS.md).
+
+**Pétalas dobradas** gera fitas enroladas em volta de um vaso interno redondo
+e oco. Ajuste largura, espessura, curvatura, sobreposição, estiramento e
+alternância; escolha qualidade Rascunho, Normal, Fina ou Adaptativa. Fina é
+o padrão final. O modo espiral e as outras texturas ficam indisponíveis.
+Confira os sólidos sobrepostos na prévia fatiada; a estimativa inclui as
+sobreposições.
+
 
 Você pode ativar **uma ou várias camadas de textura ao mesmo tempo** — os relevos são somados matematicamente em milímetros com paridade exata entre o 3D da tela e a malha final!
 
