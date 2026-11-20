@@ -24,7 +24,7 @@ from vase_studio.locale_catalog import locale_vocabulary
 p=normalize_params({'textures':{'waves':{'enabled':False}},'base_diameter_mm':90,'belly_diameter_mm':100,'waist_diameter_mm':90,'neck_diameter_mm':95,'lip_flare_mm':0})
 print(json.dumps({'patterns':GEOMETRIC_PATTERNS,'vocabulary':locale_vocabulary(),'pages':[{'mode':m,'html':get_studio_html(m,{'lang':'en','params':p})} for m in ('page','dock')]},ensure_ascii=False))
 `);
-const report = {ok:false,cases:[],errors:[],exports:[],limitations:'Isolated Chromium and real Python controller. No native OrcaSlicer or physical print validation.'};
+const report = {ok:false,cases:[],flattening:[],errors:[],exports:[],limitations:'Isolated Chromium and real Python controller. No native OrcaSlicer or physical print validation.'};
 const exportsFromUI = [];
 async function capturePreview(page) {
   return page.evaluate(()=>{
@@ -32,7 +32,8 @@ async function capturePreview(page) {
     let ribbon=null;
     if(mesh) {
       const n=mesh.positions.length/3,indices=[0,1,16,Math.floor(n/7),Math.floor(n/3),Math.floor(n/2),n-2,n-1];
-      ribbon={vertices:n,triangles:mesh.indices.length/3,placement:[api.state.lastGeoData.vaseOffsetX,0,api.state.lastGeoData.vaseLiftZ],samples:indices.map(index=>({index,position:Array.from(mesh.positions.subarray(index*3,index*3+3))}))};
+      let maxRadius=0;for(let i=0;i<mesh.positions.length;i+=3)maxRadius=Math.max(maxRadius,Math.hypot(mesh.positions[i],mesh.positions[i+1]));
+      ribbon={vertices:n,triangles:mesh.indices.length/3,maxRadius,placement:[api.state.lastGeoData.vaseOffsetX,0,api.state.lastGeoData.vaseLiftZ],samples:indices.map(index=>({index,position:Array.from(mesh.positions.subarray(index*3,index*3+3))}))};
     }
     const gl=document.getElementById('gl-canvas').getContext('webgl2');
     return {params:api.state.params,radii:api.evaluateRadiusGrid(api.state.params,17,23).radii,
@@ -75,6 +76,32 @@ async function captureExports(page,mode,pattern,observed) {
         if(pattern==='folded_petals') {
           assert(observed.ribbon?.vertices>100000,'Curled ribbons missing from the actual displayed mesh');
           assert(await page.locator('#btn-mode-spiral').isDisabled());
+          await page.screenshot({path:path.join(output,`${packet.mode}-ribbons-original.png`)});
+          const flatten=page.locator('[data-slider="textures.geometric.ribbon_flatten_pct"] input[type="number"]');
+          let previousRadius=observed.ribbon.maxRadius;
+          for(const value of [30,60]) {
+            await flatten.fill(String(value));await flatten.press('Tab');
+            await page.waitForFunction(value=>window.VaseStudioMath.state.params.textures.geometric.ribbon_flatten_pct===value&&!window.VaseStudioMath.state.geometryError,value);
+            const flattened=await capturePreview(page);
+            assert.equal(flattened.params.textures.geometric.ribbon_flatten_pct,value);
+            assert(flattened.ribbon.maxRadius<previousRadius,'Flattening did not bring the displayed ribbons closer to the cup');
+            previousRadius=flattened.ribbon.maxRadius;
+            report.flattening.push({mode:packet.mode,percent:value,maxRadius:previousRadius,originalMaxRadius:observed.ribbon.maxRadius});
+            await captureExports(page,packet.mode,pattern,flattened);
+            if(value===60) await page.screenshot({path:path.join(output,`${packet.mode}-ribbons-flattened.png`)});
+          }
+          await page.locator('#btn-undo').click();assert.equal(await flatten.inputValue(),'30');
+          await page.locator('#btn-redo').click();assert.equal(await flatten.inputValue(),'60');
+          const narrow=page.locator('[data-slider="textures.geometric.ribbon_width_mm"] input[type="number"]');
+          const thick=page.locator('[data-slider="textures.geometric.ribbon_thickness_mm"] input[type="number"]');
+          await narrow.fill('8');await narrow.press('Tab');
+          await thick.fill('4');await thick.press('Tab');
+          assert(await page.locator('[data-action="export_stl"]:visible').first().isDisabled(),'A pinched fold can still be exported');
+          assert.match(await page.evaluate(()=>String(window.VaseStudioMath.state.geometryError)),/Flattening pinches/);
+          await narrow.fill('34');await narrow.press('Tab');
+          await thick.fill('1.2');await thick.press('Tab');
+          assert(await page.locator('[data-action="export_stl"]:visible').first().isEnabled(),'Pinched fold did not recover after correction');
+          await flatten.fill('0');await flatten.press('Tab');
           const width=page.locator('[data-slider="textures.geometric.ribbon_width_mm"] input[type="number"]');
           await width.fill('36');await width.press('Tab');
           await page.locator('#btn-undo').click();assert.equal(await width.inputValue(),'34.0');
@@ -100,6 +127,7 @@ async function captureExports(page,mode,pattern,observed) {
           for(const [code,vocabulary] of Object.entries(generated.vocabulary)) {
             await page.locator('#lang-select').selectOption(code);
             assert.equal(await page.locator('[data-i18n="lbl_ribbon_quality"]').textContent(),vocabulary['Ribbon Quality']||'Ribbon Quality');
+            assert.equal(await page.locator('[data-spec-label="textures.geometric.ribbon_flatten_pct"]').textContent(),vocabulary['Ribbon Flattening']||'Ribbon Flattening');
             assert.equal(await page.evaluate(()=>JSON.stringify(window.VaseStudioMath.state.params)),before);
           }
           await page.locator('#lang-select').selectOption('en');
@@ -160,7 +188,7 @@ rows=[]
 with patch.object(plugin_main,'_resolve_storage_dir',return_value=out):
  controller=plugin_main.VaseStudioController()
  for item in data:
-  message=item['message'];quality=message['params']['textures']['geometric']['ribbon_quality'];message['params']['name']=item['mode']+'_'+item['pattern']+'_'+quality
+  message=item['message'];geo=message['params']['textures']['geometric'];quality=geo['ribbon_quality'];message['params']['name']=item['mode']+'_'+item['pattern']+'_'+quality+'_flat_'+str(geo['ribbon_flatten_pct']);message['filename']=message['params']['name']+'.'+message['format']
   np.testing.assert_allclose(evaluate_radius_grid(message['params'],17,23)[2],item['radii'],atol=2e-9,rtol=0)
   if item.get('ribbon'):
    plan=ribbon_plan(message['params']);profile=evaluate_radius_grid(message['params'],plan['nz']+1,3)[2][:,0]
@@ -178,10 +206,10 @@ with patch.object(plugin_main,'_resolve_storage_dir',return_value=out):
     assert z.testzip() is None
     assert message['params']['name'] in z.read('3D/3dmodel.model').decode('utf8')
   if item.get('ribbon'):assert 'RIBBON_ASSEMBLY' in [warning['code'] for warning in result['report']['warnings']]
-  rows.append({'mode':item['mode'],'pattern':item['pattern'],'format':message['format'],'quality':quality,'includeSaucer':bool(message.get('include_saucer')),'bytes':p.stat().st_size,'surfaceParity':True,'ribbonParity':bool(item.get('ribbon'))})
+  rows.append({'mode':item['mode'],'pattern':item['pattern'],'format':message['format'],'quality':quality,'flattenPercent':geo['ribbon_flatten_pct'],'includeSaucer':bool(message.get('include_saucer')),'bytes':p.stat().st_size,'surfaceParity':True,'ribbonParity':bool(item.get('ribbon'))})
 print(json.dumps(rows))
 `,exportsFromUI);
-    assert.equal(report.exports.length,52);
+    assert.equal(report.exports.length,60);
     report.ok=true;
   } finally {
     await browser.close();

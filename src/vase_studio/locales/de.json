@@ -256,6 +256,9 @@
     "Curled ribbons have steep overhangs. Inspect the sliced preview and adjust curl, cooling or supports as needed.": "Die gewundenen Bänder haben starke Überhänge. Slicing-Vorschau prüfen und Krümmung, Kühlung oder Stützen bei Bedarf anpassen.",
     "Bottom Ribbon Strength": "Bandstärke unten",
     "Middle Ribbon Strength": "Bandstärke in der Mitte",
-    "Top Ribbon Strength": "Bandstärke oben"
+    "Top Ribbon Strength": "Bandstärke oben",
+    "Ribbon Flattening": "Abflachung der Bänder",
+    "Brings folds closer to the cup without thinning the ribbons. Steep overhangs may remain; check the sliced preview.": "Bringt die Falten näher an den Vasenkörper, ohne die Bänder dünner zu machen. Starke Überhänge können verbleiben; prüfen Sie die Schichtvorschau.",
+    "Flattening pinches a ribbon fold. Reduce flattening or thickness, or increase ribbon width.": "Die Abflachung drückt eine Bandfalte zu stark zusammen. Verringern Sie die Abflachung oder Dicke oder vergrößern Sie die Bandbreite."
   }
 }

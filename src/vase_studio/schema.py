@@ -322,7 +322,7 @@ def normalize_params(raw: dict[str, Any] | None) -> dict[str, Any]:
     for key, low, high in (("ribbon_width_mm", 8, 80), ("ribbon_thickness_mm", 0.4, 4),
                           ("ribbon_curl_deg", 180, 430), ("ribbon_overlap_mm", 0, 4),
                           ("ribbon_stretch_pct", 0, 25), ("ribbon_stagger", 0, 1),
-                          ("ribbon_nozzle_mm", 0.2, 1.2)):
+                          ("ribbon_nozzle_mm", 0.2, 1.2), ("ribbon_flatten_pct", 0, 60)):
         geo[key] = _to_float(geo[key], GEOMETRIC_DEFAULTS[key], low, high)
     if geo["ribbon_quality"] not in ("draft", "normal", "fine", "adaptive"):
         geo["ribbon_quality"] = "fine"

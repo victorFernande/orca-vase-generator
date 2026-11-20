@@ -256,6 +256,9 @@
     "Curled ribbons have steep overhangs. Inspect the sliced preview and adjust curl, cooling or supports as needed.": "Curled ribbons have steep overhangs. Inspect the sliced preview and adjust curl, cooling or supports as needed.",
     "Bottom Ribbon Strength": "Bottom Ribbon Strength",
     "Middle Ribbon Strength": "Middle Ribbon Strength",
-    "Top Ribbon Strength": "Top Ribbon Strength"
+    "Top Ribbon Strength": "Top Ribbon Strength",
+    "Ribbon Flattening": "Ribbon Flattening",
+    "Brings folds closer to the cup without thinning the ribbons. Steep overhangs may remain; check the sliced preview.": "Brings folds closer to the cup without thinning the ribbons. Steep overhangs may remain; check the sliced preview.",
+    "Flattening pinches a ribbon fold. Reduce flattening or thickness, or increase ribbon width.": "Flattening pinches a ribbon fold. Reduce flattening or thickness, or increase ribbon width."
   }
 }

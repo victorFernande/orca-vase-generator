@@ -256,6 +256,9 @@
     "Curled ribbons have steep overhangs. Inspect the sliced preview and adjust curl, cooling or supports as needed.": "As fitas enroladas têm overhangs acentuados. Confira a prévia fatiada e ajuste curvatura, resfriamento ou suportes conforme necessário.",
     "Bottom Ribbon Strength": "Intensidade das fitas na base",
     "Middle Ribbon Strength": "Intensidade das fitas no meio",
-    "Top Ribbon Strength": "Intensidade das fitas no topo"
+    "Top Ribbon Strength": "Intensidade das fitas no topo",
+    "Ribbon Flattening": "Achatamento das fitas",
+    "Brings folds closer to the cup without thinning the ribbons. Steep overhangs may remain; check the sliced preview.": "Aproxima as dobras do vaso sem afinar as fitas. Ainda pode haver overhangs acentuados; confira a prévia fatiada.",
+    "Flattening pinches a ribbon fold. Reduce flattening or thickness, or increase ribbon width.": "O achatamento comprime demais uma dobra da fita. Reduza o achatamento ou a espessura, ou aumente a largura da fita."
   }
 }
