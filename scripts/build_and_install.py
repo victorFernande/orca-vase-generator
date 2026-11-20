@@ -41,6 +41,7 @@ MODULE_ORDER: list[str] = [
     "locale_catalog.py",
     "geometric_patterns.py",
     "schema.py",
+    "ribbon_geometry.py",
     "mesh_generator.py",
     "printability.py",
     "exporters.py",

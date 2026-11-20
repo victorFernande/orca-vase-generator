@@ -179,7 +179,17 @@ def analyze_printability(
             "en": f"Height ({dz:.1f} mm) exceeds printer Z limit ({max_z:.0f} mm).",
         })
 
-    if critical_faces_pct > 0.5 or max_overhang_deg > 55.0:
+    g = p["textures"]["geometric"]
+    if g["enabled"] and g["pattern"] == "folded_petals":
+        warnings.append({"code": "RIBBON_ASSEMBLY",
+            "pt": "As fitas e o vaso são sólidos fechados sobrepostos. Confira a união na prévia fatiada. O volume de material inclui as sobreposições.",
+            "en": "Ribbons and cup are overlapping closed solids. Inspect their union in the sliced preview. Material volume includes overlaps."})
+
+    if g["enabled"] and g["pattern"] == "folded_petals" and (critical_faces_pct > 0.5 or max_overhang_deg > 55.0):
+        warnings.append({"code": "CRITICAL_RIBBON_OVERHANG",
+            "pt": "As fitas enroladas têm overhangs acentuados. Confira a prévia fatiada e ajuste curvatura, resfriamento ou suportes conforme necessário.",
+            "en": "Curled ribbons have steep overhangs. Inspect the sliced preview and adjust curl, cooling or supports as needed."})
+    elif critical_faces_pct > 0.5 or max_overhang_deg > 55.0:
         warnings.append({
             "code": "CRITICAL_OVERHANG",
             "pt": (

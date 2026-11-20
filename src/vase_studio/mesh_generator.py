@@ -29,6 +29,7 @@ except ModuleNotFoundError:
 
 from .schema import normalize_params
 from .geometric_patterns import geometric_displacement
+from .ribbon_geometry import ribbon_plan, build_ribbon_mesh
 
 
 @dataclass
@@ -821,7 +822,7 @@ def _add_planar_disk_with_holes(
 # Public Mesh Generators (Section 3)
 # ---------------------------------------------------------------------------
 
-def generate_vase_mesh(params: dict[str, Any], layer_height_mm: float = 0.2) -> MeshData:
+def _generate_vase_body_mesh(params: dict[str, Any], layer_height_mm: float = 0.2) -> MeshData:
     """Generate a 100% closed, watertight 2-manifold vase mesh for spiral_vase or shelled_hollow."""
     p = normalize_params(params)
     lh = max(0.05, min(1.0, float(layer_height_mm)))
@@ -1003,6 +1004,33 @@ def generate_vase_mesh(params: dict[str, Any], layer_height_mm: float = 0.2) -> 
             mb.add_quad_strip(bot_hole_rings[idx_h], top_hole_rings[idx_h], reverse=True)
 
     return mb.build()
+
+
+def generate_vase_mesh(params: dict[str, Any], layer_height_mm: float = 0.2) -> MeshData:
+    """Generate the vase, or the reference-style cup plus closed curled ribbons.
+
+    Ribbons and cup deliberately retain separate indexed boundaries; overlaps
+    are not reported as a Boolean union or unique material volume.
+    """
+    p = normalize_params(params)
+    g = p["textures"]["geometric"]
+    if not (g["enabled"] and g["pattern"] == "folded_petals"):
+        return _generate_vase_body_mesh(p, layer_height_mm)
+    plan = ribbon_plan(p)
+    if plan["triangles"] > 3_000_000:
+        raise ValueError("Ribbon mesh is too large. Reduce ribbon count or choose a lower ribbon quality.")
+    _, _, radii = evaluate_radius_grid(p, n_z=plan["nz"] + 1, n_theta=3)
+    if float(radii.min()) - p["wall_thickness_mm"] <= 2:
+        raise ValueError("The cup is too narrow for its wall. Increase the profile diameter or reduce wall thickness.")
+    cup = _generate_vase_body_mesh(p, layer_height_mm)
+    verts, tris = build_ribbon_mesh(p, radii[:, 0])
+    builder = _MeshBuilder()
+    builder.add_vertices(cup.vertices)
+    builder.add_triangles(cup.triangles)
+    start = builder.vertex_count
+    builder.add_vertices(verts)
+    builder.add_triangles(tris + start)
+    return builder.build()
 
 
 def generate_saucer_mesh(params: dict[str, Any]) -> MeshData:

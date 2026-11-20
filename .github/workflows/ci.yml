@@ -68,7 +68,8 @@ jobs:
           name: vase-multilingual-ui
           path: |
             test-output/multilingual/
-            test-output/geometric-patterns/
+            test-output/geometric-patterns/report.json
+            test-output/geometric-patterns/*.png
           if-no-files-found: ignore
           retention-days: 14
 

@@ -319,6 +319,18 @@ def normalize_params(raw: dict[str, Any] | None) -> dict[str, Any]:
     for zone in ("bottom", "middle", "top"):
         key = "strength_" + zone
         geo[key] = _to_float(geo[key], 1.0, 0.0, 2.0)
+    for key, low, high in (("ribbon_width_mm", 8, 80), ("ribbon_thickness_mm", 0.4, 4),
+                          ("ribbon_curl_deg", 180, 430), ("ribbon_overlap_mm", 0, 4),
+                          ("ribbon_stretch_pct", 0, 25), ("ribbon_stagger", 0, 1),
+                          ("ribbon_nozzle_mm", 0.2, 1.2)):
+        geo[key] = _to_float(geo[key], GEOMETRIC_DEFAULTS[key], low, high)
+    if geo["ribbon_quality"] not in ("draft", "normal", "fine", "adaptive"):
+        geo["ribbon_quality"] = "fine"
+    if geo["enabled"] and geo["pattern"] == "folded_petals":
+        out["print_mode"] = "shelled_hollow"
+        out["polygon_sides"] = 0
+        for layer in ("ribbed", "waves", "origami", "cellular"):
+            tex[layer]["enabled"] = False
 
     # Drainage
     dr = out["drainage"]

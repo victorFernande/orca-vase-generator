@@ -63,6 +63,14 @@ colunas, fileiras, torção e a intensidade na base, no meio e no topo.
 Desligue os outros efeitos para isolar o padrão ou combine as camadas.
 Veja os [controles, limites e testes](GEOMETRIC_PATTERNS.md).
 
+**Pétalas dobradas** gera fitas enroladas em volta de um vaso interno redondo
+e oco. Ajuste largura, espessura, curvatura, sobreposição, estiramento e
+alternância; escolha qualidade Rascunho, Normal, Fina ou Adaptativa. Fina é
+o padrão final. O modo espiral e as outras texturas ficam indisponíveis.
+Confira os sólidos sobrepostos na prévia fatiada; a estimativa inclui as
+sobreposições.
+
+
 Você pode ativar **uma ou várias camadas de textura ao mesmo tempo** — os relevos são somados matematicamente em milímetros com paridade exata entre o 3D da tela e a malha final!
 
 Antes das camadas, ajuste o **Envelope & Torção Global**:

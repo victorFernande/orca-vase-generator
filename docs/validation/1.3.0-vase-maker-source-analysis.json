@@ -77,12 +77,24 @@
     },
     "note": "Counts from the reviewed pure estimator only. They are not a runtime benchmark or a validation of the reference mesh."
   },
-  "source_reuse": "No reference source copied into runtime or distribution. Existing relief equations remain independent implementations.",
+  "source_reuse": "Curled ribbon midpoint/offset construction adapted into ribbon_geometry.py with the original copyright and full MIT permission notice. Complete reference plugin and reference screenshots are not redistributed.",
   "gaps": [
-    "Reference folded petals use independent curved ribbon solids plus a cup, unlike the current single-wall relief.",
     "Reference leaf/crater controls include valley depth, stagger, cell aspect and sharpness, which the current geometric layer does not expose.",
     "Reference spiral bloom uses one family of rounded helical blades, unlike the current two-wave relief.",
     "Reference ripple varies angular phase vertically, unlike the current horizontal rings."
   ],
-  "scope": "Source comparison only; no native OrcaSlicer interaction, plugin installation, merge or release."
+  "scope": "Source comparison only; no native OrcaSlicer interaction, plugin installation, merge or release.",
+  "ribbon_implementation": {
+    "status": "Implemented after user selected actual curled ribbons",
+    "source_coordinate_samples": 24,
+    "construction": "Independent closed cup and ribbon shells; intentional overlaps, no Boolean-union claim",
+    "height_fix": "Normal-offset vertices are trimmed to Z=0..requested height",
+    "quality_levels": [
+      "draft",
+      "normal",
+      "fine",
+      "adaptive"
+    ],
+    "default_quality": "fine"
+  }
 }

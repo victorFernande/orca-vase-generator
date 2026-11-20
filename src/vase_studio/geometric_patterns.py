@@ -21,6 +21,11 @@ GEOMETRIC_DEFAULTS = {
     "cells_around": 14, "cells_vertical": 10, "twist_deg": 0.0,
     "phase_deg": 0.0, "strength_bottom": 1.0,
     "strength_middle": 1.0, "strength_top": 1.0,
+    "ribbon_width_mm": 34.0, "ribbon_thickness_mm": 1.2,
+    "ribbon_curl_deg": 382.0, "ribbon_overlap_mm": 1.4,
+    "ribbon_stretch_pct": 8.0, "ribbon_stagger": 0.5,
+    "ribbon_quality": "fine",
+    "ribbon_nozzle_mm": 0.4,
 }
 
 
@@ -32,6 +37,9 @@ def geometric_displacement(z_norm: np.ndarray, theta: np.ndarray, p: dict) -> np
     caused by directly switching a row's angular phase at integer heights.
     """
     import numpy as np
+
+    if p["pattern"] == "folded_petals":
+        return np.zeros(np.broadcast_shapes(z_norm.shape, theta.shape), dtype=np.float64)
 
     u = (theta + np.deg2rad(p["twist_deg"]) * z_norm + np.deg2rad(p["phase_deg"])) * p["cells_around"] / (2 * np.pi)
     v = z_norm * p["cells_vertical"]
@@ -77,6 +85,7 @@ def geometric_displacement(z_norm: np.ndarray, theta: np.ndarray, p: dict) -> np
 # browser function directly, including fractional coordinates and angular seam.
 GEOMETRIC_JS = r"""
   function geometricDisplacement(zNorm, theta, p) {
+    if (p.pattern === "folded_petals") return 0;
     const u = (theta + p.twist_deg * Math.PI / 180 * zNorm + p.phase_deg * Math.PI / 180) * p.cells_around / (2 * Math.PI);
     const v = zNorm * p.cells_vertical;
     let relief = 0;

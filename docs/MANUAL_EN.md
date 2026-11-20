@@ -63,6 +63,13 @@ columns, rows, twist and independent bottom/middle/top strength. Disable the
 other effects to isolate the pattern or combine the layers. See the
 [controls, limits and tests](GEOMETRIC_PATTERNS.md).
 
+**Folded Petals** builds curled ribbons around a round hollow cup. Adjust
+width, thickness, curl, overlap, stretch and stagger; select Draft, Normal,
+Fine or Adaptive quality. Fine is the final default. Spiral mode and other
+textures are unavailable for this style. Inspect the overlapping solids in
+the sliced preview; the estimate includes overlap volume.
+
+
 You can enable **any single texture or stack all four simultaneously** — radial displacements are summed in exact millimeters with `< 1e-12 mm` parity between the WebGL2 preview and the exported 2-manifold mesh!
 
 First, set **Envelope & Global Twist**:

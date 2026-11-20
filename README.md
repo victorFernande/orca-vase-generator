@@ -27,12 +27,16 @@
 
 ## Version 1.3.0 · Padrões geométricos / Geometric patterns
 
-Sete novos relevos de parede: **losangos, escamas, crateras, pétalas dobradas,
+Sete novos estilos de superfície: **losangos, escamas, crateras, pétalas dobradas,
 flor em espiral, anéis e coral**, com repetição, torção e intensidades
 independentes na base, meio e topo. Disponíveis na aba e no painel lateral,
 nos sete idiomas. Os quatro efeitos anteriores continuam combináveis.
 
-Seven new sidewall reliefs with signed depth, repetition, twist and independent
+Folded Petals uses actual curled ribbons around a hollow cup, with width,
+thickness, curl, overlap, stretch and four quality levels. The other six
+patterns remain wall reliefs.
+
+Seven new sidewall patterns with signed depth, repetition, twist and independent
 bottom/middle/top strength. Existing preset geometry stays unchanged when the
 layer is disabled. See [usage, provenance and validation](docs/GEOMETRIC_PATTERNS.md).
 
