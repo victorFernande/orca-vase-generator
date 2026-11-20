@@ -1,0 +1,88 @@
+{
+  "reference": {
+    "name": "Vase Maker",
+    "author": "Dante x",
+    "version": "0.8.19",
+    "license": "MIT",
+    "copyright": "Copyright (c) 2026 Dante x",
+    "sha256": "01f3df57ff095fbe166d55eaffa88ec32f007692046d9f76554dd5333ce91a9d",
+    "bytes": 151871,
+    "access": "Read-only inspection of the user-installed package; no full plugin import or registration."
+  },
+  "reviewed_functions": [
+    "surface_amount",
+    "surface_tangent_amount",
+    "mesh_plan",
+    "_make_folded_petals_mesh"
+  ],
+  "patterns": [
+    "smooth",
+    "straight",
+    "spiral",
+    "ripple",
+    "diamond",
+    "coral",
+    "petal",
+    "leaf",
+    "folded",
+    "folded_petals"
+  ],
+  "folded_petals_example": {
+    "height_mm": 150,
+    "ribbons": 8,
+    "rows": 4,
+    "width_mm": 34,
+    "thickness_mm": 1.2,
+    "quality_plans": {
+      "draft": {
+        "n": 128,
+        "nz": 100,
+        "inner_nz": 1,
+        "strip_u": 16,
+        "dz": 1.5,
+        "vertices": 53330,
+        "triangles": 106624,
+        "stl_bytes": 5331284
+      },
+      "normal": {
+        "n": 128,
+        "nz": 273,
+        "inner_nz": 1,
+        "strip_u": 24,
+        "dz": 0.55,
+        "vertices": 179746,
+        "triangles": 359456,
+        "stl_bytes": 17972884
+      },
+      "fine": {
+        "n": 128,
+        "nz": 536,
+        "inner_nz": 1,
+        "strip_u": 36,
+        "dz": 0.28,
+        "vertices": 455378,
+        "triangles": 910720,
+        "stl_bytes": 45536084
+      },
+      "adaptive": {
+        "n": 96,
+        "nz": 250,
+        "inner_nz": 1,
+        "strip_u": 22,
+        "dz": 0.6000000000000001,
+        "vertices": 140562,
+        "triangles": 281088,
+        "stl_bytes": 14054484
+      }
+    },
+    "note": "Counts from the reviewed pure estimator only. They are not a runtime benchmark or a validation of the reference mesh."
+  },
+  "source_reuse": "No reference source copied into runtime or distribution. Existing relief equations remain independent implementations.",
+  "gaps": [
+    "Reference folded petals use independent curved ribbon solids plus a cup, unlike the current single-wall relief.",
+    "Reference leaf/crater controls include valley depth, stagger, cell aspect and sharpness, which the current geometric layer does not expose.",
+    "Reference spiral bloom uses one family of rounded helical blades, unlike the current two-wave relief.",
+    "Reference ripple varies angular phase vertically, unlike the current horizontal rings."
+  ],
+  "scope": "Source comparison only; no native OrcaSlicer interaction, plugin installation, merge or release."
+}

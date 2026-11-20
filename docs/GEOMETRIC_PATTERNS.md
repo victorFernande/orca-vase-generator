@@ -73,12 +73,55 @@ Classic and Hourglass are already expressible through this studio's silhouette
 controls and existing presets. The listing also describes independent pattern
 strength near the bottom, middle and top.
 
-The official download endpoint returned HTTP 401 (`missing_authorization`)
-without an authenticated session. The reference package was therefore **not
-downloaded or executed**. This implementation uses original analytic formulas
-inspired by the visible pattern families; it does not claim exact replication
-of the reference geometry, code, design files or all unrelated application
-features. No third-party source or reference screenshots are redistributed.
+The initial official download request returned HTTP 401
+(`missing_authorization`). After the user installed Vase Maker, its local
+0.8.19 package became available for read-only source inspection. The complete
+plugin was not imported, registered or executed. Only the reviewed, pure
+`mesh_plan` estimator was evaluated in isolation with literal parameters and
+math/builtin functions, without filesystem or host access.
+
+The installed file identifies `Copyright (c) 2026 Dante x` and
+`SPDX-License-Identifier: MIT`. Its SHA-256 and comparison evidence are in
+[the source-analysis report](validation/1.3.0-vase-maker-source-analysis.json).
+No third-party source or reference screenshots are redistributed. The current
+Vase Studio equations remain original interpretations, with the differences
+below; they are not exact replicas of the reference geometry.
+
+### Comparação após acesso ao código / Source comparison
+
+| Família / Family | Vase Maker 0.8.19 | Vase Studio 1.3.0 nesta PR / in this PR |
+| --- | --- | --- |
+| Ondas / Ripple | Canelas cuja fase angular oscila ao longo da altura / Ribs with vertically varying angular phase | Anéis horizontais ondulados / Wavy horizontal rings |
+| Losangos / Diamond | Produto de duas ondas cossenoidais / Product of angular and vertical cosine waves | Facetas em células alternadas / Facets in staggered cells |
+| Coral | Onda bidimensional com expoente de nitidez / Two-dimensional wave with a sharpness exponent | Trama periódica de cristas curvas / Periodic curved-ridge lattice |
+| Flor em espiral / Spiral Bloom | Pétalas helicoidais com raiz larga e crista arredondada / Helical petals with broad roots and rounded crests | Duas famílias de ondas helicoidais / Two families of helical waves |
+| Escamas / Leaf Scales | Profundidades independentes de relevo e vale; nitidez, alternância e proporção da célula / Separate relief and valley depths, sharpness, stagger and cell aspect | Lentes periódicas; sem esses quatro controles específicos / Periodic lenses without those four specific controls |
+| Crateras / Crater Cells | Cristas apontadas em torno de um centro rebaixado, com os mesmos controles de célula / Pointed rims around recessed centres, with the same cell controls | Bacias arredondadas com borda / Rounded basins with a rim |
+| Pétalas dobradas / Folded Petals | Vaso interno mais fitas curvas espessas, com largura, curvatura, sobreposição e estiramento / Inner cup plus thick curved ribbons with width, curl, overlap and stretch | Relevo dobrado integrado à parede; não gera fitas / Folded relief integrated into the wall; no ribbons |
+
+**A opção atual de pétalas não reproduz as fitas do Vase Maker.** Para esse
+formato é necessário outro construtor de geometria, com a mesma representação
+na prévia e na exportação. A rotina da referência emite o vaso e cada fita
+como sólidos indexados separados; não executa uma união booleana. Importar
+essa rotina diretamente não comprovaria uma superfície única ou a ausência
+de interseções. A escolha entre fitas e relevo contínuo está pendente com o
+usuário; esta comparação não declara essa implementação concluída.
+
+**The current petal option does not reproduce Vase Maker's ribbons.** That
+form requires a different geometry builder and matching preview/export
+representation. The reference emits its cup and each ribbon as separately
+indexed solids without a Boolean union. Copying the builder would not prove
+a single connected boundary or absence of intersections. The user has been
+asked to choose ribbons or continuous relief; this comparison does not claim
+that the ribbon implementation is complete.
+
+For a 150 mm vase with eight ribbons, four rows, 34 mm ribbon width and
+1.2 mm ribbon thickness, the reference estimator reports 106,624 triangles
+in Draft, 359,456 in Normal, 910,720 in Fine and 281,088 in Adaptive quality.
+Fine binary STL size is estimated at 45,536,084 bytes. These are estimates
+from the reviewed planner, not generated-mesh validation or timings. The
+current Studio example has roughly 211,200 triangles but represents a
+different surface, so these counts are not an equivalent-quality benchmark.
 
 ## Reproducible verification
 
