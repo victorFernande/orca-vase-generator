@@ -23,6 +23,7 @@ GEOMETRIC_DEFAULTS = {
     "strength_middle": 1.0, "strength_top": 1.0,
     "ribbon_width_mm": 34.0, "ribbon_thickness_mm": 1.2,
     "ribbon_curl_deg": 382.0, "ribbon_overlap_mm": 1.4,
+    "ribbon_flatten_pct": 0.0,
     "ribbon_stretch_pct": 8.0, "ribbon_stagger": 0.5,
     "ribbon_quality": "fine",
     "ribbon_nozzle_mm": 0.4,

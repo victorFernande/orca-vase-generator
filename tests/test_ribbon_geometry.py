@@ -70,6 +70,40 @@ class TestRibbonGeometry(unittest.TestCase):
         for item in fixture['samples']:
             np.testing.assert_allclose(vertices[item['index']], item['position'], atol=1e-10, rtol=1e-10)
 
+    def test_flattening_reduces_projection_without_thinning_or_opening_shells(self):
+        projections, steep_areas, skin_distances = [], [], []
+        for flatten in (0, 30, 60):
+            p = ribbon_params(ribbon_flatten_pct=flatten, ribbon_quality='normal')
+            plan = ribbon_plan(p)
+            vertices, triangles = build_ribbon_mesh(p, np.full(plan['nz'] + 1, 50.0))
+            per_v, per_f = plan['vertices'] // 3, plan['triangles'] // 3
+            shell = vertices[:per_v]
+            self.assert_closed_oriented_shell(shell, triangles[:per_f])
+            half = per_v // 2
+            front, back = shell[:half], shell[half:]
+            midpoint = (front + back) / 2
+            projections.append(float(np.max(np.linalg.norm(midpoint[:, :2], axis=1) - 50)))
+            # Exclude the endpoint caps, which are clipped to the requested height.
+            distances = np.linalg.norm(front - back, axis=1).reshape(plan['nz'] + 1, plan['nu'] + 1)
+            skin_distances.append(distances[2:-2])
+            a, b, c = (vertices[triangles[:, i]] for i in range(3))
+            cross = np.cross(b - a, c - a)
+            lengths = np.linalg.norm(cross, axis=1)
+            steep = -cross[:, 2] / lengths > np.sin(np.radians(45))
+            steep_areas.append(float(lengths[steep].sum() / 2))
+        np.testing.assert_allclose(projections, projections[0] * np.array([1, .7, .4]), atol=1e-10)
+        for distances in skin_distances[1:]:
+            np.testing.assert_allclose(distances, skin_distances[0], atol=1e-10)
+        self.assertLess(steep_areas[-1], steep_areas[0] * .5)
+
+    def test_flattening_validation_and_pinched_fold_rejection(self):
+        self.assertEqual(ribbon_params()['textures']['geometric']['ribbon_flatten_pct'], 0)
+        for value, expected in ((-20, 0), (100, 60), (float('nan'), 0), (True, 0)):
+            self.assertEqual(ribbon_params(ribbon_flatten_pct=value)['textures']['geometric']['ribbon_flatten_pct'], expected)
+        p = ribbon_params(ribbon_flatten_pct=60, ribbon_width_mm=8, ribbon_thickness_mm=4)
+        with self.assertRaisesRegex(ValueError, 'Flattening pinches'):
+            generate_vase_mesh(p)
+
     def test_quality_and_actual_vase_boundaries_and_warning(self):
         sizes = []
         for quality in ('draft', 'normal', 'fine'):
@@ -108,7 +142,7 @@ class TestRibbonGeometry(unittest.TestCase):
 
     @unittest.skipUnless(shutil.which('node'), 'Node required for production JS parity')
     def test_browser_and_numpy_positions_and_oriented_triangles_match(self):
-        p = ribbon_params(twist_deg=-85, phase_deg=37, strength_middle=0.35)
+        p = ribbon_params(twist_deg=-85, phase_deg=37, strength_middle=0.35, ribbon_flatten_pct=50)
         plan = ribbon_plan(p)
         radii = (50 + 4 * np.sin(np.linspace(0, np.pi, plan['nz'] + 1))).tolist()
         vertices, triangles = build_ribbon_mesh(p, radii)
@@ -126,7 +160,7 @@ class TestRibbonGeometry(unittest.TestCase):
     def test_three_distribution_formats_generate_ribbons_without_source_checkout(self):
         root = Path(__file__).resolve().parents[1]
         artifacts = [root / 'dist/orca_vase_generator.py', root / 'dist/orca_vase_generator_any.py',
-                     root / 'dist/orca_vase_generator-1.3.0-py3-none-any.whl']
+                     root / 'dist/orca_vase_generator-1.3.1-py3-none-any.whl']
         code = r'''
 import sys,importlib.util,zipfile
 from pathlib import Path
@@ -135,7 +169,7 @@ if p.suffix=='.whl':
  sys.path.insert(0,str(p))
  import vase_studio as api
  from vase_studio.studio_ui import get_studio_html
- assert api.__version__=='1.3.0'
+ assert api.__version__=='1.3.1'
  with zipfile.ZipFile(p) as z:
   notice=z.read('vase_studio/ribbon_geometry.py').decode()
   assert 'Copyright (c) 2026 Dante x' in notice and 'Permission is hereby granted' in notice
@@ -145,7 +179,8 @@ else:
  get_studio_html=api.get_studio_html
  notice=p.read_text(encoding='utf8')
  assert 'Copyright (c) 2026 Dante x' in notice and 'Permission is hereby granted' in notice
-params=api.normalize_params({'height_mm':60,'resolution_angular':96,'resolution_vertical':60,'textures':{'geometric':{'enabled':True,'pattern':'folded_petals','cells_around':3,'cells_vertical':4,'ribbon_quality':'draft'}}})
+params=api.normalize_params({'height_mm':60,'resolution_angular':96,'resolution_vertical':60,'textures':{'geometric':{'enabled':True,'pattern':'folded_petals','cells_around':3,'cells_vertical':4,'ribbon_quality':'draft','ribbon_flatten_pct':50}}})
+assert params['textures']['geometric']['ribbon_flatten_pct']==50
 mesh=api.generate_vase_mesh(params)
 assert len(mesh.triangles)>30000 and mesh.volume_cm3>0
 assert mesh.bounds_mm['min'][2]==0 and mesh.bounds_mm['max'][2]==60

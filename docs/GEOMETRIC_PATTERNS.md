@@ -127,6 +127,7 @@ como na referência. A profundidade radial fica oculta por não se aplicar.
 | Largura / Width | 8–80 mm |
 | Espessura / Thickness | 0.4–4 mm |
 | Curvatura / Curl | 180–430° |
+| Achatamento / Flattening | 0–60% (1.3.1+) |
 | Sobreposição / Overlap | 0–4 mm |
 | Estiramento / Stretch | 0–25% |
 | Alternância / Stagger | 0–1 |

@@ -1,4 +1,4 @@
-# Mini Manual de Uso — Orca Vase Studio (`v1.3.0`)
+# Mini Manual de Uso — Orca Vase Studio (`v1.3.1`)
 
 O seletor do cabeçalho oferece Português, English, Español, Italiano, Français, Deutsch e 日本語. A escolha é salva e sincronizada entre aba e painel; veja [idiomas e otimização](MULTILINGUAL_AND_PERFORMANCE.md).
 
@@ -69,6 +69,13 @@ alternância; escolha qualidade Rascunho, Normal, Fina ou Adaptativa. Fina é
 o padrão final. O modo espiral e as outras texturas ficam indisponíveis.
 Confira os sólidos sobrepostos na prévia fatiada; a estimativa inclui as
 sobreposições.
+
+**Achatamento das fitas (0–60%)** aproxima as folhas do vaso sem reduzir a
+espessura existente. Comece em 30–50%; 0% mantém a forma da versão 1.3.0.
+Para folhas menores, reduza também **Largura da fita**. Se uma dobra ficar
+comprimida demais, reduza achatamento/espessura ou aumente a largura.
+Ainda pode haver overhang acentuado: confira cada camada na prévia fatiada
+e avalie resfriamento e suportes. [Detalhes e limites](RIBBON_FLATTENING.md).
 
 
 Você pode ativar **uma ou várias camadas de textura ao mesmo tempo** — os relevos são somados matematicamente em milímetros com paridade exata entre o 3D da tela e a malha final!
