@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "orca-vase-generator"
-version = "1.1.1"
+version = "1.2.0"
 description = "Parametric 3D Vase & Planter Studio with X-Ray Wall Calipers & 1-Click Plater | Estudio 3D de Vasos e Cachepos"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -20,11 +20,11 @@ dependencies = [
 where = ["src"]
 
 [tool.setuptools.package-data]
-vase_studio = ["icon.svg"]
+vase_studio = ["icon.svg", "locales/*.json"]
 
 [tool.orcaslicer.plugin]
 id = "orca-vase-studio"
 name = "Orca Vase Studio"
 description = "Parametric 3D Vase & Planter Studio with X-Ray Wall Calipers & 1-Click Plater | Estudio 3D de Vasos e Cachepos"
 author = "Orca Vase Studio"
-version = "1.1.1"
+version = "1.2.0"

@@ -13,6 +13,9 @@ from __future__ import annotations
 import copy
 import json
 from typing import Any
+from html import escape as _escape_language_label
+from .locale_catalog import locale_payload, discovered_language_packs
+from .language_packs import resolve_language
 
 if "DEFAULT_PARAMS" not in globals():
     try:
@@ -40,7 +43,7 @@ def _studio_ui_safe_json(payload: dict[str, Any]) -> str:
 
 
 _STUDIO_UI_HTML_TEMPLATE = r"""<!DOCTYPE html>
-<html lang="__INITIAL_LANG__" data-theme="__INITIAL_THEME__">
+<html lang="__INITIAL_LANG__" dir="__INITIAL_DIRECTION__" data-theme="__INITIAL_THEME__">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -1448,7 +1451,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
         <span data-i18n="btn_surprise">Surpreenda-me</span>
       </button>
       <button id="btn-reset" class="btn btn-icon" title="Reset">↺</button>
-      <button id="btn-lang" class="btn btn-icon" title="Português / English">PT</button>
+      <select id="lang-select" class="btn" style="max-width:116px;padding:4px" aria-label="Language" title="Language">__LANGUAGE_OPTIONS__</select>
       <button id="btn-theme" class="btn btn-icon" title="Dark / Light">☾</button>
     </div>
   </header>
@@ -1634,7 +1637,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
         <input id="inp-cross-cut" class="orca-slider" type="range" min="0" max="100" step="1" value="0" />
         <span id="lbl-cross-cut" class="ctrl-num" style="width:62px;text-align:center;">Off</span>
         <button id="btn-cut-half" class="btn" style="padding:3px 7px;font-size:10.5px;">50%</button>
-        <button id="btn-cut-off" class="btn" style="padding:3px 7px;font-size:10.5px;">Off</button>
+        <button id="btn-cut-off" data-i18n="btn_off" class="btn" style="padding:3px 7px;font-size:10.5px;">Off</button>
       </div>
     </section>
 
@@ -2612,281 +2615,135 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
   // ==========================================================================
   // 3. Translations (PT-BR & EN) & Slider Metadata
   // ==========================================================================
-  const I18N = {
-    pt: {
-      btn_surprise: "Surpreenda-me",
-      tab_shape: "Forma",
-      tab_textures: "Texturas",
-      tab_print: "Impressão",
-      tab_presets: "Presets",
-      sec_presets: "Galeria de Modelos",
-      btn_save_preset: "+ Salvar",
-      btn_ok: "Salvar",
-      cat_all: "Todos",
-      cat_organic: "Orgânicos",
-      cat_geometric: "Geométricos",
-      cat_planter: "Cachepôs",
-      cat_user: "Meus",
-      sec_silhouette: "Silhueta & Curva 2D",
-      mode_sliders: "Sliders",
-      mode_curve: "Curva Livre 2D",
-      btn_to_curve: "Sliders → Curva",
-      hint_curve_sliders: "Arraste as alças na silhueta 2D ou ajuste os controles abaixo.",
-      hint_curve_free: "Arraste pontos · Clique na curva p/ adicionar · Duplo-clique/botão direito p/ remover.",
-      sec_resolution: "Resolução da Malha",
-      mat_emerald: "Seda Esmeralda Orca",
-      mat_terracotta: "Cerâmica Terracota",
-      mat_white: "Porcelana Branca Mate",
-      mat_copper: "Bronze Cobre Escovado",
-      mat_xray: "🔬 Raio-X / Parede (Translúcido)",
-      mat_heatmap: "Mapa de Overhang (°)",
-      vp_xray: "🔬 Raio-X / Parede",
-      vp_calipers: "📏 Cotas mm",
-      vp_heatmap: "🔥 Overhang",
-      vp_wire: "⌗ Malha",
-      vp_saucer: "🍽 Pratinho",
-      vp_layout_nested: "Encaixado",
-      vp_layout_side: "Lado a Lado",
-      hud_title: "Printabilidade",
-      hud_wall_floor: "Parede / Fundo",
-      hud_mouth_hole: "Ø Furo Boca",
-      hud_dims: "Dimensões (mm)",
-      hud_overhang: "Overhang Máx",
-      hud_weight: "Filamento Est.",
-      hud_Tris: "Triângulos",
-      leg_outer: "Externa",
-      leg_inner: "Cavidade & Fundo",
-      cam_front: "Frente",
-      cam_top: "Topo",
-      cam_bottom: "Base",
-      cam_fit: "Enquadrar",
-      vp_cut: "✂ Corte Transversal",
-      vp_cut_y: "✂ Corte Vertical (Perfil Y)",
-      vp_cut_z: "💿 Fatia Horizontal Z (Planta 5%–100%)",
-      sec_envelope: "Envelope & Torção Global",
-      sec_textures: "Texturas Combináveis",
-      tex_ribbed: "Canelado / Frisos",
-      tex_waves: "Ondas Orgânicas",
-      tex_origami: "Origami Diamante",
-      tex_cellular: "Celular / Coral 3D",
-      lbl_ridge_mode: "Veios em Crista (Coral)",
-      sec_print_mode: "Parede & Abertura (mm)",
-      mode_hollow: "Vaso Oco Real (Parede em mm)",
-      mode_spiral: "Modo Espiral (1 Linha)",
-      lbl_stl_open_hollow: "Manter boca aberta ao exportar .STL",
-      note_spiral_honest: "O Modo Espiral gera um bloco base cujo topo é removido pelo fatiador (.3MF). Para exportar .STL sempre aberto, mantenha a proteção abaixo ativa!",
-      banner_spiral_safe: "Modo Espiral: malha base p/ .3MF (fatiador remove o topo) · .STL protegido c/ Boca Aberta",
-      banner_spiral_closed: "Atenção: Bloco Espiral maciço — o .STL sairá com o topo FECHADO para fatiamento Espiral!",
-      perim_hint_fmt: "≈ {n} voltas de {lw} mm · Furo Ø {id} mm",
-      spiral_floor_fmt: "≈ {mm} mm de fundo ({n} cam.) · Bico {noz}mm (ideal {wmin}–{wmax} mm)",
-      wall_badge_hollow: "Oco · {w} mm",
-      wall_badge_spiral: "Espiral · {w} mm",
-      cal_ext: "Ø Externo: {v} mm",
-      cal_hole: "Ø Furo: {v} mm",
-      cal_wall: "Parede: {v} mm",
-      cal_wall_range: "Parede: {v} mm ({min}–{max} mm)",
-      cal_floor: "Fundo: {v} mm",
-      cal_z_slice: "💿 Fatia Z = {z} mm ({pct}%)",
-      lbl_2d_wall: "Parede {v} mm",
-      lbl_2d_floor: "Fundo {v} mm",
-      lbl_2d_hole: "Ø Furo {v} mm",
-      lbl_2d_spiral_cap: "Tampa Espiral (.3MF)",
-      lbl_auto_slicer: "Auto-ajustar OrcaSlicer ao enviar",
-      lbl_spiral_smooth: "Suavizar Costura Espiral XY",
-      lbl_clamp_overhang: "Limitar Overhang Automaticamente",
-      sec_gardening: "Jardinagem: Drenagem & Prato",
-      lbl_drainage: "Furos de Drenagem na Base",
-      note_drainage_spiral: "Cavidades cegas nas camadas sólidas da base: furos reais sem quebrar o contorno único do Modo Espiral!",
-      note_drainage_hollow: "Túneis cilíndricos atravessando o fundo oco da peça com malha 2-manifold estanque.",
-      lbl_include_saucer: "Incluir Pratinho Coordenado",
-      warn_saucer_spiral: "Vaso + Prato juntos convertem automaticamente para Vaso Oco Aberto na mesa/exportação.",
-      lbl_saucer_tex: "Repetir Textura do Vaso no Prato",
-      btn_send_plater: "Enviar para a Mesa do OrcaSlicer",
-      btn_exp_3mf: "Exportar .3MF",
-      btn_exp_stl: "Exportar .STL",
-      poly_circle: "Circular",
-      poly_sides_fmt: "{n} Lados",
-      active_tex_fmt: "{n} ativa(s)",
-      bed_exceeded: "Excede o volume da impressora ({bx}×{by}×{bz} mm)!",
-      btn_fit_printer: "Ajustar à Mesa",
-      printer_sync_tip: "Clique para sincronizar impressora ativa do OrcaSlicer",
-      toast_printer_synced: "Impressora ativa sincronizada: {name} ({dims})",
-      toast_fitted_printer: "Dimensões ajustadas ao volume de {name}!",
-      status_ok: "ÓTIMO",
-      status_warn: "ATENÇÃO",
-      status_crit: "CRÍTICO",
-      toast_randomized: "Novo vaso imprimível gerado!",
-      toast_preset_saved: "Preset salvo com sucesso!",
-      toast_converted_curve: "Convertido para Curva Livre PCHIP!"
-    },
-    en: {
-      btn_surprise: "Surprise Me",
-      tab_shape: "Shape",
-      tab_textures: "Textures",
-      tab_print: "Wall & Print",
-      tab_presets: "Presets",
-      sec_presets: "Preset Gallery",
-      btn_save_preset: "+ Save",
-      btn_ok: "Save",
-      cat_all: "All",
-      cat_organic: "Organic",
-      cat_geometric: "Geometric",
-      cat_planter: "Planters",
-      cat_user: "Saved",
-      sec_silhouette: "Silhouette & 2D Curve",
-      mode_sliders: "Sliders",
-      mode_curve: "Freeform 2D Curve",
-      btn_to_curve: "Sliders → Curve",
-      hint_curve_sliders: "Drag handles directly on the 2D silhouette or fine-tune sliders below.",
-      hint_curve_free: "Drag knots · Click curve to add knot · Double-click/right-click interior knot to remove.",
-      sec_resolution: "Mesh Resolution",
-      mat_emerald: "Orca Emerald Silk",
-      mat_terracotta: "Terracotta Clay",
-      mat_white: "Matte White Ceramic",
-      mat_copper: "Copper Bronze",
-      mat_xray: "🔬 X-Ray / Wall (Translucent)",
-      mat_heatmap: "Overhang Heatmap (°)",
-      vp_xray: "🔬 X-Ray / Wall",
-      vp_calipers: "📏 mm Calipers",
-      vp_heatmap: "🔥 Overhang",
-      vp_wire: "⌗ Wireframe",
-      vp_saucer: "🍽 Saucer",
-      vp_layout_nested: "Nested",
-      vp_layout_side: "Side-by-Side",
-      hud_title: "Printability",
-      hud_wall_floor: "Wall / Floor",
-      hud_mouth_hole: "Ø Mouth Bore",
-      hud_dims: "Dimensions (mm)",
-      hud_overhang: "Max Overhang",
-      hud_weight: "Est. Filament",
-      hud_Tris: "Triangles",
-      leg_outer: "Outer Wall",
-      leg_inner: "Cavity & Floor",
-      cam_front: "Front",
-      cam_top: "Top",
-      cam_bottom: "Bottom",
-      cam_fit: "Fit View",
-      vp_cut: "✂ Cross-Section Cut",
-      vp_cut_y: "✂ Vertical Cut (Profile Y)",
-      vp_cut_z: "💿 Horizontal Z Slice (Plan 5%–100%)",
-      sec_envelope: "Envelope & Global Twist",
-      sec_textures: "Combinable Textures",
-      tex_ribbed: "Ribbed / Fluted",
-      tex_waves: "Organic Waves",
-      tex_origami: "Origami Diamond",
-      tex_cellular: "Cellular / Coral 3D",
-      lbl_ridge_mode: "Ridged Coral Veins",
-      sec_print_mode: "Wall & Opening (mm)",
-      mode_hollow: "True Hollow Vase (mm Wall)",
-      mode_spiral: "Spiral Mode (1 Line)",
-      lbl_stl_open_hollow: "Always keep open mouth on .STL export",
-      note_spiral_honest: "Spiral Mode builds a solid base block whose top is removed by the slicer (.3MF). Keep the toggle below checked so .STL exports stay open!",
-      banner_spiral_safe: "Spiral Mode: solid base block for .3MF (slicer removes top) · .STL protected w/ Open Mouth",
-      banner_spiral_closed: "Warning: Solid Spiral Block — .STL will export CLOSED at top for Spiral Slicing!",
-      perim_hint_fmt: "≈ {n} loops of {lw} mm · Bore Ø {id} mm",
-      spiral_floor_fmt: "≈ {mm} mm floor ({n} lay.) · Nozzle {noz}mm (ideal {wmin}–{wmax} mm)",
-      wall_badge_hollow: "Hollow · {w} mm",
-      wall_badge_spiral: "Spiral · {w} mm",
-      cal_ext: "Ø Outer: {v} mm",
-      cal_hole: "Ø Bore: {v} mm",
-      cal_wall: "Wall: {v} mm",
-      cal_wall_range: "Wall: {v} mm ({min}–{max} mm)",
-      cal_floor: "Bottom: {v} mm",
-      cal_z_slice: "💿 Z Slice = {z} mm ({pct}%)",
-      lbl_2d_wall: "Wall {v} mm",
-      lbl_2d_floor: "Bottom {v} mm",
-      lbl_2d_hole: "Ø Bore {v} mm",
-      lbl_2d_spiral_cap: "Spiral Cap (.3MF)",
-      lbl_auto_slicer: "Auto-configure OrcaSlicer on send",
-      lbl_spiral_smooth: "Smooth Spiral XY Seam",
-      lbl_clamp_overhang: "Auto-Clamp Overhang Slope",
-      sec_gardening: "Gardening: Drainage & Saucer",
-      lbl_drainage: "Bottom Drainage Holes",
-      note_drainage_spiral: "Smart blind cavities through solid bottom layers: real drainage holes without breaking single-contour Spiral Vase!",
-      note_drainage_hollow: "Watertight cylindrical drainage tunnels straight through the hollow pot floor.",
-      lbl_include_saucer: "Include Matching Saucer",
-      warn_saucer_spiral: "Vase + Saucer together automatically switch to Open Hollow Mesh on send/export.",
-      lbl_saucer_tex: "Match Vase Texture on Saucer",
-      btn_send_plater: "Send to OrcaSlicer Plater",
-      btn_exp_3mf: "Export .3MF",
-      btn_exp_stl: "Export .STL",
-      poly_circle: "Smooth Circle",
-      poly_sides_fmt: "{n}-Gon",
-      active_tex_fmt: "{n} active",
-      bed_exceeded: "Exceeds printer build volume ({bx}×{by}×{bz} mm)!",
-      btn_fit_printer: "Fit to Printer",
-      printer_sync_tip: "Click to sync active OrcaSlicer printer",
-      toast_printer_synced: "Synced active printer: {name} ({dims})",
-      toast_fitted_printer: "Dimensions fitted to {name} build volume!",
-      status_ok: "PRINTABLE",
-      status_warn: "WARNING",
-      status_crit: "CRITICAL",
-      toast_randomized: "Generated printable vase design!",
-      toast_preset_saved: "Preset saved!",
-      toast_converted_curve: "Converted sliders to PCHIP Freeform Curve!"
+  const LOCALE_DATA = __VASE_LOCALE_PACKS__;
+  const LANGUAGE_METADATA = LOCALE_DATA.metadata;
+  const LANGUAGES = LANGUAGE_METADATA.map(function(item) { return item.code; });
+  const LOCALE_VOCABULARY = LOCALE_DATA.vocabulary;
+  const I18N = {};
+  for (const language of LANGUAGES) {
+    const catalog = LOCALE_VOCABULARY[language] || {};
+    I18N[language] = Object.fromEntries(Object.entries(LOCALE_DATA.messages).map(function(entry) {
+      return [entry[0], catalog["ui:" + entry[0] + "::" + entry[1]] || catalog[entry[1]] || entry[1]];
+    }));
+  }
+  function normalizeLanguage(value) {
+    let code = String(value || "").trim().toLowerCase().replace(/_/g, "-").split(/[.@]/)[0];
+    if (!code) return LANGUAGES.includes("pt") ? "pt" : "en";
+    while (code) {
+      if (LANGUAGES.includes(code)) return code;
+      code = code.includes("-") ? code.slice(0, code.lastIndexOf("-")) : "";
     }
-  };
+    return "en";
+  }
+  function localizedText(english) {
+    const catalog = LOCALE_VOCABULARY[state.lang] || {};
+    return catalog[english] || english;
+  }
+  function localizedWarning(warning) {
+    const source = warning.en || warning.pt || "";
+    const catalog = LOCALE_VOCABULARY[state.lang] || {};
+    if (catalog[source]) return catalog[source];
+    for (const template of Object.keys(catalog)) {
+      if (!template.includes("{")) continue;
+      const names = [];
+      const pattern = template.split(/(\{[a-z]+\})/).map(function(part) {
+        if (/^\{[a-z]+\}$/.test(part)) { names.push(part.slice(1, -1)); return "(.+?)"; }
+        return part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      }).join("");
+      const match = source.match(new RegExp("^" + pattern + "$"));
+      if (match) {
+        let result = catalog[template];
+        names.forEach(function(name, i) { result = result.replace("{" + name + "}", match[i + 1]); });
+        return result;
+      }
+    }
+    return source;
+  }
+  function sliderLabel(spec) { return localizedText(spec.en); }
+  function sliderUnit(unit) {
+    return localizedText(({seg:"Segments",cam:"Layers",un:"Count",oct:"Octaves"})[unit] || unit);
+  }
+  const STATIC_ATTRIBUTES = [];
+  function initializeStaticTranslations() {
+    document.querySelectorAll("[title], [placeholder], [aria-label]").forEach(function(node) {
+      for (const attr of ["title", "placeholder", "aria-label"]) {
+        const value = node.getAttribute(attr);
+        if (value) STATIC_ATTRIBUTES.push({node: node, attr: attr, value: value});
+      }
+    });
+  }
+  function translateStaticAttributes() {
+    for (const entry of STATIC_ATTRIBUTES) {
+      let source = entry.value;
+      if (source === "Nome do preset...") source = "Preset name...";
+      if (source === "Dark / Light") source = "Toggle Theme";
+      if (source.startsWith("Undo (")) source = localizedText("Undo") + " (Ctrl+Z)";
+      else if (source.startsWith("Redo (")) source = localizedText("Redo") + " (Ctrl+Y)";
+      else source = localizedText(source);
+      entry.node.setAttribute(entry.attr, source);
+    }
+  }
 
   const SLIDER_SPECS = [
-    { path: "height_mm", min: 30, max: 500, step: 1, unit: "mm", pt: "Altura Total", en: "Total Height" },
-    { path: "base_diameter_mm", min: 20, max: 450, step: 1, unit: "mm", pt: "Diâmetro da Base", en: "Base Diameter" },
-    { path: "belly_diameter_mm", min: 20, max: 450, step: 1, unit: "mm", pt: "Diâmetro do Bojo", en: "Belly Diameter" },
-    { path: "belly_height_ratio", min: 0.08, max: 0.85, step: 0.01, unit: "h", pt: "Altura do Bojo", en: "Belly Height Ratio" },
-    { path: "waist_diameter_mm", min: 16, max: 450, step: 1, unit: "mm", pt: "Diâmetro da Cintura", en: "Waist Diameter" },
-    { path: "waist_height_ratio", min: 0.15, max: 0.92, step: 0.01, unit: "h", pt: "Altura da Cintura", en: "Waist Height Ratio" },
-    { path: "neck_diameter_mm", min: 16, max: 450, step: 1, unit: "mm", pt: "Diâmetro do Pescoço", en: "Neck Diameter" },
-    { path: "lip_flare_mm", min: -15, max: 25, step: 0.5, unit: "mm", pt: "Abertura da Borda", en: "Top Lip Flare" },
-    { path: "lip_bevel_mm", min: 0, max: 4, step: 0.2, unit: "mm", pt: "Chanfro/Borda", en: "Top Rim Bevel" },
-    { path: "polygon_sides", min: 0, max: 24, step: 1, unit: "n", pt: "Lados do Polígono (0=Circ)", en: "Polygon Sides (0=Circle)" },
-    { path: "polygon_roundness", min: 0, max: 1, step: 0.02, unit: "", pt: "Suavidade dos Cantos", en: "Polygon Roundness" },
-    { path: "resolution_angular", min: 64, max: 360, step: 8, unit: "seg", pt: "Resolução Angular", en: "Angular Resolution" },
-    { path: "resolution_vertical", min: 60, max: 400, step: 10, unit: "cam", pt: "Resolução Vertical", en: "Vertical Resolution" },
+    { path: "height_mm", min: 30, max: 500, step: 1, unit: "mm", en: "Total Height" },
+    { path: "base_diameter_mm", min: 20, max: 450, step: 1, unit: "mm", en: "Base Diameter" },
+    { path: "belly_diameter_mm", min: 20, max: 450, step: 1, unit: "mm", en: "Belly Diameter" },
+    { path: "belly_height_ratio", min: 0.08, max: 0.85, step: 0.01, unit: "h", en: "Belly Height Ratio" },
+    { path: "waist_diameter_mm", min: 16, max: 450, step: 1, unit: "mm", en: "Waist Diameter" },
+    { path: "waist_height_ratio", min: 0.15, max: 0.92, step: 0.01, unit: "h", en: "Waist Height Ratio" },
+    { path: "neck_diameter_mm", min: 16, max: 450, step: 1, unit: "mm", en: "Neck Diameter" },
+    { path: "lip_flare_mm", min: -15, max: 25, step: 0.5, unit: "mm", en: "Top Lip Flare" },
+    { path: "lip_bevel_mm", min: 0, max: 4, step: 0.2, unit: "mm", en: "Top Rim Bevel" },
+    { path: "polygon_sides", min: 0, max: 24, step: 1, unit: "n", en: "Polygon Sides (0=Circle)" },
+    { path: "polygon_roundness", min: 0, max: 1, step: 0.02, unit: "", en: "Polygon Roundness" },
+    { path: "resolution_angular", min: 64, max: 360, step: 8, unit: "seg", en: "Angular Resolution" },
+    { path: "resolution_vertical", min: 60, max: 400, step: 10, unit: "cam", en: "Vertical Resolution" },
 
-    { path: "bottom_fade_mm", min: 0, max: 60, step: 1, unit: "mm", pt: "Suavização na Base", en: "Bottom Texture Fade" },
-    { path: "top_fade_mm", min: 0, max: 60, step: 1, unit: "mm", pt: "Suavização no Topo", en: "Top Texture Fade" },
-    { path: "global_twist_deg", min: -720, max: 720, step: 5, unit: "°", pt: "Torção Helicoidal", en: "Global Helical Twist" },
+    { path: "bottom_fade_mm", min: 0, max: 60, step: 1, unit: "mm", en: "Bottom Texture Fade" },
+    { path: "top_fade_mm", min: 0, max: 60, step: 1, unit: "mm", en: "Top Texture Fade" },
+    { path: "global_twist_deg", min: -720, max: 720, step: 5, unit: "°", en: "Global Helical Twist" },
 
-    { path: "textures.ribbed.depth_mm", min: -15, max: 15, step: 0.2, unit: "mm", pt: "Profundidade do Friso", en: "Rib Depth" },
-    { path: "textures.ribbed.count", min: 3, max: 180, step: 1, unit: "un", pt: "Quantidade (Densidade)", en: "Rib Count (Density)" },
-    { path: "textures.ribbed.duty_cycle", min: 0.10, max: 0.90, step: 0.02, unit: "", pt: "Largura vs Espaçamento", en: "Rib Width / Duty Cycle" },
-    { path: "textures.ribbed.sharpness", min: 0, max: 1, step: 0.02, unit: "", pt: "Nitidez da Crista", en: "Crest Sharpness" },
-    { path: "textures.ribbed.twist_deg", min: -720, max: 720, step: 5, unit: "°", pt: "Torção dos Frisos", en: "Rib Helical Twist" },
-    { path: "textures.ribbed.phase_deg", min: 0, max: 360, step: 5, unit: "°", pt: "Fase Angular", en: "Angular Phase" },
+    { path: "textures.ribbed.depth_mm", min: -15, max: 15, step: 0.2, unit: "mm", en: "Rib Depth" },
+    { path: "textures.ribbed.count", min: 3, max: 180, step: 1, unit: "un", en: "Rib Count (Density)" },
+    { path: "textures.ribbed.duty_cycle", min: 0.10, max: 0.90, step: 0.02, unit: "", en: "Rib Width / Duty Cycle" },
+    { path: "textures.ribbed.sharpness", min: 0, max: 1, step: 0.02, unit: "", en: "Crest Sharpness" },
+    { path: "textures.ribbed.twist_deg", min: -720, max: 720, step: 5, unit: "°", en: "Rib Helical Twist" },
+    { path: "textures.ribbed.phase_deg", min: 0, max: 360, step: 5, unit: "°", en: "Angular Phase" },
 
-    { path: "textures.waves.depth_mm", min: -15, max: 15, step: 0.2, unit: "mm", pt: "Amplitude da Onda", en: "Wave Depth" },
-    { path: "textures.waves.vertical_wavelength_mm", min: 4, max: 120, step: 1, unit: "mm", pt: "Comprimento Vertical", en: "Vertical Wavelength" },
-    { path: "textures.waves.angular_lobes", min: 0, max: 48, step: 1, unit: "un", pt: "Lóbulos na Volta", en: "Angular Lobes" },
-    { path: "textures.waves.interference_mix", min: 0, max: 1, step: 0.02, unit: "", pt: "Interferência Cruzada", en: "Counter-Wave Mix" },
-    { path: "textures.waves.wave_skew", min: -0.8, max: 0.8, step: 0.05, unit: "", pt: "Assimetria da Onda", en: "Wave Skew" },
-    { path: "textures.waves.phase_deg", min: 0, max: 360, step: 5, unit: "°", pt: "Fase da Onda", en: "Wave Phase" },
+    { path: "textures.waves.depth_mm", min: -15, max: 15, step: 0.2, unit: "mm", en: "Wave Depth" },
+    { path: "textures.waves.vertical_wavelength_mm", min: 4, max: 120, step: 1, unit: "mm", en: "Vertical Wavelength" },
+    { path: "textures.waves.angular_lobes", min: 0, max: 48, step: 1, unit: "un", en: "Angular Lobes" },
+    { path: "textures.waves.interference_mix", min: 0, max: 1, step: 0.02, unit: "", en: "Counter-Wave Mix" },
+    { path: "textures.waves.wave_skew", min: -0.8, max: 0.8, step: 0.05, unit: "", en: "Wave Skew" },
+    { path: "textures.waves.phase_deg", min: 0, max: 360, step: 5, unit: "°", en: "Wave Phase" },
 
-    { path: "textures.origami.depth_mm", min: -15, max: 15, step: 0.2, unit: "mm", pt: "Relevo dos Diamantes", en: "Facet Depth" },
-    { path: "textures.origami.cells_around", min: 3, max: 60, step: 1, unit: "un", pt: "Células Horizontais", en: "Cells Around" },
-    { path: "textures.origami.cells_vertical", min: 2, max: 50, step: 1, unit: "un", pt: "Andares Verticais", en: "Vertical Tiers" },
-    { path: "textures.origami.crease_sharpness", min: 0, max: 1, step: 0.02, unit: "", pt: "Vincos Dobrados", en: "Crease Sharpness" },
-    { path: "textures.origami.stagger", min: 0, max: 1, step: 0.05, unit: "", pt: "Deslocamento (Stagger)", en: "Row Stagger" },
+    { path: "textures.origami.depth_mm", min: -15, max: 15, step: 0.2, unit: "mm", en: "Facet Depth" },
+    { path: "textures.origami.cells_around", min: 3, max: 60, step: 1, unit: "un", en: "Cells Around" },
+    { path: "textures.origami.cells_vertical", min: 2, max: 50, step: 1, unit: "un", en: "Vertical Tiers" },
+    { path: "textures.origami.crease_sharpness", min: 0, max: 1, step: 0.02, unit: "", en: "Crease Sharpness" },
+    { path: "textures.origami.stagger", min: 0, max: 1, step: 0.05, unit: "", en: "Row Stagger" },
 
-    { path: "textures.cellular.depth_mm", min: -12, max: 12, step: 0.2, unit: "mm", pt: "Relevo Celular", en: "Cellular Depth" },
-    { path: "textures.cellular.scale_angular", min: 2, max: 40, step: 1, unit: "un", pt: "Células na Volta", en: "Angular Cell Scale" },
-    { path: "textures.cellular.scale_vertical_mm", min: 5, max: 100, step: 1, unit: "mm", pt: "Escala Vertical", en: "Vertical Cell Size" },
-    { path: "textures.cellular.octaves", min: 1, max: 4, step: 1, unit: "oct", pt: "Detalhe (Oitavas)", en: "Detail Octaves" },
-    { path: "textures.cellular.seed", min: 1, max: 99999, step: 1, unit: "#", pt: "Semente (Seed)", en: "Pattern Seed" },
+    { path: "textures.cellular.depth_mm", min: -12, max: 12, step: 0.2, unit: "mm", en: "Cellular Depth" },
+    { path: "textures.cellular.scale_angular", min: 2, max: 40, step: 1, unit: "un", en: "Angular Cell Scale" },
+    { path: "textures.cellular.scale_vertical_mm", min: 5, max: 100, step: 1, unit: "mm", en: "Vertical Cell Size" },
+    { path: "textures.cellular.octaves", min: 1, max: 4, step: 1, unit: "oct", en: "Detail Octaves" },
+    { path: "textures.cellular.seed", min: 1, max: 99999, step: 1, unit: "#", en: "Pattern Seed" },
 
-    { path: "spiral_line_width_mm", min: 0.40, max: 1.20, step: 0.02, unit: "mm", pt: "Largura de Linha Espiral", en: "Spiral Line Width" },
-    { path: "spiral_bottom_layers", min: 2, max: 15, step: 1, unit: "cam", pt: "Camadas Sólidas de Base", en: "Bottom Solid Layers" },
-    { path: "wall_thickness_mm", min: 0.8, max: 25, step: 0.1, unit: "mm", pt: "Espessura da Parede", en: "Wall Thickness" },
-    { path: "bottom_thickness_mm", min: 1.0, max: 25, step: 0.2, unit: "mm", pt: "Espessura do Fundo", en: "Bottom Floor Thickness" },
-    { path: "max_safe_overhang_deg", min: 35, max: 65, step: 1, unit: "°", pt: "Limite de Overhang", en: "Max Safe Overhang" },
+    { path: "spiral_line_width_mm", min: 0.40, max: 1.20, step: 0.02, unit: "mm", en: "Spiral Line Width" },
+    { path: "spiral_bottom_layers", min: 2, max: 15, step: 1, unit: "cam", en: "Bottom Solid Layers" },
+    { path: "wall_thickness_mm", min: 0.8, max: 25, step: 0.1, unit: "mm", en: "Wall Thickness" },
+    { path: "bottom_thickness_mm", min: 1.0, max: 25, step: 0.2, unit: "mm", en: "Bottom Floor Thickness" },
+    { path: "max_safe_overhang_deg", min: 35, max: 65, step: 1, unit: "°", en: "Max Safe Overhang" },
 
-    { path: "drainage.hole_count", min: 1, max: 9, step: 1, unit: "un", pt: "Número de Furos", en: "Drainage Hole Count" },
-    { path: "drainage.hole_diameter_mm", min: 3, max: 20, step: 0.5, unit: "mm", pt: "Diâmetro do Furo", en: "Hole Diameter" },
-    { path: "drainage.ring_radius_ratio", min: 0, max: 0.68, step: 0.02, unit: "r", pt: "Raio do Anel (0=Centro)", en: "Ring Radius Ratio" },
+    { path: "drainage.hole_count", min: 1, max: 9, step: 1, unit: "un", en: "Drainage Hole Count" },
+    { path: "drainage.hole_diameter_mm", min: 3, max: 20, step: 0.5, unit: "mm", en: "Hole Diameter" },
+    { path: "drainage.ring_radius_ratio", min: 0, max: 0.68, step: 0.02, unit: "r", en: "Ring Radius Ratio" },
 
-    { path: "saucer.clearance_mm", min: 3, max: 25, step: 0.5, unit: "mm", pt: "Folga Interna do Prato", en: "Saucer Inner Clearance" },
-    { path: "saucer.rim_height_mm", min: 10, max: 60, step: 1, unit: "mm", pt: "Altura da Borda", en: "Saucer Rim Height" },
-    { path: "saucer.wall_thickness_mm", min: 1.2, max: 5.0, step: 0.2, unit: "mm", pt: "Parede do Prato", en: "Saucer Wall Thickness" },
-    { path: "saucer.floor_thickness_mm", min: 1.2, max: 6.0, step: 0.2, unit: "mm", pt: "Fundo do Prato", en: "Saucer Floor Thickness" },
-    { path: "saucer.inner_ribs_height_mm", min: 0, max: 6.0, step: 0.2, unit: "mm", pt: "Frisos Internos de Escoamento", en: "Inner Drainage Ribs" }
+    { path: "saucer.clearance_mm", min: 3, max: 25, step: 0.5, unit: "mm", en: "Saucer Inner Clearance" },
+    { path: "saucer.rim_height_mm", min: 10, max: 60, step: 1, unit: "mm", en: "Saucer Rim Height" },
+    { path: "saucer.wall_thickness_mm", min: 1.2, max: 5.0, step: 0.2, unit: "mm", en: "Saucer Wall Thickness" },
+    { path: "saucer.floor_thickness_mm", min: 1.2, max: 6.0, step: 0.2, unit: "mm", en: "Saucer Floor Thickness" },
+    { path: "saucer.inner_ribs_height_mm", min: 0, max: 6.0, step: 0.2, unit: "mm", en: "Inner Drainage Ribs" }
   ];
 
   // ==========================================================================
@@ -2895,7 +2752,12 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
   const initCtx = (BOOT_PAYLOAD && BOOT_PAYLOAD.initial_context) ? BOOT_PAYLOAD.initial_context : {};
   const state = {
     mode: BOOT_PAYLOAD.mode === "dock" ? "dock" : "page",
-    lang: initCtx.lang === "en" ? "en" : "pt",
+    lang: normalizeLanguage(initCtx.lang),
+    manualLanguageSelected: Boolean(initCtx.language_override),
+    pendingLanguage: null,
+    deferredLanguageUpdate: null,
+    nextLanguageRequest: 0,
+    languageRevision: Number(initCtx.language_revision || 0),
     theme: initCtx.theme === "light" ? "light" : "dark",
     printer: Object.assign(
       {
@@ -2964,7 +2826,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
   }
 
   function tr(key) {
-    const dict = I18N[state.lang] || I18N.pt;
+    const dict = I18N[state.lang] || I18N.en;
     return dict[key] !== undefined ? dict[key] : key;
   }
 
@@ -3202,7 +3064,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     if (!msg || typeof msg !== "object") return;
 
     if (msg.type === "init_state") {
-      if (msg.lang === "en" || msg.lang === "pt") state.lang = msg.lang;
+      if (msg.lang && !state.manualLanguageSelected) state.lang = normalizeLanguage(msg.lang);
       if (!state.userOverrodeTheme) {
         const cssTheme = msg.theme_explicit === false ? detectInjectedOrcaTheme() : null;
         if (cssTheme === "light" || cssTheme === "dark") {
@@ -3238,8 +3100,8 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       const wasManual = pendingManualPrinterSync;
       pendingManualPrinterSync = false;
       let langOrThemeChanged = false;
-      if ((msg.lang === "en" || msg.lang === "pt") && msg.lang !== state.lang) {
-        state.lang = msg.lang;
+      if (msg.lang && !state.manualLanguageSelected && normalizeLanguage(msg.lang) !== state.lang) {
+        state.lang = normalizeLanguage(msg.lang);
         langOrThemeChanged = true;
       }
       if (!state.userOverrodeTheme) {
@@ -3254,6 +3116,27 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
         applyThemeAndLanguage();
       }
       applyIncomingPrinter(msg.printer, true, wasManual);
+      return;
+    }
+
+    if (msg.type === "preferences_updated" && msg.lang) {
+      const revision = Number(msg.language_revision || 0);
+      if (revision && revision < state.languageRevision) return;
+      if (state.pendingLanguage) {
+        const pending = state.pendingLanguage;
+        if (msg.source_mode === state.mode && Number(msg.request_id || 0) < pending.id) return;
+        if (normalizeLanguage(msg.lang) !== pending.lang) {
+          if (msg.source_mode !== state.mode && revision > Number(state.deferredLanguageUpdate?.language_revision || 0)) state.deferredLanguageUpdate = msg;
+          return;
+        }
+        state.pendingLanguage = null;
+      }
+      const resolved = Number(state.deferredLanguageUpdate?.language_revision || 0) > revision ? state.deferredLanguageUpdate : msg;
+      state.deferredLanguageUpdate = null;
+      state.languageRevision = Math.max(state.languageRevision, Number(resolved.language_revision || 0));
+      state.manualLanguageSelected = true;
+      state.lang = normalizeLanguage(resolved.lang);
+      applyThemeAndLanguage();
       return;
     }
 
@@ -3342,7 +3225,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
         idx.push(a, b, c);
       },
       addWireSeg: function (x1, y1, z1, x2, y2, z2) {
-        wire.push(x1, y1, z1, x2, y2, z2);
+        if (state.wireframe) wire.push(x1, y1, z1, x2, y2, z2);
       }
     };
   }
@@ -5884,10 +5767,10 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       host.className = "ctrl-row";
       host.innerHTML =
         '<div class="ctrl-top">' +
-          '<span class="ctrl-label" data-spec-label="' + spec.path + '">' + (state.lang === "en" ? spec.en : spec.pt) + '</span>' +
+          '<span class="ctrl-label" data-spec-label="' + spec.path + '"></span>' +
           '<div class="ctrl-val-wrap">' +
             '<input class="ctrl-num" type="number" min="' + spec.min + '" max="' + spec.max + '" step="' + spec.step + '" value="' + Number(initVal).toFixed(decs) + '" />' +
-            '<span class="ctrl-unit">' + spec.unit + '</span>' +
+            '<span class="ctrl-unit"></span>' +
           '</div>' +
         '</div>' +
         '<input class="orca-slider" type="range" min="' + spec.min + '" max="' + spec.max + '" step="' + spec.step + '" value="' + initVal + '" />';
@@ -5895,8 +5778,11 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       const rangeEl = host.querySelector('input[type="range"]');
       const numEl = host.querySelector('input[type="number"]');
       const labelEl = host.querySelector("[data-spec-label]");
+      if (labelEl) labelEl.textContent = sliderLabel(spec);
+      const unitEl = host.querySelector(".ctrl-unit");
+      if (unitEl) unitEl.textContent = sliderUnit(spec.unit);
 
-      sliderRefs[spec.path] = { spec: spec, rangeEl: rangeEl, numEl: numEl, labelEl: labelEl, decs: decs };
+      sliderRefs[spec.path] = { spec: spec, rangeEl: rangeEl, numEl: numEl, labelEl: labelEl, unitEl:host.querySelector(".ctrl-unit"), decs: decs };
 
       if (rangeEl) {
         rangeEl.addEventListener("pointerdown", function () {
@@ -6041,13 +5927,13 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     if (lbl) {
       if (isZ) {
         if (state.zSlicePct >= 100) {
-          lbl.textContent = "Off";
+          lbl.textContent = localizedText("Off");
         } else {
           const zMm = Math.round(state.params.height_mm * (state.zSlicePct / 100.0));
           lbl.textContent = state.zSlicePct + "% (" + zMm + "mm)";
         }
       } else {
-        lbl.textContent = state.crossCutPct === 0 ? "Off" : (state.crossCutPct + "%");
+        lbl.textContent = state.crossCutPct === 0 ? localizedText("Off") : (state.crossCutPct + "%");
       }
     }
   }
@@ -6270,12 +6156,8 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       const card = document.createElement("div");
       card.className = "preset-card" + (item.id === state.activePresetId ? " active" : "");
 
-      const title = state.lang === "en"
-        ? (item.title_en || item.name || item.title_pt || "Preset")
-        : (item.title_pt || item.name || item.title_en || "Preset");
-      const desc = state.lang === "en"
-        ? (item.description_en || item.category || "")
-        : (item.description_pt || item.category || "");
+      const title = item._isUser ? (item.name || item.title_pt || item.title_en || "Preset") : localizedText(item.title_en || item.title_pt || "Preset");
+      const desc = item._isUser ? (item.description_en || item.description_pt || "") : localizedText(item.description_en || item.description_pt || "");
 
       card.innerHTML =
         '<div class="preset-thumb">' + makePresetMiniSvg(item.params || {}) + '</div>' +
@@ -6293,7 +6175,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
         const delBtn = document.createElement("button");
         delBtn.className = "preset-del-btn";
         delBtn.textContent = "×";
-        delBtn.title = "Delete";
+        delBtn.title = localizedText("Delete");
         delBtn.addEventListener("click", function (ev) {
           ev.stopPropagation();
           if (!sendToHost({ type: "preset_delete", id: item.id })) {
@@ -6400,7 +6282,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
           const div = document.createElement("div");
           const code = String(w.code || "").toLowerCase();
           div.className = "hud-warn-item" + (code.includes("crit") || code.includes("bed") || code.includes("height") ? " crit" : "");
-          div.textContent = state.lang === "en" ? (w.en || w.pt || "") : (w.pt || w.en || "");
+          div.textContent = localizedWarning(w);
           warnEl.appendChild(div);
         }
       }
@@ -6441,15 +6323,20 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     }
   }
 
+  initializeStaticTranslations();
+
   function applyThemeAndLanguage() {
     document.documentElement.setAttribute("data-theme", state.theme);
     document.documentElement.setAttribute("lang", state.lang);
+    const languageMeta = LANGUAGE_METADATA.find(function(item) { return item.code === state.lang; });
+    document.documentElement.setAttribute("dir", languageMeta ? languageMeta.direction : "ltr");
     if (document.body) {
       document.body.setAttribute("data-mode", state.mode);
     }
 
-    const langBtn = document.getElementById("btn-lang");
-    if (langBtn) langBtn.textContent = state.lang.toUpperCase();
+    const langSelect = document.getElementById("lang-select");
+    if (langSelect) langSelect.value = state.lang;
+    translateStaticAttributes();
 
     const themeBtn = document.getElementById("btn-theme");
     if (themeBtn) themeBtn.textContent = state.theme === "dark" ? "☾" : "☀";
@@ -6466,8 +6353,9 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     for (let i = 0; i < paths.length; i++) {
       const ref = sliderRefs[paths[i]];
       if (ref.labelEl) {
-        ref.labelEl.textContent = state.lang === "en" ? ref.spec.en : ref.spec.pt;
+        ref.labelEl.textContent = sliderLabel(ref.spec);
       }
+      if (ref.unitEl) ref.unitEl.textContent = sliderUnit(ref.spec.unit);
     }
 
     updateDerivedBadges();
@@ -6665,9 +6553,13 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       scheduleHostAnalyze();
     });
 
-    on("btn-lang", "click", function () {
-      state.lang = state.lang === "pt" ? "en" : "pt";
+    on("lang-select", "change", function () {
+      state.lang = normalizeLanguage(document.getElementById("lang-select").value);
+      state.manualLanguageSelected = true;
+      const requestId = ++state.nextLanguageRequest;
+      state.pendingLanguage = {id:requestId,lang:state.lang};
       applyThemeAndLanguage();
+      if (!sendToHost({type:"set_language",lang:state.lang,mode:state.mode,request_id:requestId})) state.pendingLanguage = null;
     });
 
     on("btn-theme", "click", function () {
@@ -6801,7 +6693,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       state.wireframe = !state.wireframe;
       const b = document.getElementById("btn-vp-wire");
       if (b) b.classList.toggle("active", state.wireframe);
-      requestRender();
+      rebuildScene(false);
     });
 
     on("btn-vp-saucer", "click", function () {
@@ -7023,7 +6915,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
             include_saucer: Boolean(state.includeSaucer)
           })) {
             setActionButtonsBusy(false);
-            showToast("OrcaSlicer host bridge not connected (Standalone Preview).", true);
+            showToast(localizedText("OrcaSlicer host bridge not connected (Standalone Preview)."), true);
           }
         } else if (act === "export_3mf" || act === "export_stl") {
           const fmt = act === "export_3mf" ? "3mf" : "stl";
@@ -7037,7 +6929,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
             filename: fname
           })) {
             setActionButtonsBusy(false);
-            showToast("OrcaSlicer host bridge not connected (Standalone Preview).", true);
+            showToast(localizedText("OrcaSlicer host bridge not connected (Standalone Preview)."), true);
           }
         } else if (act === "open_folder") {
           sendToHost({ type: "open_exports_folder" });
@@ -7114,8 +7006,9 @@ def get_studio_html(mode: str = "page", initial_context: dict[str, Any] | None =
     norm_mode = "dock" if str(mode or "").strip().lower() == "dock" else "page"
     ctx: dict[str, Any] = copy.deepcopy(initial_context) if isinstance(initial_context, dict) else {}
 
-    lang_raw = str(ctx.get("lang") or "pt").strip().lower()
-    norm_lang = "en" if lang_raw.startswith("en") else "pt"
+    packs = discovered_language_packs()
+    norm_lang = resolve_language(ctx.get("lang"), packs)
+    ctx["lang"] = norm_lang
 
     theme_raw = str(ctx.get("theme") or "dark").strip().lower()
     norm_theme = "light" if theme_raw == "light" else "dark"
@@ -7131,6 +7024,10 @@ def get_studio_html(mode: str = "page", initial_context: dict[str, Any] | None =
     }
 
     html = _STUDIO_UI_HTML_TEMPLATE
+    html = html.replace("__VASE_LOCALE_PACKS__", _studio_ui_safe_json(locale_payload(packs)))
+    options = "".join('<option value="' + _escape_language_label(code, quote=True) + '">' + _escape_language_label(pack["native_name"]) + '</option>' for code, pack in packs.items())
+    html = html.replace("__LANGUAGE_OPTIONS__", options)
+    html = html.replace("__INITIAL_DIRECTION__", packs[norm_lang]["direction"])
     html = html.replace("__INITIAL_LANG__", norm_lang)
     html = html.replace("__INITIAL_THEME__", norm_theme)
     html = html.replace("__INITIAL_MODE__", norm_mode)

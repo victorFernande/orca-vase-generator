@@ -8,7 +8,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: write
+  contents: read
 
 env:
   PYTHONUTF8: "1"
@@ -22,10 +22,12 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up Python 3.12
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
 
@@ -33,21 +35,48 @@ jobs:
         run: python -m pip install --upgrade pip "numpy>=1.26"
 
       - name: Build PEP 723 Single-File Bundle & Universal Wheel
-        run: python -B scripts/build_and_install.py --no-install
+        run: python -B -W error scripts/build_and_install.py --no-install
 
       - name: Run Full Geometry, 2-Manifold & Bridge Test Suite
-        run: python -B -m unittest discover -s tests -v
+        run: python -B -W error -m unittest discover -s tests -v
+
+      - name: Install isolated offline UI test tools
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          npm install --prefix "$RUNNER_TEMP/orca-ui-tools" --no-save --package-lock=false playwright@1.62.1
+          node "$RUNNER_TEMP/orca-ui-tools/node_modules/playwright/cli.js" install --with-deps chromium
+
+      - name: Verify seven languages in page and dock
+        if: runner.os == 'Linux'
+        env:
+          ORCA_PLAYWRIGHT_MODULE: ${{ runner.temp }}/orca-ui-tools/node_modules/playwright
+          ORCA_TEST_PYTHON: python
+        run: node scripts/check_multilingual.cjs
+
+      - name: Preserve multilingual UI evidence
+        if: always() && runner.os == 'Linux'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: vase-multilingual-ui
+          path: test-output/multilingual/
+          if-no-files-found: ignore
+          retention-days: 14
 
   attach-release-assets:
     name: Upload Bundles to GitHub Release
     needs: test-cross-platform
     if: startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
       - name: Set up Python 3.12
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
 
@@ -56,7 +85,7 @@ jobs:
           ORCA_PLUGIN_VERSION: ${{ github.ref_name }}
         run: |
           python -m pip install --upgrade pip "numpy>=1.26"
-          python -B scripts/build_and_install.py --no-install
+          python -B -W error scripts/build_and_install.py --no-install
 
       - name: Attach .py and .whl to GitHub Release
         env:

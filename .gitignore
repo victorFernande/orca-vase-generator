@@ -17,3 +17,29 @@ venv/
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# Private local outputs and credentials
+test-output/
+exports/
+.env
+.env.*
+!.env.example
+*.log
+*.tmp
+*.local.json
+ui_preferences.json
+
+# Local secrets and personal configuration
+.secrets/
+secrets/
+credentials*.json
+*.pem
+*.key
+*.pfx
+*.p12
+exports_personal/
+.vscode/
+.idea/
+node_modules/
+.install_state.json
+install_state.json

@@ -1,0 +1,96 @@
+{
+  "baseline_commit": "19519a0568ad79db8326b7b172cfdd756f4bb339",
+  "method": "Five isolated Python3.12 subprocess imports per artifact; alternating AB/BA order, one import per process including source read, compile, execution and NumPy; no OS cache flush. After import, measure page HTML generation. No native OrcaSlicer startup claim.",
+  "order": [
+    "baseline",
+    "final",
+    "final",
+    "baseline",
+    "baseline",
+    "final",
+    "final",
+    "baseline",
+    "baseline",
+    "final"
+  ],
+  "samples": {
+    "baseline": [
+      {
+        "import_ms": 698.8061999436468,
+        "html_ms": 5.251599941402674,
+        "bytes": 481852
+      },
+      {
+        "import_ms": 620.1883000321686,
+        "html_ms": 3.4315999364480376,
+        "bytes": 481852
+      },
+      {
+        "import_ms": 620.882400078699,
+        "html_ms": 3.2269000075757504,
+        "bytes": 481852
+      },
+      {
+        "import_ms": 656.053299899213,
+        "html_ms": 3.266100073233247,
+        "bytes": 481852
+      },
+      {
+        "import_ms": 664.2686000559479,
+        "html_ms": 3.9416999788954854,
+        "bytes": 481852
+      }
+    ],
+    "final": [
+      {
+        "import_ms": 603.8743000244722,
+        "html_ms": 5.2686999551951885,
+        "bytes": 344637
+      },
+      {
+        "import_ms": 611.9068999541923,
+        "html_ms": 5.745800095610321,
+        "bytes": 344637
+      },
+      {
+        "import_ms": 713.1027000723407,
+        "html_ms": 6.889900076203048,
+        "bytes": 344637
+      },
+      {
+        "import_ms": 701.4061000663787,
+        "html_ms": 5.2943999180570245,
+        "bytes": 344637
+      },
+      {
+        "import_ms": 777.9218999203295,
+        "html_ms": 5.5475999834015965,
+        "bytes": 344637
+      }
+    ]
+  },
+  "median_import_ms": {
+    "baseline": 656.053299899213,
+    "final": 701.4061000663787
+  },
+  "median_html_ms": {
+    "baseline": 3.4315999364480376,
+    "final": 5.5475999834015965
+  },
+  "artifacts": {
+    "baseline": {
+      "bytes": 481852,
+      "sha256": "747076044ac1e59aa572dcfce0d1e07dc9f2808a98737dbc8b47c85d00b140e4"
+    },
+    "final": {
+      "bytes": 344637,
+      "sha256": "0398adda19533c3050af9050c783a46fe662acb5ba5e918ecfc5211031a18c8e"
+    }
+  },
+  "limits": "Machine-specific isolated measurements; no universal speed/FPS guarantee. Wheel grows due five new locale dictionaries and retains readable sources.",
+  "measurement_snapshot": {
+    "commit": "63b72c9376f130b3ce06b54b1671ced029a9ce61",
+    "scope": "Initial fixed seven-language catalog implementation BEFORE JSON-pack modularization. The final artifact hashes and sizes differ; these samples are historical and are not current-candidate startup claims.",
+    "current_distribution_report": "1.2.0-modular-language-packs.json"
+  }
+}

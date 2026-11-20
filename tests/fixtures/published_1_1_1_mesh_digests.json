@@ -1,0 +1,116 @@
+{
+  "baseline_commit": "19519a0568ad79db8326b7b172cfdd756f4bb339",
+  "baseline_bundle_sha256": "747076044ac1e59aa572dcfce0d1e07dc9f2808a98737dbc8b47c85d00b140e4",
+  "method": "Generate full-resolution original twelve preset vases and botanical saucer independently from archived published standalone bundle and current source; compare raw float32 vertices/normals and int32 triangles byte for byte. Manufacturing source files remain exactly equal to baseline Git blobs.",
+  "ok": true,
+  "unchanged_sources": {
+    "src/vase_studio/schema.py": "4dc158077f66b36514232ff28d54c268ea3c4837fe11e1d1d2166109326474fc",
+    "src/vase_studio/mesh_generator.py": "3c8d196dfe2cb918a48d58b88117e70591bb9d49b156a3ea9897a9f3b204ea58",
+    "src/vase_studio/printability.py": "c6ac1600afdf4e541b3a94e1b2804b6b3c2594aa52597244580d6ff526d7b644",
+    "src/vase_studio/presets_catalog.py": "a112f03458c775dd1a19b3142e54c4892fa58d46c9d3efa590f3bf595d7a48a5",
+    "src/vase_studio/exporters.py": "fe52f6e016aafd618e0c8b1974cbfa4eb03418fceae8c68be38507a8c40a39e3"
+  },
+  "presets": [
+    {
+      "id": "ondas_organicas",
+      "vase": {
+        "vertices": "895881734a7f0e5cf4cd9c3e1962e6f4bd2212d22c47b384336dcfb350dd6a6e",
+        "triangles": "0d99a45764c6ae2630a1c1853005d1decd9abb2b06b8c460748a829c34e24d4a",
+        "face_normals": "9873a15eb48f96b0d4c4eb833f5e731d93fc883a42af72f4555a4fd9988816cc"
+      }
+    },
+    {
+      "id": "colunas_caneladas",
+      "vase": {
+        "vertices": "139a0e8c7e3fd48c3335a308d78ba3db2e9c37ddc75c608f8457b663379bfbba",
+        "triangles": "0d99a45764c6ae2630a1c1853005d1decd9abb2b06b8c460748a829c34e24d4a",
+        "face_normals": "ea099f72709214520975849de5b3f39e917584ca4646d7853bb0143ec0619cc9"
+      }
+    },
+    {
+      "id": "helice_escultural",
+      "vase": {
+        "vertices": "2aa0d98e7737ce946d5a3fab541ba069b33c2516a8106a3955f8f2c3b6c2fafc",
+        "triangles": "2d5907f9b9eceebcdf37992dbb472bfd13316af87f0a5f6a7a51f220b2bd072a",
+        "face_normals": "ce195d2920f26660b1df4cd6ab393fd58de74871f8b064515917b161f4055db5"
+      }
+    },
+    {
+      "id": "origami_yoshimura",
+      "vase": {
+        "vertices": "f696cb0c87cd8bba39d4d6ee3e049c340df9cd95d7edc7a92c35d65d2c16f604",
+        "triangles": "0d99a45764c6ae2630a1c1853005d1decd9abb2b06b8c460748a829c34e24d4a",
+        "face_normals": "b17bb7341648a2c938be8e760d3b0500b11601ef6a59102375f92d85c20cfe2f"
+      }
+    },
+    {
+      "id": "recife_celular",
+      "vase": {
+        "vertices": "3022363c7d2d07d06171f02b6ed139a5f185b12920e0e72b6113ab125c5db130",
+        "triangles": "8a69f4c07df2206842f7c8c4417fd2efa168dbfe8ced91db11bd84e0320821b5",
+        "face_normals": "fabcd76b010e53ac3f9f6ca0251d93b38b2a4fb2bdbade4076f4de3c13366ff0"
+      }
+    },
+    {
+      "id": "tulipa_minimalista",
+      "vase": {
+        "vertices": "5e5de9b90611e8ab886462ac7ba80e10a7c8c2d53b9d2d22ae0ed3e4e9f3913c",
+        "triangles": "0d99a45764c6ae2630a1c1853005d1decd9abb2b06b8c460748a829c34e24d4a",
+        "face_normals": "5757b4603ba8fd0d21cd98227c5d9d381e74cafb86bc161726fa3f1d1ec24aac"
+      }
+    },
+    {
+      "id": "cachepo_botanico",
+      "vase": {
+        "vertices": "8cb4b317e5255093bb29dc9295d5aef6bfaa8cc14476f5b0828656dc2aba5c54",
+        "triangles": "085bbfc9b8781728b4e522ab5ca403df878fcdff21b2111b2aa5040107e35d14",
+        "face_normals": "34c3c1cd54c721447067243358ae23047d3a5fd79282c3448695b1f37eed3953"
+      },
+      "saucer": {
+        "vertices": "39c4bd4483610c928d21dae3128b74b7fcbfa8406bdb505bd99a69e250c1512a",
+        "triangles": "07a73affc870c87ed923e23c3db1bbbb544049ca1bd2e045c2908063c70a2944",
+        "face_normals": "9efc7e5799be3f5c418b4b936fe623d0d09d085cbcad38c52ba02a2845c0f4e8"
+      }
+    },
+    {
+      "id": "ampulheta_hibrida",
+      "vase": {
+        "vertices": "665c609d8f37fc5041a0151965fec1641d49ff78aebff3c63ee8caa8e1f16d9d",
+        "triangles": "0d99a45764c6ae2630a1c1853005d1decd9abb2b06b8c460748a829c34e24d4a",
+        "face_normals": "e7336093f98ad555b24591dc99e7203678dfd1f80e974233cef9e21797a352ab"
+      }
+    },
+    {
+      "id": "cristal_lowpoly",
+      "vase": {
+        "vertices": "d488dd93ed1e23dac767c477e8b991acdd52970f34444ab0c0d869e1f8602156",
+        "triangles": "2d5907f9b9eceebcdf37992dbb472bfd13316af87f0a5f6a7a51f220b2bd072a",
+        "face_normals": "8e354a2253ae07f4b6517b2adcaef47d1b4e48a84fd564e2fb64bb712cc5c4da"
+      }
+    },
+    {
+      "id": "zen_martelado",
+      "vase": {
+        "vertices": "dff7d154c18d89cf4124a1cda2702e65f824d53b4fb1dd82977ba725185d25b3",
+        "triangles": "74b7539618274c50e61da47167439a75a6962acb2cfc2c516d4c436d84d51060",
+        "face_normals": "d0869e09b827a6eeac8343f5fe2b7872ee90c3caaff75abe11e36a3dcd7b37af"
+      }
+    },
+    {
+      "id": "lanterna_plissada",
+      "vase": {
+        "vertices": "98c2dfae5d3bef318bd0b88997468c5708eb7031a2b79c1cf2f01a1ccf38aabd",
+        "triangles": "0d99a45764c6ae2630a1c1853005d1decd9abb2b06b8c460748a829c34e24d4a",
+        "face_normals": "0f321a3045fc267501d59b84f892233a667c5665b33f563624b7ab9544f5d220"
+      }
+    },
+    {
+      "id": "anfora_mediterranea",
+      "vase": {
+        "vertices": "b97bb6f91059e39bd7558182be0ee2f1b96f7cdd784343aeb96e9130f51213c7",
+        "triangles": "0d99a45764c6ae2630a1c1853005d1decd9abb2b06b8c460748a829c34e24d4a",
+        "face_normals": "a983fc0b84d15814b2e4d5859156df5cde24e02447ea0116ec933031fab0f036"
+      }
+    }
+  ]
+}

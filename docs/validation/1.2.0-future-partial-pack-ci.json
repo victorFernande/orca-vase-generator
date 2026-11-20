@@ -1,0 +1,40 @@
+{
+  "baseline_commit": "63b72c9376f130b3ce06b54b1671ced029a9ce61",
+  "method": "Private copied project; add only a partial eighth nl.json with one phrase; run actual unchanged CI build, full Python suite and browser script. Synthetic extension tests must coexist with that real eighth pack without editing Python or JavaScript.",
+  "stages": [
+    {
+      "name": "build",
+      "exit_code": 0
+    },
+    {
+      "name": "full_suite",
+      "exit_code": 0
+    },
+    {
+      "name": "browser",
+      "exit_code": 0
+    }
+  ],
+  "ok": true,
+  "browser_shipped_cases": 16,
+  "browser_extra_fixture_cases": 2,
+  "console_errors": [],
+  "production_source_unchanged": true,
+  "production_pack_count": 7,
+  "copied_project_pack_count": 8,
+  "python_full_suite": {
+    "count": 40,
+    "seconds": 29.005,
+    "warnings": "error",
+    "skips": 0
+  },
+  "added_pack": {
+    "code": "nl",
+    "native_name": "Nederlands",
+    "direction": "ltr",
+    "order": 7,
+    "translations": {
+      "Preset Gallery": "Galerij"
+    }
+  }
+}
