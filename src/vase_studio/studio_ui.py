@@ -13,6 +13,7 @@ from __future__ import annotations
 import copy
 import json
 from typing import Any
+from .locale_catalog import locale_rows, normalize_language
 
 if "DEFAULT_PARAMS" not in globals():
     try:
@@ -1448,7 +1449,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
         <span data-i18n="btn_surprise">Surpreenda-me</span>
       </button>
       <button id="btn-reset" class="btn btn-icon" title="Reset">↺</button>
-      <button id="btn-lang" class="btn btn-icon" title="Português / English">PT</button>
+      <select id="lang-select" class="btn" style="max-width:116px;padding:4px" aria-label="Language" title="Language"><option value="pt">Português</option><option value="en">English</option><option value="es">Español</option><option value="it">Italiano</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="ja">日本語</option></select>
       <button id="btn-theme" class="btn btn-icon" title="Dark / Light">☾</button>
     </div>
   </header>
@@ -1634,7 +1635,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
         <input id="inp-cross-cut" class="orca-slider" type="range" min="0" max="100" step="1" value="0" />
         <span id="lbl-cross-cut" class="ctrl-num" style="width:62px;text-align:center;">Off</span>
         <button id="btn-cut-half" class="btn" style="padding:3px 7px;font-size:10.5px;">50%</button>
-        <button id="btn-cut-off" class="btn" style="padding:3px 7px;font-size:10.5px;">Off</button>
+        <button id="btn-cut-off" data-i18n="btn_off" class="btn" style="padding:3px 7px;font-size:10.5px;">Off</button>
       </div>
     </section>
 
@@ -2827,6 +2828,80 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     }
   };
 
+  const LANGUAGES = ["pt", "en", "es", "it", "fr", "de", "ja"];
+  const LOCALE_VOCABULARY = (function(rows) {
+    const catalogs = {};
+    LANGUAGES.slice(2).forEach(function(language, column) {
+      catalogs[language] = Object.fromEntries(rows.map(function(row) { return [row[0], row[column + 1]]; }));
+    });
+    return catalogs;
+  })(__VASE_LOCALE_VOCABULARY__);
+  function normalizeLanguage(value) {
+    const raw = String(value || "").trim().toLowerCase().replace(/_/g, "-");
+    if (!raw) return "pt";
+    const code = raw.split(/[.-]/)[0];
+    return LANGUAGES.includes(code) ? code : "en";
+  }
+  I18N.pt.btn_off = "Desligado";
+  I18N.en.btn_off = "Off";
+  for (const language of LANGUAGES.slice(2)) {
+    I18N[language] = {};
+    for (const key of Object.keys(I18N.en)) {
+      I18N[language][key] = LOCALE_VOCABULARY[language][I18N.en[key]] || I18N.en[key];
+    }
+  }
+  function localizedText(english) {
+    if (state.lang === "pt") return ({"Language":"Idioma","Undo":"Desfazer","Redo":"Refazer","Reset":"Restaurar","Toggle Theme":"Alternar tema","Auto-Rotate":"Giro automático","New Seed":"Nova semente","Open Exports Folder":"Abrir pasta de exportação","Delete":"Excluir","Preset name...":"Nome do preset...","Off":"Desligado","Design Name":"Nome do projeto"})[english] || english;
+    const catalog = LOCALE_VOCABULARY[state.lang] || {};
+    return catalog[english] || english;
+  }
+  function localizedWarning(warning) {
+    if (state.lang === "pt") return warning.pt || warning.en || "";
+    const source = warning.en || warning.pt || "";
+    const catalog = LOCALE_VOCABULARY[state.lang] || {};
+    if (catalog[source]) return catalog[source];
+    for (const template of Object.keys(catalog)) {
+      if (!template.includes("{")) continue;
+      const names = [];
+      const pattern = template.split(/(\{[a-z]+\})/).map(function(part) {
+        if (/^\{[a-z]+\}$/.test(part)) { names.push(part.slice(1, -1)); return "(.+?)"; }
+        return part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      }).join("");
+      const match = source.match(new RegExp("^" + pattern + "$"));
+      if (match) {
+        let result = catalog[template];
+        names.forEach(function(name, i) { result = result.replace("{" + name + "}", match[i + 1]); });
+        return result;
+      }
+    }
+    return source;
+  }
+  function sliderLabel(spec) { return state.lang === "pt" ? spec.pt : localizedText(spec.en); }
+  function sliderUnit(unit) {
+    if (state.lang === "pt") return unit;
+    return localizedText(({seg:"Segments",cam:"Layers",un:"Count",oct:"Octaves"})[unit] || unit);
+  }
+  const STATIC_ATTRIBUTES = [];
+  function initializeStaticTranslations() {
+    document.querySelectorAll("[title], [placeholder], [aria-label]").forEach(function(node) {
+      for (const attr of ["title", "placeholder", "aria-label"]) {
+        const value = node.getAttribute(attr);
+        if (value) STATIC_ATTRIBUTES.push({node: node, attr: attr, value: value});
+      }
+    });
+  }
+  function translateStaticAttributes() {
+    for (const entry of STATIC_ATTRIBUTES) {
+      let source = entry.value;
+      if (source === "Nome do preset...") source = "Preset name...";
+      if (source === "Dark / Light") source = "Toggle Theme";
+      if (source.startsWith("Undo (")) source = localizedText("Undo") + " (Ctrl+Z)";
+      else if (source.startsWith("Redo (")) source = localizedText("Redo") + " (Ctrl+Y)";
+      else source = localizedText(source);
+      entry.node.setAttribute(entry.attr, source);
+    }
+  }
+
   const SLIDER_SPECS = [
     { path: "height_mm", min: 30, max: 500, step: 1, unit: "mm", pt: "Altura Total", en: "Total Height" },
     { path: "base_diameter_mm", min: 20, max: 450, step: 1, unit: "mm", pt: "Diâmetro da Base", en: "Base Diameter" },
@@ -2895,7 +2970,12 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
   const initCtx = (BOOT_PAYLOAD && BOOT_PAYLOAD.initial_context) ? BOOT_PAYLOAD.initial_context : {};
   const state = {
     mode: BOOT_PAYLOAD.mode === "dock" ? "dock" : "page",
-    lang: initCtx.lang === "en" ? "en" : "pt",
+    lang: normalizeLanguage(initCtx.lang),
+    manualLanguageSelected: Boolean(initCtx.language_override),
+    pendingLanguage: null,
+    deferredLanguageUpdate: null,
+    nextLanguageRequest: 0,
+    languageRevision: Number(initCtx.language_revision || 0),
     theme: initCtx.theme === "light" ? "light" : "dark",
     printer: Object.assign(
       {
@@ -2964,7 +3044,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
   }
 
   function tr(key) {
-    const dict = I18N[state.lang] || I18N.pt;
+    const dict = I18N[state.lang] || I18N.en;
     return dict[key] !== undefined ? dict[key] : key;
   }
 
@@ -3202,7 +3282,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     if (!msg || typeof msg !== "object") return;
 
     if (msg.type === "init_state") {
-      if (msg.lang === "en" || msg.lang === "pt") state.lang = msg.lang;
+      if (msg.lang && !state.manualLanguageSelected) state.lang = normalizeLanguage(msg.lang);
       if (!state.userOverrodeTheme) {
         const cssTheme = msg.theme_explicit === false ? detectInjectedOrcaTheme() : null;
         if (cssTheme === "light" || cssTheme === "dark") {
@@ -3238,8 +3318,8 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       const wasManual = pendingManualPrinterSync;
       pendingManualPrinterSync = false;
       let langOrThemeChanged = false;
-      if ((msg.lang === "en" || msg.lang === "pt") && msg.lang !== state.lang) {
-        state.lang = msg.lang;
+      if (msg.lang && !state.manualLanguageSelected && normalizeLanguage(msg.lang) !== state.lang) {
+        state.lang = normalizeLanguage(msg.lang);
         langOrThemeChanged = true;
       }
       if (!state.userOverrodeTheme) {
@@ -3254,6 +3334,27 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
         applyThemeAndLanguage();
       }
       applyIncomingPrinter(msg.printer, true, wasManual);
+      return;
+    }
+
+    if (msg.type === "preferences_updated" && msg.lang) {
+      const revision = Number(msg.language_revision || 0);
+      if (revision && revision < state.languageRevision) return;
+      if (state.pendingLanguage) {
+        const pending = state.pendingLanguage;
+        if (msg.source_mode === state.mode && Number(msg.request_id || 0) < pending.id) return;
+        if (normalizeLanguage(msg.lang) !== pending.lang) {
+          if (msg.source_mode !== state.mode && revision > Number(state.deferredLanguageUpdate?.language_revision || 0)) state.deferredLanguageUpdate = msg;
+          return;
+        }
+        state.pendingLanguage = null;
+      }
+      const resolved = Number(state.deferredLanguageUpdate?.language_revision || 0) > revision ? state.deferredLanguageUpdate : msg;
+      state.deferredLanguageUpdate = null;
+      state.languageRevision = Math.max(state.languageRevision, Number(resolved.language_revision || 0));
+      state.manualLanguageSelected = true;
+      state.lang = normalizeLanguage(resolved.lang);
+      applyThemeAndLanguage();
       return;
     }
 
@@ -3342,7 +3443,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
         idx.push(a, b, c);
       },
       addWireSeg: function (x1, y1, z1, x2, y2, z2) {
-        wire.push(x1, y1, z1, x2, y2, z2);
+        if (state.wireframe) wire.push(x1, y1, z1, x2, y2, z2);
       }
     };
   }
@@ -5884,10 +5985,10 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       host.className = "ctrl-row";
       host.innerHTML =
         '<div class="ctrl-top">' +
-          '<span class="ctrl-label" data-spec-label="' + spec.path + '">' + (state.lang === "en" ? spec.en : spec.pt) + '</span>' +
+          '<span class="ctrl-label" data-spec-label="' + spec.path + '">' + sliderLabel(spec) + '</span>' +
           '<div class="ctrl-val-wrap">' +
             '<input class="ctrl-num" type="number" min="' + spec.min + '" max="' + spec.max + '" step="' + spec.step + '" value="' + Number(initVal).toFixed(decs) + '" />' +
-            '<span class="ctrl-unit">' + spec.unit + '</span>' +
+            '<span class="ctrl-unit">' + sliderUnit(spec.unit) + '</span>' +
           '</div>' +
         '</div>' +
         '<input class="orca-slider" type="range" min="' + spec.min + '" max="' + spec.max + '" step="' + spec.step + '" value="' + initVal + '" />';
@@ -5896,7 +5997,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       const numEl = host.querySelector('input[type="number"]');
       const labelEl = host.querySelector("[data-spec-label]");
 
-      sliderRefs[spec.path] = { spec: spec, rangeEl: rangeEl, numEl: numEl, labelEl: labelEl, decs: decs };
+      sliderRefs[spec.path] = { spec: spec, rangeEl: rangeEl, numEl: numEl, labelEl: labelEl, unitEl:host.querySelector(".ctrl-unit"), decs: decs };
 
       if (rangeEl) {
         rangeEl.addEventListener("pointerdown", function () {
@@ -6041,13 +6142,13 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     if (lbl) {
       if (isZ) {
         if (state.zSlicePct >= 100) {
-          lbl.textContent = "Off";
+          lbl.textContent = localizedText("Off");
         } else {
           const zMm = Math.round(state.params.height_mm * (state.zSlicePct / 100.0));
           lbl.textContent = state.zSlicePct + "% (" + zMm + "mm)";
         }
       } else {
-        lbl.textContent = state.crossCutPct === 0 ? "Off" : (state.crossCutPct + "%");
+        lbl.textContent = state.crossCutPct === 0 ? localizedText("Off") : (state.crossCutPct + "%");
       }
     }
   }
@@ -6270,12 +6371,8 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       const card = document.createElement("div");
       card.className = "preset-card" + (item.id === state.activePresetId ? " active" : "");
 
-      const title = state.lang === "en"
-        ? (item.title_en || item.name || item.title_pt || "Preset")
-        : (item.title_pt || item.name || item.title_en || "Preset");
-      const desc = state.lang === "en"
-        ? (item.description_en || item.category || "")
-        : (item.description_pt || item.category || "");
+      const title = item._isUser ? (item.name || item.title_pt || item.title_en || "Preset") : (state.lang === "pt" ? (item.title_pt || item.title_en || "Preset") : localizedText(item.title_en || item.title_pt || "Preset"));
+      const desc = item._isUser ? (item.description_en || item.description_pt || "") : (state.lang === "pt" ? (item.description_pt || "") : localizedText(item.description_en || ""));
 
       card.innerHTML =
         '<div class="preset-thumb">' + makePresetMiniSvg(item.params || {}) + '</div>' +
@@ -6293,7 +6390,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
         const delBtn = document.createElement("button");
         delBtn.className = "preset-del-btn";
         delBtn.textContent = "×";
-        delBtn.title = "Delete";
+        delBtn.title = localizedText("Delete");
         delBtn.addEventListener("click", function (ev) {
           ev.stopPropagation();
           if (!sendToHost({ type: "preset_delete", id: item.id })) {
@@ -6400,7 +6497,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
           const div = document.createElement("div");
           const code = String(w.code || "").toLowerCase();
           div.className = "hud-warn-item" + (code.includes("crit") || code.includes("bed") || code.includes("height") ? " crit" : "");
-          div.textContent = state.lang === "en" ? (w.en || w.pt || "") : (w.pt || w.en || "");
+          div.textContent = localizedWarning(w);
           warnEl.appendChild(div);
         }
       }
@@ -6441,6 +6538,8 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     }
   }
 
+  initializeStaticTranslations();
+
   function applyThemeAndLanguage() {
     document.documentElement.setAttribute("data-theme", state.theme);
     document.documentElement.setAttribute("lang", state.lang);
@@ -6448,8 +6547,9 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       document.body.setAttribute("data-mode", state.mode);
     }
 
-    const langBtn = document.getElementById("btn-lang");
-    if (langBtn) langBtn.textContent = state.lang.toUpperCase();
+    const langSelect = document.getElementById("lang-select");
+    if (langSelect) langSelect.value = state.lang;
+    translateStaticAttributes();
 
     const themeBtn = document.getElementById("btn-theme");
     if (themeBtn) themeBtn.textContent = state.theme === "dark" ? "☾" : "☀";
@@ -6466,8 +6566,9 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     for (let i = 0; i < paths.length; i++) {
       const ref = sliderRefs[paths[i]];
       if (ref.labelEl) {
-        ref.labelEl.textContent = state.lang === "en" ? ref.spec.en : ref.spec.pt;
+        ref.labelEl.textContent = sliderLabel(ref.spec);
       }
+      if (ref.unitEl) ref.unitEl.textContent = sliderUnit(ref.spec.unit);
     }
 
     updateDerivedBadges();
@@ -6665,9 +6766,13 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       scheduleHostAnalyze();
     });
 
-    on("btn-lang", "click", function () {
-      state.lang = state.lang === "pt" ? "en" : "pt";
+    on("lang-select", "change", function () {
+      state.lang = normalizeLanguage(document.getElementById("lang-select").value);
+      state.manualLanguageSelected = true;
+      const requestId = ++state.nextLanguageRequest;
+      state.pendingLanguage = {id:requestId,lang:state.lang};
       applyThemeAndLanguage();
+      if (!sendToHost({type:"set_language",lang:state.lang,mode:state.mode,request_id:requestId})) state.pendingLanguage = null;
     });
 
     on("btn-theme", "click", function () {
@@ -6801,7 +6906,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       state.wireframe = !state.wireframe;
       const b = document.getElementById("btn-vp-wire");
       if (b) b.classList.toggle("active", state.wireframe);
-      requestRender();
+      rebuildScene(false);
     });
 
     on("btn-vp-saucer", "click", function () {
@@ -7023,7 +7128,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
             include_saucer: Boolean(state.includeSaucer)
           })) {
             setActionButtonsBusy(false);
-            showToast("OrcaSlicer host bridge not connected (Standalone Preview).", true);
+            showToast(localizedText("OrcaSlicer host bridge not connected (Standalone Preview)."), true);
           }
         } else if (act === "export_3mf" || act === "export_stl") {
           const fmt = act === "export_3mf" ? "3mf" : "stl";
@@ -7037,7 +7142,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
             filename: fname
           })) {
             setActionButtonsBusy(false);
-            showToast("OrcaSlicer host bridge not connected (Standalone Preview).", true);
+            showToast(localizedText("OrcaSlicer host bridge not connected (Standalone Preview)."), true);
           }
         } else if (act === "open_folder") {
           sendToHost({ type: "open_exports_folder" });
@@ -7114,8 +7219,8 @@ def get_studio_html(mode: str = "page", initial_context: dict[str, Any] | None =
     norm_mode = "dock" if str(mode or "").strip().lower() == "dock" else "page"
     ctx: dict[str, Any] = copy.deepcopy(initial_context) if isinstance(initial_context, dict) else {}
 
-    lang_raw = str(ctx.get("lang") or "pt").strip().lower()
-    norm_lang = "en" if lang_raw.startswith("en") else "pt"
+    norm_lang = normalize_language(ctx.get("lang"))
+    ctx["lang"] = norm_lang
 
     theme_raw = str(ctx.get("theme") or "dark").strip().lower()
     norm_theme = "light" if theme_raw == "light" else "dark"
@@ -7131,6 +7236,7 @@ def get_studio_html(mode: str = "page", initial_context: dict[str, Any] | None =
     }
 
     html = _STUDIO_UI_HTML_TEMPLATE
+    html = html.replace("__VASE_LOCALE_VOCABULARY__", _studio_ui_safe_json(locale_rows()))
     html = html.replace("__INITIAL_LANG__", norm_lang)
     html = html.replace("__INITIAL_THEME__", norm_theme)
     html = html.replace("__INITIAL_MODE__", norm_mode)

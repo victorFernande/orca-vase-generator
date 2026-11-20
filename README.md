@@ -2,7 +2,7 @@
   <img src="assets/icon.jpg" alt="Orca Vase Studio" width="210" />
 </p>
 
-<h1 align="center">Orca Vase Studio (<code>v1.1.1</code>)</h1>
+<h1 align="center">Orca Vase Studio (<code>v1.2.0</code>)</h1>
 
 <p align="center">
   <strong>Native Parametric 3D Vase &amp; Botanical Planter Studio Inside OrcaSlicer 2.5.1+</strong><br/>
@@ -25,11 +25,19 @@
 
 ---
 
+## Version 1.2.0 · Idiomas e otimização
+
+The header now provides seven fully offline interface languages: **Português, English, Español, Italiano, Français, Deutsch and 日本語**. The host language is detected automatically; an explicit selection is saved and shared between the main tab and dock. Built-in preset descriptions, parameter names, warnings and export messages are translated. Personal names, printer profiles, filenames and manufacturing values are preserved. Unsupported system languages use English. Technical errors from the engine remain verbatim when there is no translated message.
+
+O cabeçalho agora oferece sete idiomas offline. A escolha é salva e sincronizada entre aba e painel; sem escolha manual, segue o idioma do OrcaSlicer. Os textos foram preparados com terminologia de impressão 3D e ainda aceitam revisão de falantes nativos. Os manuais completos continuam em PT/EN.
+
+The standalone installer stores the immutable HTML template with lossless standard-library compression; the wheel keeps readable source modules. Wireframe vertices are created/uploaded only while wireframe is enabled and released when it is disabled. All twelve published preset vases and the botanical saucer preserve the original vertex, triangle and normal bytes. See [languages and measured optimization](docs/MULTILINGUAL_AND_PERFORMANCE.md). Install one format only, activate it, close and reopen OrcaSlicer. No installer or test updates an existing Orca installation unless installation is explicitly requested.
+
 ## English Overview
 
-**Orca Vase Studio (`orca-vase-studio` v1.1.1)** is a self-contained, single-file native Python plugin for **OrcaSlicer 2.5.1+** that embeds an interactive 60 FPS **WebGL2 + 2D PCHIP Curve** parametric studio right inside the slicer. Design sculptural vases, thick-walled ceramic vessels (`0.8–25.0 mm`), and botanical planters with drainage holes and matching drip saucers — then inject them directly onto your active OrcaSlicer build plate in **1 click** with automatic slicer configuration.
+**Orca Vase Studio (`orca-vase-studio` v1.2.0)** is a self-contained, single-file native Python plugin for **OrcaSlicer 2.5.1+** that embeds an interactive **WebGL2 + 2D PCHIP Curve** parametric studio right inside the slicer. Design sculptural vases, thick-walled ceramic vessels (`0.8–25.0 mm`), and botanical planters with drainage holes and matching drip saucers — then inject them directly onto your active OrcaSlicer build plate in **1 click** with automatic slicer configuration.
 
-### Key Highlights (`v1.1.1`)
+### Key Highlights (`v1.2.0`)
 
 - **Dual Native OrcaSlicer Integration:**
   - **Top-Bar Studio Tab (`Gerador de Vasos`):** Full 3-column workspace right beside *Prepare / Preview / Device*.
@@ -54,9 +62,9 @@
 
 ## Visão Geral (Português PT-BR)
 
-O **Orca Vase Studio (`orca-vase-studio` v1.1.1)** é um plugin nativo em Python de **arquivo único autossuficiente** para o **OrcaSlicer 2.5.1+** que adiciona um estúdio paramétrico 3D interativo em 60 FPS (**WebGL2 + Curva Livre 2D PCHIP**, 100% offline) dentro do próprio fatiador. Crie vasos decorativos, peças cerâmicas de parede espessa (`0,8–25,0 mm`) e cachepôs com furos de drenagem e pratinho coletor, enviando tudo em **1 clique** direto para a mesa (*Plater*) com ajuste automático do fatiamento.
+O **Orca Vase Studio (`orca-vase-studio` v1.2.0)** é um plugin nativo em Python de **arquivo único autossuficiente** para o **OrcaSlicer 2.5.1+** que adiciona um estúdio paramétrico 3D interativo (**WebGL2 + Curva Livre 2D PCHIP**, 100% offline) dentro do próprio fatiador. Crie vasos decorativos, peças cerâmicas de parede espessa (`0,8–25,0 mm`) e cachepôs com furos de drenagem e pratinho coletor, enviando tudo em **1 clique** direto para a mesa (*Plater*) com ajuste automático do fatiamento.
 
-### Principais Recursos (`v1.1.1`)
+### Principais Recursos (`v1.2.0`)
 
 - **Dupla Integração Nativa no OrcaSlicer:**
   - **Aba Superior (`Gerador de Vasos`):** Estúdio amplo em 3 colunas ao lado de *Preparar / Visualizar / Dispositivo*.
@@ -118,13 +126,13 @@ orca-vase-generator/
 │       ├── printability.py        # Overhang trigonometry, volume, filament weight & bed bounds
 │       ├── exporters.py           # Binary STL & native OrcaSlicer 2.5.1 3MF project writers
 │       ├── presets_catalog.py     # 12 bilingual curated presets, user CRUD & printable randomizer
-│       ├── studio_ui.py           # Offline 60 FPS HTML5 + CSS3 + WebGL2 + X-Ray + CAD Calipers UI
+│       ├── studio_ui.py           # Offline HTML5 + CSS3 + WebGL2 + X-Ray + CAD Calipers UI
 │       ├── plugin_main.py         # Native `orca` bridge + auto-materialized SVG icon + WM_COPYDATA IPC
 │       └── icon.svg               # Source 64x64 vector tab icon
 ├── dist/
-│   ├── orca_vase_generator.py     # Ready-to-distribute PEP 723 single-file plugin bundle (v1.1.1)
+│   ├── orca_vase_generator.py     # Ready-to-distribute PEP 723 single-file plugin bundle (v1.2.0)
 │   ├── orca_vase_generator_any.py # Universal `_any` PEP 723 bundle for OrcaCloud publishing
-│   └── orca_vase_generator-1.1.1-py3-none-any.whl
+│   └── orca_vase_generator-1.2.0-py3-none-any.whl
 └── tests/                         # 26/26 topology, 3MF/STL, JS-Python parity & bridge QA tests
 ```
 

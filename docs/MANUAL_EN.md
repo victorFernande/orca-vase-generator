@@ -1,4 +1,6 @@
-# Quick User Manual — Orca Vase Studio (`v1.1.1`)
+# Quick User Manual — Orca Vase Studio (`v1.2.0`)
+
+The language selector in the header offers Português, English, Español, Italiano, Français, Deutsch and 日本語. Your choice is saved and synchronized between page and dock; see [languages and optimization](MULTILINGUAL_AND_PERFORMANCE.md).
 
 <p align="center">
   <img src="../assets/icon.jpg" alt="Orca Vase Studio" width="150" />
@@ -6,7 +8,7 @@
 
 > 🇧🇷 **Leia em Português:** [Mini Manual de Uso (`MANUAL_PT-BR.md`)](MANUAL_PT-BR.md)
 
-Welcome to **Orca Vase Studio**! With this native plugin for **OrcaSlicer 2.5.1+**, you can sculpt decorative vases, thick-walled architectural ceramic vessels, and botanical planters with drainage holes and matching drip saucers in real time (60 FPS, 100% offline) — and send them straight to the build plate in one click.
+Welcome to **Orca Vase Studio**! With this native plugin for **OrcaSlicer 2.5.1+**, you can sculpt decorative vases, thick-walled architectural ceramic vessels, and botanical planters with drainage holes and matching drip saucers in real time (100% offline) — and send them straight to the build plate in one click.
 
 ---
 
@@ -55,7 +57,7 @@ Inside **Silhouette & 2D Curve**, choose your preferred sculpting workflow:
 
 ## 4. Customizing Texture Dimensions (4 Combinable Layers)
 
-You can enable **any single texture or stack all four simultaneously** — radial displacements are summed in exact millimeters with `< 1e-12 mm` parity between the 60 FPS WebGL2 preview and the exported 2-manifold mesh!
+You can enable **any single texture or stack all four simultaneously** — radial displacements are summed in exact millimeters with `< 1e-12 mm` parity between the WebGL2 preview and the exported 2-manifold mesh!
 
 First, set **Envelope & Global Twist**:
 - **Bottom / Top Texture Fade (`mm`):** Smoothly ramps surface relief from `0 mm` at the build plate (ensuring a 100% flat, rock-solid first layer!) and tapers cleanly near the top rim.

@@ -14,6 +14,7 @@ import time
 import types
 from pathlib import Path
 from typing import Any, Callable
+from .locale_catalog import normalize_language, translate_text
 
 # Intra-package imports (stripped cleanly when bundled into single-file PEP 723 script)
 if "normalize_params" not in globals():
@@ -938,19 +939,13 @@ def _bundle_get_value(bundle: Any, key: str, preset_obj: Any = None) -> Any:
 
 
 def _detect_language(app_info: dict[str, Any]) -> str:
-    raw = str(app_info.get("language") or app_info.get("lang") or "").strip().lower()
-    if raw.startswith("en"):
-        return "en"
-    if raw.startswith("pt"):
-        return "pt"
+    raw = app_info.get("language") or app_info.get("lang")
     if raw:
-        return "en" if not raw.startswith("pt") else "pt"
+        return normalize_language(raw)
     try:
-        loc = (locale.getlocale()[0] or "").lower()
-        if loc.startswith("en"):
-            return "en"
-        if loc.startswith("pt"):
-            return "pt"
+        detected = locale.getlocale()[0]
+        if detected:
+            return normalize_language(detected)
     except Exception:
         pass
     return "pt"
@@ -995,9 +990,27 @@ class VaseStudioController:
     def __init__(self) -> None:
         self._lock = threading.RLock()
         self._current_params: dict[str, Any] = normalize_params(DEFAULT_PARAMS)
-        self._listeners: list[Callable[[dict[str, Any]], None]] = []
+        self._listeners: dict[str, Callable[[dict[str, Any]], None]] = {}
+        self._manual_language: str | None = None
+        self._language_loaded = False
+        self._language_revision = 0
+        self._last_language_requests: dict[str, int] = {}
         self._last_plater_worker: threading.Thread | None = None
         self._last_plater_outcome: dict[str, Any] = {}
+
+    def _load_language_preferences(self) -> None:
+        # Storage is callback-only in Orca: never consult it while importing or
+        # registering capabilities. The first context read is a UI callback.
+        with self._lock:
+            if self._language_loaded:
+                return
+            self._language_loaded = True
+            try:
+                prefs = json.loads((_resolve_storage_dir() / "ui_preferences.json").read_text(encoding="utf8"))
+                if isinstance(prefs, dict) and prefs.get("language"):
+                    self._manual_language = normalize_language(prefs["language"])
+            except (OSError, ValueError, TypeError):
+                pass
 
     @property
     def current_params(self) -> dict[str, Any]:
@@ -1035,6 +1048,7 @@ class VaseStudioController:
 
     def read_host_context(self) -> dict[str, Any]:
         """Defensively inspect `orca.host.app_info()`, `orca.host.app_language()`, and `orca.host.preset_bundle()`."""
+        self._load_language_preferences()
         app_info: dict[str, Any] = {}
         host = getattr(orca, "host", None)
         if host is not None:
@@ -1058,7 +1072,7 @@ class VaseStudioController:
                     except Exception:
                         pass
 
-        lang = _detect_language(app_info)
+        lang = self._manual_language or _detect_language(app_info)
         theme = _detect_theme(app_info)
         theme_explicit = any(k in app_info for k in ("theme", "color_mode", "dark_mode"))
         orca_version = str(app_info.get("version") or "2.5.1")
@@ -1306,6 +1320,8 @@ class VaseStudioController:
         return {
             "mode": mode,
             "lang": host_ctx["lang"],
+            "language_override": self._manual_language is not None,
+            "language_revision": self._language_revision,
             "theme": host_ctx["theme"],
             "theme_explicit": bool(host_ctx.get("theme_explicit", False)),
             "printer": self.build_printer_payload(host_ctx),
@@ -1511,8 +1527,40 @@ class VaseStudioController:
         msg_type = str(msg.get("type") or "").strip()
 
         try:
+            if msg_type == "set_language":
+                language = normalize_language(msg.get("lang"))
+                origin_mode = "dock" if str(msg.get("mode") or default_mode) == "dock" else "page"
+                request_id = int(msg.get("request_id") or 0)
+                with self._lock:
+                    if request_id > 0 and request_id < self._last_language_requests.get(origin_mode, 0):
+                        return
+                    if request_id > 0:
+                        self._last_language_requests[origin_mode] = request_id
+                    self._language_revision += 1
+                    revision = self._language_revision
+                    self._manual_language = language
+                    self._language_loaded = True
+                    target = _resolve_storage_dir() / "ui_preferences.json"
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    temporary = target.with_suffix(".tmp")
+                    temporary.write_text(json.dumps({"language": language}), encoding="utf8")
+                    temporary.replace(target)
+                    callbacks = list(self._listeners.values())
+                if send_fn not in callbacks:
+                    callbacks.append(send_fn)
+                for callback in callbacks:
+                    try:
+                        callback({"type":"preferences_updated", "lang":language, "language_revision":revision, "request_id":request_id, "source_mode":origin_mode})
+                    except Exception:
+                        pass
+                return
+
             if msg_type == "ready":
                 mode = str(msg.get("mode") or default_mode)
+                with self._lock:
+                    view_mode = "dock" if mode == "dock" else "page"
+                    self._listeners[view_mode] = send_fn
+                    self._last_language_requests.pop(view_mode, None)
                 init_ctx = self.build_initial_context(mode=mode)
                 host_ctx = self.read_host_context()
                 params = init_ctx["params"]
@@ -1646,7 +1694,7 @@ class VaseStudioController:
                         total_w = 2.0 * vase_rx + gap_mm + 2.0 * saucer_rx
                         vase_pos = (round(cx - total_w / 2.0 + vase_rx, 2), round(cy, 2), 0.0)
                         saucer_pos = (round(cx + total_w / 2.0 - saucer_rx, 2), round(cy, 2), 0.0)
-                        saucer_label = "Prato" if lang == "pt" else "Saucer"
+                        saucer_label = "Prato" if lang == "pt" else translate_text("Saucer", lang)
                         items = [
                             (vase_label, vase_mesh, vase_pos),
                             (saucer_label, saucer_mesh, saucer_pos),
@@ -1694,6 +1742,11 @@ class VaseStudioController:
                     if lang == "pt"
                     else f"Exported successfully: {Path(paths[0]).name}{open_mouth_note}"
                 )
+                if lang not in ("pt", "en"):
+                    note = ""
+                    if open_mouth_note:
+                        note = translate_text(" (open-mouthed {mm} mm shell)", lang).replace("{mm}", f"{effective_params['wall_thickness_mm']:.1f}")
+                    ok_msg = translate_text("Exported successfully: {name}", lang).replace("{name}", Path(paths[0]).name) + note
                 send_fn(
                     {
                         "type": "action_result",
@@ -1823,6 +1876,10 @@ class VaseStudioController:
                     if lang == "pt"
                     else f"Sent to OrcaSlicer Plater ({len(stl_paths)} object(s)).{saucer_spiral_note}"
                 )
+                if lang not in ("pt", "en"):
+                    msg_text = translate_text("Sent to OrcaSlicer Plater ({n} object(s)).", lang).replace("{n}", str(len(stl_paths)))
+                    if saucer_spiral_note:
+                        msg_text += translate_text(" (Converted to open hollow shell to slice vase + saucer together.)", lang)
                 self._notify_host_toast(msg_text)
 
                 send_fn(
@@ -1866,6 +1923,8 @@ class VaseStudioController:
                     if lang == "pt"
                     else f"Exports folder: {export_dir}"
                 )
+                if lang not in ("pt", "en"):
+                    msg_text = translate_text("Exports folder: {path}", lang).replace("{path}", str(export_dir))
                 send_fn(
                     {
                         "type": "action_result",
@@ -2000,6 +2059,10 @@ class VaseStudioPageCapability(orca.pages.PagesPluginCapabilityBase):
             _read_capability_config(self),
         )
 
+    def on_unload(self) -> None:
+        with self._controller._lock:
+            self._controller._listeners.pop("page", None)
+
     def get_icon(self) -> str:
         storage_dir = _resolve_storage_dir(in_callback=True)
         existing_candidates: list[Path] = []
@@ -2116,6 +2179,8 @@ class VaseStudioDockCapability(orca.script.ScriptPluginCapabilityBase):
         )
 
     def on_unload(self) -> None:
+        with self._controller._lock:
+            self._controller._listeners.pop("dock", None)
         with self._panel_lock:
             VaseStudioDockCapability._active_panel = None
 
@@ -2146,6 +2211,8 @@ class VaseStudioDockCapability(orca.script.ScriptPluginCapabilityBase):
         )
 
     def _on_panel_close(self) -> None:
+        with self._controller._lock:
+            self._controller._listeners.pop("dock", None)
         with self._panel_lock:
             VaseStudioDockCapability._active_panel = None
 

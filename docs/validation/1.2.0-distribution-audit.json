@@ -1,0 +1,65 @@
+{
+  "baseline_commit": "19519a0568ad79db8326b7b172cfdd756f4bb339",
+  "version": "1.2.0",
+  "ok": true,
+  "artifacts": {
+    "orca_vase_generator-1.2.0-py3-none-any.whl": {
+      "bytes": 144250,
+      "sha256": "1c400bf9a5a074730ed3fc48bfb3738d838c00637b5912ad6ad6cc41fc43acfc"
+    },
+    "orca_vase_generator.py": {
+      "bytes": 344637,
+      "sha256": "0398adda19533c3050af9050c783a46fe662acb5ba5e918ecfc5211031a18c8e"
+    },
+    "orca_vase_generator_any.py": {
+      "bytes": 344637,
+      "sha256": "0398adda19533c3050af9050c783a46fe662acb5ba5e918ecfc5211031a18c8e"
+    }
+  },
+  "wheel": {
+    "entries": [
+      "vase_studio/__init__.py",
+      "vase_studio/locale_catalog.py",
+      "vase_studio/schema.py",
+      "vase_studio/mesh_generator.py",
+      "vase_studio/printability.py",
+      "vase_studio/exporters.py",
+      "vase_studio/presets_catalog.py",
+      "vase_studio/studio_ui.py",
+      "vase_studio/plugin_main.py",
+      "vase_studio/icon.svg",
+      "orca_vase_generator-1.2.0.dist-info/LICENSE",
+      "orca_vase_generator-1.2.0.dist-info/METADATA",
+      "orca_vase_generator-1.2.0.dist-info/WHEEL",
+      "orca_vase_generator-1.2.0.dist-info/top_level.txt",
+      "orca_vase_generator-1.2.0.dist-info/RECORD"
+    ],
+    "all_record_digests_correct": true,
+    "all_source_modules_equal": true,
+    "readme_equal": true,
+    "unix_zip_metadata": true
+  },
+  "source_hashes": {
+    "src/vase_studio/__init__.py": "15a3c95d4bde4c883ef1ae23e4757cd558bff516ca41e1a8fd309793be6611e4",
+    "src/vase_studio/exporters.py": "fe52f6e016aafd618e0c8b1974cbfa4eb03418fceae8c68be38507a8c40a39e3",
+    "src/vase_studio/icon.svg": "ec747132414463692b546f4576a64e01df36501949de61e558a34f95a4010ec5",
+    "src/vase_studio/locale_catalog.py": "7fa0911c49c1c1bf1b8ddae2a035d26b0701d01802dedc4cea67ca2bfeafc9eb",
+    "src/vase_studio/mesh_generator.py": "3c8d196dfe2cb918a48d58b88117e70591bb9d49b156a3ea9897a9f3b204ea58",
+    "src/vase_studio/plugin_main.py": "569b9357a539cd2b6d03cf472679169bad33837cb48a841d55d2884016d1c8d2",
+    "src/vase_studio/presets_catalog.py": "a112f03458c775dd1a19b3142e54c4892fa58d46c9d3efa590f3bf595d7a48a5",
+    "src/vase_studio/printability.py": "c6ac1600afdf4e541b3a94e1b2804b6b3c2594aa52597244580d6ff526d7b644",
+    "src/vase_studio/schema.py": "4dc158077f66b36514232ff28d54c268ea3c4837fe11e1d1d2166109326474fc",
+    "src/vase_studio/studio_ui.py": "a311934867f7ea9838d969609f8f211ec1578bd0344d68a86ea735e55d430ebb"
+  },
+  "tests": {
+    "python_tests": 35,
+    "python_seconds": 23.55,
+    "warnings": "error",
+    "skips": 0,
+    "browser_language_view_cases": 14,
+    "browser_errors": 0,
+    "actual_new_locale_exports": 10,
+    "original_manufacturing_array_digests": 39
+  },
+  "scope": "No install, native Orca interaction, commit, publication or personal-file change. Untracked personal images excluded from candidate files."
+}

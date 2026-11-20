@@ -64,8 +64,10 @@ BUILD_SCRIPT = REPO_ROOT / "scripts" / "build_and_install.py"
 SRC_ICON_SVG = REPO_ROOT / "src" / "vase_studio" / "icon.svg"
 DIST_BUNDLE = REPO_ROOT / "dist" / "orca_vase_generator.py"
 DIST_ANY_BUNDLE = REPO_ROOT / "dist" / "orca_vase_generator_any.py"
-DIST_WHEEL = REPO_ROOT / "dist" / "orca_vase_generator-1.1.1-py3-none-any.whl"
-INSTALLED_DIR = ORCA_DATA_DIR / "orca_plugins" / "orca_vase_generator"
+DIST_WHEEL = REPO_ROOT / "dist" / "orca_vase_generator-1.2.0-py3-none-any.whl"
+# Repository tests never inspect or replace the user's installed plugin.
+# An explicit isolated install directory can be provided for installer verification.
+INSTALLED_DIR = Path(os.environ.get("ORCA_VASE_TEST_INSTALL_DIR") or (REPO_ROOT / "test-output" / "isolated-install"))
 INSTALLED_PLUGIN_PY = INSTALLED_DIR / "orca_vase_generator.py"
 ALLOWED_INSTALLED_FILENAMES = {
     "orca_vase_generator.py",
@@ -859,8 +861,8 @@ class TestPluginBundleAndBridge(unittest.TestCase):
         self.assertNotIn(";", plugin_meta["name"])
         self.assertEqual(
             plugin_meta.get("version"),
-            "1.1.1",
-            f"Expected [tool.orcaslicer.plugin].version == '1.1.1', got {plugin_meta.get('version')!r}",
+            "1.2.0",
+            f"Expected [tool.orcaslicer.plugin].version == '1.2.0', got {plugin_meta.get('version')!r}",
         )
         self.assertTrue(bool(plugin_meta.get("description")), "Missing [tool.orcaslicer.plugin].description")
         self.assertTrue(bool(plugin_meta.get("author")), "Missing [tool.orcaslicer.plugin].author")
@@ -869,13 +871,13 @@ class TestPluginBundleAndBridge(unittest.TestCase):
             pyproj = tomllib.loads(PYPROJECT_TOML.read_text(encoding="utf-8"))
             self.assertEqual(
                 pyproj.get("project", {}).get("version"),
-                "1.1.1",
-                "pyproject.toml [project].version must be '1.1.1'",
+                "1.2.0",
+                "pyproject.toml [project].version must be '1.2.0'",
             )
             self.assertEqual(
                 pyproj.get("tool", {}).get("orcaslicer", {}).get("plugin", {}).get("version"),
-                "1.1.1",
-                "pyproject.toml [tool.orcaslicer.plugin].version must be '1.1.1'",
+                "1.2.0",
+                "pyproject.toml [tool.orcaslicer.plugin].version must be '1.2.0'",
             )
 
     def test_02_plugin_registration_permissions_and_capabilities(self) -> None:
@@ -2079,7 +2081,7 @@ console.log(JSON.stringify({ ok: true, evaluator: evaluator.name + ' [' + evalua
         self.assertEqual(decoded_wstr, formatted)
 
     def test_08_live_printer_sync_line_width_pct_circular_beds_and_zero_sovol(self) -> None:
-        """Verify v1.1.1 community readiness: zero 'Sovol' strings, %/0 line-width parsing,
+        """Verify v1.2.0 community readiness: zero 'Sovol' strings, %/0 line-width parsing,
         circular/large/small printable_area sync, C++ PresetCollection.edited_preset properties,
         sync_printer -> printer_updated + analysis_result, on_lifecycle_event, and JS dynamic slider max.
         """
@@ -2449,9 +2451,11 @@ console.log(JSON.stringify({
             check_files.append(INSTALLED_PLUGIN_PY)
         for fpath in check_files:
             content = fpath.read_text(encoding="utf-8")
-            self.assertNotIn(
-                forbidden_user,
-                content.lower(),
+            # Public author attribution is allowed; actual private home paths are not.
+            normalized = content.lower().replace("\\", "/")
+            self.assertNotRegex(
+                normalized,
+                r"[a-z]:/+users/+" + forbidden_user + r"(?:/|$)",
                 f"Forbidden hardcoded user path found in {fpath}!",
             )
 
@@ -2559,7 +2563,7 @@ console.log(JSON.stringify({
             rec_txt = zf.read(f"{di}/RECORD").decode("utf-8")
 
             self.assertIn("Name: Orca Vase Studio", meta_txt)
-            self.assertIn("Version: 1.1.1", meta_txt)
+            self.assertIn("Version: 1.2.0", meta_txt)
             self.assertIn("Author: Orca Vase Studio", meta_txt)
             self.assertIn("Requires-Dist: numpy>=1.26", meta_txt)
             self.assertIn("Import-Name: vase_studio", meta_txt)

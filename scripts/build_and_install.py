@@ -23,6 +23,7 @@ import tempfile
 import tokenize
 import tomllib
 import zipfile
+import zlib
 from pathlib import Path
 
 sys.dont_write_bytecode = True
@@ -35,6 +36,7 @@ DIST_ANY_BUNDLE_PATH = DIST_DIR / "orca_vase_generator_any.py"
 ICON_SRC_PATH = SRC_PKG_DIR / "icon.svg"
 
 MODULE_ORDER: list[str] = [
+    "locale_catalog.py",
     "schema.py",
     "mesh_generator.py",
     "printability.py",
@@ -44,7 +46,7 @@ MODULE_ORDER: list[str] = [
     "plugin_main.py",
 ]
 
-DEFAULT_PLUGIN_VERSION = "1.1.1"
+DEFAULT_PLUGIN_VERSION = "1.2.0"
 PLUGIN_VERSION = os.environ.get("ORCA_PLUGIN_VERSION", "").strip().lstrip("v") or DEFAULT_PLUGIN_VERSION
 
 PEP723_HEADER = f"""\
@@ -289,6 +291,18 @@ def build_bundle() -> Path:
             src = _rename_colliding_privates(src, mod_stem, rename_set)
 
         transformed, fut = _strip_internal_imports(src)
+        if mod_file == "studio_ui.py":
+            # Pack the immutable HTML literal, never geometry or executable modules.
+            # The temporary compressed expression is released after initialization.
+            ui_tree = ast.parse(transformed)
+            for assignment in ui_tree.body:
+                if isinstance(assignment, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "_STUDIO_UI_HTML_TEMPLATE" for t in assignment.targets):
+                    literal = ast.literal_eval(assignment.value)
+                    packed = base64.b85encode(zlib.compress(literal.encode("utf8"), 9)).decode("ascii")
+                    lines = transformed.splitlines(keepends=True)
+                    lines[assignment.lineno - 1 : assignment.end_lineno] = ["_STUDIO_UI_HTML_TEMPLATE = __import__('zlib').decompress(__import__('base64').b85decode(" + repr(packed) + ")).decode('utf8')\n"]
+                    transformed = "".join(lines)
+                    break
         all_future_features.update(fut)
 
         banner = (
@@ -424,6 +438,7 @@ def build_wheel() -> Path:
     with zipfile.ZipFile(whl_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
         for arc_path, payload in entries:
             zi = zipfile.ZipInfo(arc_path, date_time=fixed_dt)
+            zi.create_system = 3
             zi.external_attr = 0o644 << 16
             zi.compress_type = zipfile.ZIP_DEFLATED
             zf.writestr(zi, payload)

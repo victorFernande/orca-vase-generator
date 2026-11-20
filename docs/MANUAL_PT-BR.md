@@ -1,4 +1,6 @@
-# Mini Manual de Uso — Orca Vase Studio (`v1.1.1`)
+# Mini Manual de Uso — Orca Vase Studio (`v1.2.0`)
+
+O seletor do cabeçalho oferece Português, English, Español, Italiano, Français, Deutsch e 日本語. A escolha é salva e sincronizada entre aba e painel; veja [idiomas e otimização](MULTILINGUAL_AND_PERFORMANCE.md).
 
 <p align="center">
   <img src="../assets/icon.jpg" alt="Orca Vase Studio" width="150" />
@@ -6,7 +8,7 @@
 
 > 🇺🇸 **Read in English:** [Quick User Manual (`MANUAL_EN.md`)](MANUAL_EN.md)
 
-Bem-vindo ao **Orca Vase Studio**! Com este plugin nativo para o **OrcaSlicer 2.5.1+**, você modela vasos decorativos, vasos cerâmicos de parede espessa e cachepôs com drenagem e pratinho coletor em tempo real (60 FPS, 100% offline) e envia tudo direto para a mesa de impressão em 1 clique.
+Bem-vindo ao **Orca Vase Studio**! Com este plugin nativo para o **OrcaSlicer 2.5.1+**, você modela vasos decorativos, vasos cerâmicos de parede espessa e cachepôs com drenagem e pratinho coletor em tempo real (100% offline) e envia tudo direto para a mesa de impressão em 1 clique.
 
 ---
 
