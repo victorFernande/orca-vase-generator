@@ -87,5 +87,10 @@
       "sha256": "0398adda19533c3050af9050c783a46fe662acb5ba5e918ecfc5211031a18c8e"
     }
   },
-  "limits": "Machine-specific isolated measurements; no universal speed/FPS guarantee. Wheel grows due five new locale dictionaries and retains readable sources."
+  "limits": "Machine-specific isolated measurements; no universal speed/FPS guarantee. Wheel grows due five new locale dictionaries and retains readable sources.",
+  "measurement_snapshot": {
+    "commit": "63b72c9376f130b3ce06b54b1671ced029a9ce61",
+    "scope": "Initial fixed seven-language catalog implementation BEFORE JSON-pack modularization. The final artifact hashes and sizes differ; these samples are historical and are not current-candidate startup claims.",
+    "current_distribution_report": "1.2.0-modular-language-packs.json"
+  }
 }

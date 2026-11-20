@@ -14,8 +14,9 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from vase_studio.locale_catalog import SUPPORTED_LANGUAGES, locale_vocabulary, normalize_language, translate_text
+from vase_studio.locale_catalog import supported_languages, locale_vocabulary, normalize_language, translate_text, UI_MESSAGES
 from vase_studio.studio_ui import get_studio_html
+SUPPORTED_LANGUAGES = supported_languages()
 from vase_studio import plugin_main
 from vase_studio.presets_catalog import BUILTIN_PRESETS
 from vase_studio.mesh_generator import generate_vase_mesh, generate_saucer_mesh
@@ -40,21 +41,31 @@ class TestMultilingual(unittest.TestCase):
             self.assertIsNone(controller._manual_language)
 
     def test_locale_variants_and_fallback(self):
-        for raw, expected in (("it_IT", "it"), ("es-MX", "es"), ("ja_JP.UTF-8", "ja"),
-                              ("fr-FR", "fr"), ("de_DE", "de"), ("pt_BR", "pt"),
-                              ("en-GB", "en"), ("ru_RU", "en"), (None, "pt")):
-            self.assertEqual(normalize_language(raw), expected)
-        self.assertEqual(plugin_main._detect_language({"language": "it_IT"}), "it")
+        available = set(supported_languages())
+        for raw, canonical, base in (("it_IT", "it-it", "it"), ("es-MX", "es-mx", "es"),
+                                     ("ja_JP.UTF-8", "ja-jp", "ja"), ("fr-FR", "fr-fr", "fr"),
+                                     ("de_DE", "de-de", "de"), ("pt_BR", "pt-br", "pt"),
+                                     ("en-GB", "en-gb", "en")):
+            self.assertEqual(normalize_language(raw), canonical if canonical in available else base)
+        unknown = "qaa"
+        while unknown in available:
+            unknown += "a"
+        self.assertEqual(normalize_language(unknown), "en")
+        self.assertEqual(normalize_language(None), "pt")
+        self.assertEqual(plugin_main._detect_language({"language": "it_IT"}), "it-it" if "it-it" in available else "it")
+
 
     def test_all_existing_ui_sliders_presets_and_placeholders_covered(self):
         source = (ROOT / "src/vase_studio/studio_ui.py").read_text(encoding="utf8")
-        start = source.index("    en: {", source.index("const I18N"))
-        end = source.index("\n    }\n  };", start)
-        labels = [json.loads(value) for value in re.findall(r': ("(?:[^"\\]|\\.)*")', source[start:end])]
-        labels += re.findall(r'pt: "[^"\n]*", en: "([^"\n]*)"', source)
+        labels = list(UI_MESSAGES.values())
+        labels += re.findall(r'en: "([^"\n]*)"', source)
         for preset in BUILTIN_PRESETS:
             labels.extend((preset["title_en"], preset["description_en"]))
+        original = json.loads((ROOT / "tests/fixtures/multilingual_catalog_reference.json").read_text(encoding="utf8"))
+        complete_catalogs = set(original["ui"]) | set(original["locale_translation_sha256"])
         for code, vocabulary in locale_vocabulary().items():
+            if code not in complete_catalogs:
+                continue  # Future partial packs deliberately use English for missing keys.
             for label in labels:
                 self.assertIn(label, vocabulary, (code, label))
                 self.assertEqual(sorted(re.findall(r"\{\w+\}", label)),
@@ -68,7 +79,7 @@ class TestMultilingual(unittest.TestCase):
                 self.assertIn('id="lang-select"', html)
                 for option in SUPPORTED_LANGUAGES:
                     self.assertIn(f'<option value="{option}">', html)
-                self.assertNotIn("__VASE_LOCALE_VOCABULARY__", html)
+                self.assertNotIn("__VASE_LOCALE_PACKS__", html)
 
     def test_saved_preference_wins_host_and_updates_both_live_views(self):
         with tempfile.TemporaryDirectory() as directory, patch.object(plugin_main, "_resolve_storage_dir", return_value=Path(directory)):
@@ -78,7 +89,7 @@ class TestMultilingual(unittest.TestCase):
             controller._listeners["page"] = page.append
             controller._listeners["dock"] = dock.append
             original = controller.current_params
-            controller.handle_message({"type": "set_language", "lang": "ja_JP"}, page.append)
+            controller.handle_message({"type": "set_language", "lang": "ja"}, page.append)
             self.assertEqual(page[-1]["type"], "preferences_updated")
             self.assertEqual(page[-1]["lang"], "ja")
             self.assertEqual(dock[-1], page[-1])

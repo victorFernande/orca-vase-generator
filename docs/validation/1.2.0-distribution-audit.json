@@ -1,24 +1,26 @@
 {
   "baseline_commit": "19519a0568ad79db8326b7b172cfdd756f4bb339",
+  "modular_base_commit": "63b72c9376f130b3ce06b54b1671ced029a9ce61",
   "version": "1.2.0",
   "ok": true,
   "artifacts": {
     "orca_vase_generator-1.2.0-py3-none-any.whl": {
-      "bytes": 144250,
-      "sha256": "1c400bf9a5a074730ed3fc48bfb3738d838c00637b5912ad6ad6cc41fc43acfc"
+      "bytes": 168361,
+      "sha256": "9725524e1a7bfd68dbb40cec74953e7feb850581fadaedb079d8b3b33e58766e"
     },
     "orca_vase_generator.py": {
-      "bytes": 344637,
-      "sha256": "0398adda19533c3050af9050c783a46fe662acb5ba5e918ecfc5211031a18c8e"
+      "bytes": 339529,
+      "sha256": "b04c43be0ce21f07ac1825aecb7ea270602a77465200f309770bea4540eb4103"
     },
     "orca_vase_generator_any.py": {
-      "bytes": 344637,
-      "sha256": "0398adda19533c3050af9050c783a46fe662acb5ba5e918ecfc5211031a18c8e"
+      "bytes": 339529,
+      "sha256": "b04c43be0ce21f07ac1825aecb7ea270602a77465200f309770bea4540eb4103"
     }
   },
   "wheel": {
     "entries": [
       "vase_studio/__init__.py",
+      "vase_studio/language_packs.py",
       "vase_studio/locale_catalog.py",
       "vase_studio/schema.py",
       "vase_studio/mesh_generator.py",
@@ -28,14 +30,22 @@
       "vase_studio/studio_ui.py",
       "vase_studio/plugin_main.py",
       "vase_studio/icon.svg",
+      "vase_studio/locales/de.json",
+      "vase_studio/locales/en.json",
+      "vase_studio/locales/es.json",
+      "vase_studio/locales/fr.json",
+      "vase_studio/locales/it.json",
+      "vase_studio/locales/ja.json",
+      "vase_studio/locales/pt.json",
       "orca_vase_generator-1.2.0.dist-info/LICENSE",
       "orca_vase_generator-1.2.0.dist-info/METADATA",
       "orca_vase_generator-1.2.0.dist-info/WHEEL",
       "orca_vase_generator-1.2.0.dist-info/top_level.txt",
       "orca_vase_generator-1.2.0.dist-info/RECORD"
     ],
+    "json_catalogs": 7,
     "all_record_digests_correct": true,
-    "all_source_modules_equal": true,
+    "all_source_modules_and_json_equal": true,
     "readme_equal": true,
     "unix_zip_metadata": true
   },
@@ -43,23 +53,32 @@
     "src/vase_studio/__init__.py": "15a3c95d4bde4c883ef1ae23e4757cd558bff516ca41e1a8fd309793be6611e4",
     "src/vase_studio/exporters.py": "fe52f6e016aafd618e0c8b1974cbfa4eb03418fceae8c68be38507a8c40a39e3",
     "src/vase_studio/icon.svg": "ec747132414463692b546f4576a64e01df36501949de61e558a34f95a4010ec5",
-    "src/vase_studio/locale_catalog.py": "7fa0911c49c1c1bf1b8ddae2a035d26b0701d01802dedc4cea67ca2bfeafc9eb",
+    "src/vase_studio/language_packs.py": "765537ce2de4220e6328ba72f55b9662031af43da9462455641cacf5ece5eac9",
+    "src/vase_studio/locale_catalog.py": "796a3ff3cec08aa4ea86e116ae2157ee318d854dbb5f7b42bbf69be605dc9922",
+    "src/vase_studio/locales/de.json": "a147a5b74a331b65ad60c70ee6dc3e0e9b1b070a48c65a603170dfb4d2e28ba3",
+    "src/vase_studio/locales/en.json": "4721f095c0fd1a13e6f2bec4a3ba896abb432e60687b5f9240ca081926427468",
+    "src/vase_studio/locales/es.json": "3d14490c1009a68ef8699f277a08d9be0df3a543d76db5155d8324aa1ebfd882",
+    "src/vase_studio/locales/fr.json": "6720faf79028ef95c5f0b025c7a52e460d1c3326b681fe229dc60e65d6def239",
+    "src/vase_studio/locales/it.json": "1fe58bd2dc74a21f10a860cea9647a0e4a2e56672e71c4d65ba5f2f11f0557e8",
+    "src/vase_studio/locales/ja.json": "6f973dacb5a15be06da7c3ac0bd81adb6120f4a0e6e4d14faedc3240dc4b9759",
+    "src/vase_studio/locales/pt.json": "8add3352187161eda9264d9a4e81c10628b2bd38ebbd3ed0fd4fe176597eae55",
     "src/vase_studio/mesh_generator.py": "3c8d196dfe2cb918a48d58b88117e70591bb9d49b156a3ea9897a9f3b204ea58",
-    "src/vase_studio/plugin_main.py": "569b9357a539cd2b6d03cf472679169bad33837cb48a841d55d2884016d1c8d2",
+    "src/vase_studio/plugin_main.py": "07435b4cbc6c3fb6ed96009d8be7e5243d3ec19d9ca0e0dd7ef5089d87c02f9a",
     "src/vase_studio/presets_catalog.py": "a112f03458c775dd1a19b3142e54c4892fa58d46c9d3efa590f3bf595d7a48a5",
     "src/vase_studio/printability.py": "c6ac1600afdf4e541b3a94e1b2804b6b3c2594aa52597244580d6ff526d7b644",
     "src/vase_studio/schema.py": "4dc158077f66b36514232ff28d54c268ea3c4837fe11e1d1d2166109326474fc",
-    "src/vase_studio/studio_ui.py": "a311934867f7ea9838d969609f8f211ec1578bd0344d68a86ea735e55d430ebb"
+    "src/vase_studio/studio_ui.py": "3541d555a6df1a04895ee9f001efcd7847ee2bb3b57ea894ce9991ce2d3a08ea"
   },
   "tests": {
-    "python_tests": 35,
-    "python_seconds": 23.55,
-    "warnings": "error",
+    "full_python": 40,
+    "seconds": 28.048,
     "skips": 0,
-    "browser_language_view_cases": 14,
+    "browser_shipped_cases": 14,
+    "browser_temporary_extra_pack_cases": 2,
     "browser_errors": 0,
-    "actual_new_locale_exports": 10,
-    "original_manufacturing_array_digests": 39
+    "extra_pack_source_standalone_any_wheel": true,
+    "production_extra_fixture_shipped": false,
+    "future_partial_pack_full_ci": true
   },
   "scope": "No install, native Orca interaction, commit, publication or personal-file change. Untracked personal images excluded from candidate files."
 }

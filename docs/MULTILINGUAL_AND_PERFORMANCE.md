@@ -1,5 +1,18 @@
 # Orca Vase Studio 1.2.0 — idiomas e otimização / languages and optimization
 
+A revisão atual usa **um arquivo JSON por idioma**, com descoberta automática no
+código-fonte, nos dois formatos standalone e no wheel. Para incluir outro idioma,
+adicione somente o arquivo e reconstrua; consulte [o formato dos packs](LANGUAGE_PACKS.md).
+O seletor, as preferências, a direção do texto e a correspondência regional são
+derivados dos dados, sem uma lista fixa de sete idiomas em Python ou JavaScript.
+
+Os artefatos atuais têm **339.529 bytes por standalone** e **168.361 bytes no wheel**.
+Comparados com a versão publicada 1.1.1, o standalone ficou **29,5% menor** e o wheel
+**35,9% maior**, incluindo sete JSONs legíveis e o leitor independente. As medidas e
+os hashes atuais estão no [relatório da modularização](performance/1.2.0-modular-language-packs.json).
+Não houve nova medição de abertura ou FPS após a modularização; a tabela de tempos
+abaixo é identificada como um registro histórico do primeiro snapshot com sete idiomas.
+
 ## Idiomas offline
 
 O seletor do cabeçalho oferece **Português, English, Español, Italiano, Français,
@@ -37,7 +50,7 @@ it rebuilds the same exact line bytes; triangle geometry, normals, material role
 overhang values, tessellation and manufacturing exports are unchanged. There is
 no reduction in preview quality, mesh resolution or sampling.
 
-| Measurement | Published 1.1.1 | Candidate 1.2.0 |
+| Measurement | Published 1.1.1 | Initial fixed-catalog snapshot |
 | --- | ---: | ---: |
 | Standalone `.py` / `_any.py`, each | 481,852 bytes | 344,637 bytes |
 | Universal wheel | 123,921 bytes | 144,250 bytes |
@@ -45,8 +58,8 @@ no reduction in preview quality, mesh resolution or sampling.
 | Page HTML generation median | 3.43 ms | 5.55 ms |
 | Default requested GPU buffer bytes, wire OFF | 6,604,800 | 6,328,080 |
 
-The standalone installer is **28.5% smaller despite adding five languages**. The
-wheel is **16.4% larger** because its readable locale catalog is new. The five-sample
+In that historical fixed-catalog snapshot, the standalone installer was **28.5% smaller**
+and the wheel **16.4% larger**. Current modular-pack artifact sizes are listed above. The five-sample
 comparison measured about 45 ms more import time; a startup improvement has not
 been demonstrated. HTML creation includes the new offline vocabulary and costs
 about 2.1 ms more in this measurement. Neither
@@ -63,7 +76,7 @@ guarantee is claimed.
 
 ## Verification
 
-- **35 Python tests passed in 23.550 s**, with `-B -W error` and no skips, including original geometry/export/bridge
+- **40 Python tests passed in 28.048 s**, with `-B -W error` and no skips, including original geometry/export/bridge
   tests, locale variants, catalog completeness, exact placeholder parity, corrupt
   preference recovery and persistent page/dock preference synchronization.
 - All twelve published full-resolution preset vases and the botanical saucer were
@@ -77,9 +90,15 @@ guarantee is claimed.
 - `scripts/check_multilingual.cjs` exercises all seven languages in both page and
   dock using real Chromium controls: parameter preservation, personal preset
   names, numeric warnings, export requests and edit/Undo across a language change.
-  All **14 language/view cases passed with zero JavaScript errors**, including
+  All **14 shipped language/view cases and two data-only extra-language cases passed
+  with zero JavaScript errors**, including
   delayed old acknowledgments and reordered preferences from the other view. It
   records a report plus Italian screenshots.
+- A temporary eighth JSON alone is detected by the host and page/dock selector;
+  both standalone files and the wheel are rebuilt and imported outside the source
+  tree. Regional precedence, partial fallback, context overrides, RTL metadata,
+  strict malformed/duplicate/placeholder rejection and lossless catalog migration
+  are covered. That temporary Dutch pack is not part of the production files.
 - Independent visual review covers seven languages × two views × two themes and
   compares baseline/current main GPU input hashes. A separate wire OFF/ON/OFF/ON
   check verifies exact original line bytes and release of the optional payload.

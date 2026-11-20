@@ -15,6 +15,7 @@ import base64
 import csv
 import hashlib
 import io
+import importlib.util
 import os
 import re
 import shutil
@@ -36,6 +37,7 @@ DIST_ANY_BUNDLE_PATH = DIST_DIR / "orca_vase_generator_any.py"
 ICON_SRC_PATH = SRC_PKG_DIR / "icon.svg"
 
 MODULE_ORDER: list[str] = [
+    "language_packs.py",
     "locale_catalog.py",
     "schema.py",
     "mesh_generator.py",
@@ -257,12 +259,23 @@ def _strip_internal_imports(source: str) -> tuple[str, set[str]]:
     return "".join(lines), future_features
 
 
+def _read_build_language_packs() -> dict:
+    spec = importlib.util.spec_from_file_location("_vase_language_pack_validation", SRC_PKG_DIR / "language_packs.py")
+    if spec is None or spec.loader is None:
+        raise RuntimeError("Cannot load the language-pack validator")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    packs, _ = module.load_language_packs(SRC_PKG_DIR / "locales", embedded={}, strict=True)
+    return packs
+
+
 def build_bundle() -> Path:
     """Compile all `src/vase_studio/*.py` modules into `dist/orca_vase_generator.py`."""
     missing = [m for m in MODULE_ORDER if not (SRC_PKG_DIR / m).is_file()]
     if missing:
         raise FileNotFoundError(f"Missing required source module(s) in {SRC_PKG_DIR}: {missing}")
 
+    language_packs = _read_build_language_packs()
     raw_sources: dict[str, str] = {}
     private_defs_by_mod: dict[str, set[str]] = {}
     class_attrs_by_mod: dict[str, set[str]] = {}
@@ -291,6 +304,10 @@ def build_bundle() -> Path:
             src = _rename_colliding_privates(src, mod_stem, rename_set)
 
         transformed, fut = _strip_internal_imports(src)
+        if mod_file == "language_packs.py":
+            payload = __import__("json").dumps(language_packs, ensure_ascii=False, separators=(",", ":")).encode("utf8")
+            packed = base64.b85encode(zlib.compress(payload, 9)).decode("ascii")
+            transformed = transformed.replace("_BUNDLED_LANGUAGE_PACKS = {}", "_BUNDLED_LANGUAGE_PACKS = json.loads(zlib.decompress(base64.b85decode(" + repr(packed) + ")).decode('utf8'))", 1)
         if mod_file == "studio_ui.py":
             # Pack the immutable HTML literal, never geometry or executable modules.
             # The temporary compressed expression is released after initialization.
@@ -381,7 +398,9 @@ def build_wheel() -> Path:
     readme_body = readme_path.read_text(encoding="utf-8").strip() if readme_path.is_file() else summary
 
     dist_info_dir = f"orca_vase_generator-{version}.dist-info"
-    pkg_files = ["__init__.py", *MODULE_ORDER, "icon.svg"]
+    _read_build_language_packs()
+    locale_files = [path.relative_to(SRC_PKG_DIR).as_posix() for path in sorted((SRC_PKG_DIR / "locales").glob("*.json"))]
+    pkg_files = ["__init__.py", *MODULE_ORDER, "icon.svg", *locale_files]
     missing = [f for f in pkg_files if not (SRC_PKG_DIR / f).is_file()]
     if missing:
         raise FileNotFoundError(f"Missing package file(s) in {SRC_PKG_DIR} for wheel build: {missing}")

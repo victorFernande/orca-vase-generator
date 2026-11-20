@@ -1,0 +1,857 @@
+{
+  "baseline_commit": "63b72c9376f130b3ce06b54b1671ced029a9ce61",
+  "method": "Exact English-keyed five-column translation dictionaries plus all original PT/EN semantic UI strings are migrated without rewriting localized text.",
+  "locale_translation_sha256": {
+    "es": "5523ba0c3e9e120cb8c92d6aebe8a07366c7fd6f3427333975af227405af9293",
+    "it": "56205316ae120495d3210661eb99e89d149eb6e74f3c0a8afcd4e4c373fe6512",
+    "fr": "ede9b24e140b599e8f0eeb6fa755a54cd6b7f2e0cdfe2726d4f7cea9e4ade663",
+    "de": "2c05ac3e45e1868a6e210e5357848e57452d27fdbf50dec08c952c074c187133",
+    "ja": "b9211d953d5cfd7ceaff5ba572809f0c913753fd4c93c1ee8e12586401c77050"
+  },
+  "ui": {
+    "pt": {
+      "btn_surprise": [
+        "Surprise Me",
+        "Surpreenda-me"
+      ],
+      "tab_shape": [
+        "Shape",
+        "Forma"
+      ],
+      "tab_textures": [
+        "Textures",
+        "Texturas"
+      ],
+      "tab_print": [
+        "Wall & Print",
+        "Impressão"
+      ],
+      "tab_presets": [
+        "Presets",
+        "Presets"
+      ],
+      "sec_presets": [
+        "Preset Gallery",
+        "Galeria de Modelos"
+      ],
+      "btn_save_preset": [
+        "+ Save",
+        "+ Salvar"
+      ],
+      "btn_ok": [
+        "Save",
+        "Salvar"
+      ],
+      "cat_all": [
+        "All",
+        "Todos"
+      ],
+      "cat_organic": [
+        "Organic",
+        "Orgânicos"
+      ],
+      "cat_geometric": [
+        "Geometric",
+        "Geométricos"
+      ],
+      "cat_planter": [
+        "Planters",
+        "Cachepôs"
+      ],
+      "cat_user": [
+        "Saved",
+        "Meus"
+      ],
+      "sec_silhouette": [
+        "Silhouette & 2D Curve",
+        "Silhueta & Curva 2D"
+      ],
+      "mode_sliders": [
+        "Sliders",
+        "Sliders"
+      ],
+      "mode_curve": [
+        "Freeform 2D Curve",
+        "Curva Livre 2D"
+      ],
+      "btn_to_curve": [
+        "Sliders → Curve",
+        "Sliders → Curva"
+      ],
+      "hint_curve_sliders": [
+        "Drag handles directly on the 2D silhouette or fine-tune sliders below.",
+        "Arraste as alças na silhueta 2D ou ajuste os controles abaixo."
+      ],
+      "hint_curve_free": [
+        "Drag knots · Click curve to add knot · Double-click/right-click interior knot to remove.",
+        "Arraste pontos · Clique na curva p/ adicionar · Duplo-clique/botão direito p/ remover."
+      ],
+      "sec_resolution": [
+        "Mesh Resolution",
+        "Resolução da Malha"
+      ],
+      "mat_emerald": [
+        "Orca Emerald Silk",
+        "Seda Esmeralda Orca"
+      ],
+      "mat_terracotta": [
+        "Terracotta Clay",
+        "Cerâmica Terracota"
+      ],
+      "mat_white": [
+        "Matte White Ceramic",
+        "Porcelana Branca Mate"
+      ],
+      "mat_copper": [
+        "Copper Bronze",
+        "Bronze Cobre Escovado"
+      ],
+      "mat_xray": [
+        "🔬 X-Ray / Wall (Translucent)",
+        "🔬 Raio-X / Parede (Translúcido)"
+      ],
+      "mat_heatmap": [
+        "Overhang Heatmap (°)",
+        "Mapa de Overhang (°)"
+      ],
+      "vp_xray": [
+        "🔬 X-Ray / Wall",
+        "🔬 Raio-X / Parede"
+      ],
+      "vp_calipers": [
+        "📏 mm Calipers",
+        "📏 Cotas mm"
+      ],
+      "vp_heatmap": [
+        "🔥 Overhang",
+        "🔥 Overhang"
+      ],
+      "vp_wire": [
+        "⌗ Wireframe",
+        "⌗ Malha"
+      ],
+      "vp_saucer": [
+        "🍽 Saucer",
+        "🍽 Pratinho"
+      ],
+      "vp_layout_nested": [
+        "Nested",
+        "Encaixado"
+      ],
+      "vp_layout_side": [
+        "Side-by-Side",
+        "Lado a Lado"
+      ],
+      "hud_title": [
+        "Printability",
+        "Printabilidade"
+      ],
+      "hud_wall_floor": [
+        "Wall / Floor",
+        "Parede / Fundo"
+      ],
+      "hud_mouth_hole": [
+        "Ø Mouth Bore",
+        "Ø Furo Boca"
+      ],
+      "hud_dims": [
+        "Dimensions (mm)",
+        "Dimensões (mm)"
+      ],
+      "hud_overhang": [
+        "Max Overhang",
+        "Overhang Máx"
+      ],
+      "hud_weight": [
+        "Est. Filament",
+        "Filamento Est."
+      ],
+      "hud_Tris": [
+        "Triangles",
+        "Triângulos"
+      ],
+      "leg_outer": [
+        "Outer Wall",
+        "Externa"
+      ],
+      "leg_inner": [
+        "Cavity & Floor",
+        "Cavidade & Fundo"
+      ],
+      "cam_front": [
+        "Front",
+        "Frente"
+      ],
+      "cam_top": [
+        "Top",
+        "Topo"
+      ],
+      "cam_bottom": [
+        "Bottom",
+        "Base"
+      ],
+      "cam_fit": [
+        "Fit View",
+        "Enquadrar"
+      ],
+      "vp_cut": [
+        "✂ Cross-Section Cut",
+        "✂ Corte Transversal"
+      ],
+      "vp_cut_y": [
+        "✂ Vertical Cut (Profile Y)",
+        "✂ Corte Vertical (Perfil Y)"
+      ],
+      "vp_cut_z": [
+        "💿 Horizontal Z Slice (Plan 5%–100%)",
+        "💿 Fatia Horizontal Z (Planta 5%–100%)"
+      ],
+      "sec_envelope": [
+        "Envelope & Global Twist",
+        "Envelope & Torção Global"
+      ],
+      "sec_textures": [
+        "Combinable Textures",
+        "Texturas Combináveis"
+      ],
+      "tex_ribbed": [
+        "Ribbed / Fluted",
+        "Canelado / Frisos"
+      ],
+      "tex_waves": [
+        "Organic Waves",
+        "Ondas Orgânicas"
+      ],
+      "tex_origami": [
+        "Origami Diamond",
+        "Origami Diamante"
+      ],
+      "tex_cellular": [
+        "Cellular / Coral 3D",
+        "Celular / Coral 3D"
+      ],
+      "lbl_ridge_mode": [
+        "Ridged Coral Veins",
+        "Veios em Crista (Coral)"
+      ],
+      "sec_print_mode": [
+        "Wall & Opening (mm)",
+        "Parede & Abertura (mm)"
+      ],
+      "mode_hollow": [
+        "True Hollow Vase (mm Wall)",
+        "Vaso Oco Real (Parede em mm)"
+      ],
+      "mode_spiral": [
+        "Spiral Mode (1 Line)",
+        "Modo Espiral (1 Linha)"
+      ],
+      "lbl_stl_open_hollow": [
+        "Always keep open mouth on .STL export",
+        "Manter boca aberta ao exportar .STL"
+      ],
+      "note_spiral_honest": [
+        "Spiral Mode builds a solid base block whose top is removed by the slicer (.3MF). Keep the toggle below checked so .STL exports stay open!",
+        "O Modo Espiral gera um bloco base cujo topo é removido pelo fatiador (.3MF). Para exportar .STL sempre aberto, mantenha a proteção abaixo ativa!"
+      ],
+      "banner_spiral_safe": [
+        "Spiral Mode: solid base block for .3MF (slicer removes top) · .STL protected w/ Open Mouth",
+        "Modo Espiral: malha base p/ .3MF (fatiador remove o topo) · .STL protegido c/ Boca Aberta"
+      ],
+      "banner_spiral_closed": [
+        "Warning: Solid Spiral Block — .STL will export CLOSED at top for Spiral Slicing!",
+        "Atenção: Bloco Espiral maciço — o .STL sairá com o topo FECHADO para fatiamento Espiral!"
+      ],
+      "perim_hint_fmt": [
+        "≈ {n} loops of {lw} mm · Bore Ø {id} mm",
+        "≈ {n} voltas de {lw} mm · Furo Ø {id} mm"
+      ],
+      "spiral_floor_fmt": [
+        "≈ {mm} mm floor ({n} lay.) · Nozzle {noz}mm (ideal {wmin}–{wmax} mm)",
+        "≈ {mm} mm de fundo ({n} cam.) · Bico {noz}mm (ideal {wmin}–{wmax} mm)"
+      ],
+      "wall_badge_hollow": [
+        "Hollow · {w} mm",
+        "Oco · {w} mm"
+      ],
+      "wall_badge_spiral": [
+        "Spiral · {w} mm",
+        "Espiral · {w} mm"
+      ],
+      "cal_ext": [
+        "Ø Outer: {v} mm",
+        "Ø Externo: {v} mm"
+      ],
+      "cal_hole": [
+        "Ø Bore: {v} mm",
+        "Ø Furo: {v} mm"
+      ],
+      "cal_wall": [
+        "Wall: {v} mm",
+        "Parede: {v} mm"
+      ],
+      "cal_wall_range": [
+        "Wall: {v} mm ({min}–{max} mm)",
+        "Parede: {v} mm ({min}–{max} mm)"
+      ],
+      "cal_floor": [
+        "Bottom: {v} mm",
+        "Fundo: {v} mm"
+      ],
+      "cal_z_slice": [
+        "💿 Z Slice = {z} mm ({pct}%)",
+        "💿 Fatia Z = {z} mm ({pct}%)"
+      ],
+      "lbl_2d_wall": [
+        "Wall {v} mm",
+        "Parede {v} mm"
+      ],
+      "lbl_2d_floor": [
+        "Bottom {v} mm",
+        "Fundo {v} mm"
+      ],
+      "lbl_2d_hole": [
+        "Ø Bore {v} mm",
+        "Ø Furo {v} mm"
+      ],
+      "lbl_2d_spiral_cap": [
+        "Spiral Cap (.3MF)",
+        "Tampa Espiral (.3MF)"
+      ],
+      "lbl_auto_slicer": [
+        "Auto-configure OrcaSlicer on send",
+        "Auto-ajustar OrcaSlicer ao enviar"
+      ],
+      "lbl_spiral_smooth": [
+        "Smooth Spiral XY Seam",
+        "Suavizar Costura Espiral XY"
+      ],
+      "lbl_clamp_overhang": [
+        "Auto-Clamp Overhang Slope",
+        "Limitar Overhang Automaticamente"
+      ],
+      "sec_gardening": [
+        "Gardening: Drainage & Saucer",
+        "Jardinagem: Drenagem & Prato"
+      ],
+      "lbl_drainage": [
+        "Bottom Drainage Holes",
+        "Furos de Drenagem na Base"
+      ],
+      "note_drainage_spiral": [
+        "Smart blind cavities through solid bottom layers: real drainage holes without breaking single-contour Spiral Vase!",
+        "Cavidades cegas nas camadas sólidas da base: furos reais sem quebrar o contorno único do Modo Espiral!"
+      ],
+      "note_drainage_hollow": [
+        "Watertight cylindrical drainage tunnels straight through the hollow pot floor.",
+        "Túneis cilíndricos atravessando o fundo oco da peça com malha 2-manifold estanque."
+      ],
+      "lbl_include_saucer": [
+        "Include Matching Saucer",
+        "Incluir Pratinho Coordenado"
+      ],
+      "warn_saucer_spiral": [
+        "Vase + Saucer together automatically switch to Open Hollow Mesh on send/export.",
+        "Vaso + Prato juntos convertem automaticamente para Vaso Oco Aberto na mesa/exportação."
+      ],
+      "lbl_saucer_tex": [
+        "Match Vase Texture on Saucer",
+        "Repetir Textura do Vaso no Prato"
+      ],
+      "btn_send_plater": [
+        "Send to OrcaSlicer Plater",
+        "Enviar para a Mesa do OrcaSlicer"
+      ],
+      "btn_exp_3mf": [
+        "Export .3MF",
+        "Exportar .3MF"
+      ],
+      "btn_exp_stl": [
+        "Export .STL",
+        "Exportar .STL"
+      ],
+      "poly_circle": [
+        "Smooth Circle",
+        "Circular"
+      ],
+      "poly_sides_fmt": [
+        "{n}-Gon",
+        "{n} Lados"
+      ],
+      "active_tex_fmt": [
+        "{n} active",
+        "{n} ativa(s)"
+      ],
+      "bed_exceeded": [
+        "Exceeds printer build volume ({bx}×{by}×{bz} mm)!",
+        "Excede o volume da impressora ({bx}×{by}×{bz} mm)!"
+      ],
+      "btn_fit_printer": [
+        "Fit to Printer",
+        "Ajustar à Mesa"
+      ],
+      "printer_sync_tip": [
+        "Click to sync active OrcaSlicer printer",
+        "Clique para sincronizar impressora ativa do OrcaSlicer"
+      ],
+      "toast_printer_synced": [
+        "Synced active printer: {name} ({dims})",
+        "Impressora ativa sincronizada: {name} ({dims})"
+      ],
+      "toast_fitted_printer": [
+        "Dimensions fitted to {name} build volume!",
+        "Dimensões ajustadas ao volume de {name}!"
+      ],
+      "status_ok": [
+        "PRINTABLE",
+        "ÓTIMO"
+      ],
+      "status_warn": [
+        "WARNING",
+        "ATENÇÃO"
+      ],
+      "status_crit": [
+        "CRITICAL",
+        "CRÍTICO"
+      ],
+      "toast_randomized": [
+        "Generated printable vase design!",
+        "Novo vaso imprimível gerado!"
+      ],
+      "toast_preset_saved": [
+        "Preset saved!",
+        "Preset salvo com sucesso!"
+      ],
+      "toast_converted_curve": [
+        "Converted sliders to PCHIP Freeform Curve!",
+        "Convertido para Curva Livre PCHIP!"
+      ],
+      "btn_off": [
+        "Off",
+        "Desligado"
+      ]
+    },
+    "en": {
+      "btn_surprise": [
+        "Surprise Me",
+        "Surprise Me"
+      ],
+      "tab_shape": [
+        "Shape",
+        "Shape"
+      ],
+      "tab_textures": [
+        "Textures",
+        "Textures"
+      ],
+      "tab_print": [
+        "Wall & Print",
+        "Wall & Print"
+      ],
+      "tab_presets": [
+        "Presets",
+        "Presets"
+      ],
+      "sec_presets": [
+        "Preset Gallery",
+        "Preset Gallery"
+      ],
+      "btn_save_preset": [
+        "+ Save",
+        "+ Save"
+      ],
+      "btn_ok": [
+        "Save",
+        "Save"
+      ],
+      "cat_all": [
+        "All",
+        "All"
+      ],
+      "cat_organic": [
+        "Organic",
+        "Organic"
+      ],
+      "cat_geometric": [
+        "Geometric",
+        "Geometric"
+      ],
+      "cat_planter": [
+        "Planters",
+        "Planters"
+      ],
+      "cat_user": [
+        "Saved",
+        "Saved"
+      ],
+      "sec_silhouette": [
+        "Silhouette & 2D Curve",
+        "Silhouette & 2D Curve"
+      ],
+      "mode_sliders": [
+        "Sliders",
+        "Sliders"
+      ],
+      "mode_curve": [
+        "Freeform 2D Curve",
+        "Freeform 2D Curve"
+      ],
+      "btn_to_curve": [
+        "Sliders → Curve",
+        "Sliders → Curve"
+      ],
+      "hint_curve_sliders": [
+        "Drag handles directly on the 2D silhouette or fine-tune sliders below.",
+        "Drag handles directly on the 2D silhouette or fine-tune sliders below."
+      ],
+      "hint_curve_free": [
+        "Drag knots · Click curve to add knot · Double-click/right-click interior knot to remove.",
+        "Drag knots · Click curve to add knot · Double-click/right-click interior knot to remove."
+      ],
+      "sec_resolution": [
+        "Mesh Resolution",
+        "Mesh Resolution"
+      ],
+      "mat_emerald": [
+        "Orca Emerald Silk",
+        "Orca Emerald Silk"
+      ],
+      "mat_terracotta": [
+        "Terracotta Clay",
+        "Terracotta Clay"
+      ],
+      "mat_white": [
+        "Matte White Ceramic",
+        "Matte White Ceramic"
+      ],
+      "mat_copper": [
+        "Copper Bronze",
+        "Copper Bronze"
+      ],
+      "mat_xray": [
+        "🔬 X-Ray / Wall (Translucent)",
+        "🔬 X-Ray / Wall (Translucent)"
+      ],
+      "mat_heatmap": [
+        "Overhang Heatmap (°)",
+        "Overhang Heatmap (°)"
+      ],
+      "vp_xray": [
+        "🔬 X-Ray / Wall",
+        "🔬 X-Ray / Wall"
+      ],
+      "vp_calipers": [
+        "📏 mm Calipers",
+        "📏 mm Calipers"
+      ],
+      "vp_heatmap": [
+        "🔥 Overhang",
+        "🔥 Overhang"
+      ],
+      "vp_wire": [
+        "⌗ Wireframe",
+        "⌗ Wireframe"
+      ],
+      "vp_saucer": [
+        "🍽 Saucer",
+        "🍽 Saucer"
+      ],
+      "vp_layout_nested": [
+        "Nested",
+        "Nested"
+      ],
+      "vp_layout_side": [
+        "Side-by-Side",
+        "Side-by-Side"
+      ],
+      "hud_title": [
+        "Printability",
+        "Printability"
+      ],
+      "hud_wall_floor": [
+        "Wall / Floor",
+        "Wall / Floor"
+      ],
+      "hud_mouth_hole": [
+        "Ø Mouth Bore",
+        "Ø Mouth Bore"
+      ],
+      "hud_dims": [
+        "Dimensions (mm)",
+        "Dimensions (mm)"
+      ],
+      "hud_overhang": [
+        "Max Overhang",
+        "Max Overhang"
+      ],
+      "hud_weight": [
+        "Est. Filament",
+        "Est. Filament"
+      ],
+      "hud_Tris": [
+        "Triangles",
+        "Triangles"
+      ],
+      "leg_outer": [
+        "Outer Wall",
+        "Outer Wall"
+      ],
+      "leg_inner": [
+        "Cavity & Floor",
+        "Cavity & Floor"
+      ],
+      "cam_front": [
+        "Front",
+        "Front"
+      ],
+      "cam_top": [
+        "Top",
+        "Top"
+      ],
+      "cam_bottom": [
+        "Bottom",
+        "Bottom"
+      ],
+      "cam_fit": [
+        "Fit View",
+        "Fit View"
+      ],
+      "vp_cut": [
+        "✂ Cross-Section Cut",
+        "✂ Cross-Section Cut"
+      ],
+      "vp_cut_y": [
+        "✂ Vertical Cut (Profile Y)",
+        "✂ Vertical Cut (Profile Y)"
+      ],
+      "vp_cut_z": [
+        "💿 Horizontal Z Slice (Plan 5%–100%)",
+        "💿 Horizontal Z Slice (Plan 5%–100%)"
+      ],
+      "sec_envelope": [
+        "Envelope & Global Twist",
+        "Envelope & Global Twist"
+      ],
+      "sec_textures": [
+        "Combinable Textures",
+        "Combinable Textures"
+      ],
+      "tex_ribbed": [
+        "Ribbed / Fluted",
+        "Ribbed / Fluted"
+      ],
+      "tex_waves": [
+        "Organic Waves",
+        "Organic Waves"
+      ],
+      "tex_origami": [
+        "Origami Diamond",
+        "Origami Diamond"
+      ],
+      "tex_cellular": [
+        "Cellular / Coral 3D",
+        "Cellular / Coral 3D"
+      ],
+      "lbl_ridge_mode": [
+        "Ridged Coral Veins",
+        "Ridged Coral Veins"
+      ],
+      "sec_print_mode": [
+        "Wall & Opening (mm)",
+        "Wall & Opening (mm)"
+      ],
+      "mode_hollow": [
+        "True Hollow Vase (mm Wall)",
+        "True Hollow Vase (mm Wall)"
+      ],
+      "mode_spiral": [
+        "Spiral Mode (1 Line)",
+        "Spiral Mode (1 Line)"
+      ],
+      "lbl_stl_open_hollow": [
+        "Always keep open mouth on .STL export",
+        "Always keep open mouth on .STL export"
+      ],
+      "note_spiral_honest": [
+        "Spiral Mode builds a solid base block whose top is removed by the slicer (.3MF). Keep the toggle below checked so .STL exports stay open!",
+        "Spiral Mode builds a solid base block whose top is removed by the slicer (.3MF). Keep the toggle below checked so .STL exports stay open!"
+      ],
+      "banner_spiral_safe": [
+        "Spiral Mode: solid base block for .3MF (slicer removes top) · .STL protected w/ Open Mouth",
+        "Spiral Mode: solid base block for .3MF (slicer removes top) · .STL protected w/ Open Mouth"
+      ],
+      "banner_spiral_closed": [
+        "Warning: Solid Spiral Block — .STL will export CLOSED at top for Spiral Slicing!",
+        "Warning: Solid Spiral Block — .STL will export CLOSED at top for Spiral Slicing!"
+      ],
+      "perim_hint_fmt": [
+        "≈ {n} loops of {lw} mm · Bore Ø {id} mm",
+        "≈ {n} loops of {lw} mm · Bore Ø {id} mm"
+      ],
+      "spiral_floor_fmt": [
+        "≈ {mm} mm floor ({n} lay.) · Nozzle {noz}mm (ideal {wmin}–{wmax} mm)",
+        "≈ {mm} mm floor ({n} lay.) · Nozzle {noz}mm (ideal {wmin}–{wmax} mm)"
+      ],
+      "wall_badge_hollow": [
+        "Hollow · {w} mm",
+        "Hollow · {w} mm"
+      ],
+      "wall_badge_spiral": [
+        "Spiral · {w} mm",
+        "Spiral · {w} mm"
+      ],
+      "cal_ext": [
+        "Ø Outer: {v} mm",
+        "Ø Outer: {v} mm"
+      ],
+      "cal_hole": [
+        "Ø Bore: {v} mm",
+        "Ø Bore: {v} mm"
+      ],
+      "cal_wall": [
+        "Wall: {v} mm",
+        "Wall: {v} mm"
+      ],
+      "cal_wall_range": [
+        "Wall: {v} mm ({min}–{max} mm)",
+        "Wall: {v} mm ({min}–{max} mm)"
+      ],
+      "cal_floor": [
+        "Bottom: {v} mm",
+        "Bottom: {v} mm"
+      ],
+      "cal_z_slice": [
+        "💿 Z Slice = {z} mm ({pct}%)",
+        "💿 Z Slice = {z} mm ({pct}%)"
+      ],
+      "lbl_2d_wall": [
+        "Wall {v} mm",
+        "Wall {v} mm"
+      ],
+      "lbl_2d_floor": [
+        "Bottom {v} mm",
+        "Bottom {v} mm"
+      ],
+      "lbl_2d_hole": [
+        "Ø Bore {v} mm",
+        "Ø Bore {v} mm"
+      ],
+      "lbl_2d_spiral_cap": [
+        "Spiral Cap (.3MF)",
+        "Spiral Cap (.3MF)"
+      ],
+      "lbl_auto_slicer": [
+        "Auto-configure OrcaSlicer on send",
+        "Auto-configure OrcaSlicer on send"
+      ],
+      "lbl_spiral_smooth": [
+        "Smooth Spiral XY Seam",
+        "Smooth Spiral XY Seam"
+      ],
+      "lbl_clamp_overhang": [
+        "Auto-Clamp Overhang Slope",
+        "Auto-Clamp Overhang Slope"
+      ],
+      "sec_gardening": [
+        "Gardening: Drainage & Saucer",
+        "Gardening: Drainage & Saucer"
+      ],
+      "lbl_drainage": [
+        "Bottom Drainage Holes",
+        "Bottom Drainage Holes"
+      ],
+      "note_drainage_spiral": [
+        "Smart blind cavities through solid bottom layers: real drainage holes without breaking single-contour Spiral Vase!",
+        "Smart blind cavities through solid bottom layers: real drainage holes without breaking single-contour Spiral Vase!"
+      ],
+      "note_drainage_hollow": [
+        "Watertight cylindrical drainage tunnels straight through the hollow pot floor.",
+        "Watertight cylindrical drainage tunnels straight through the hollow pot floor."
+      ],
+      "lbl_include_saucer": [
+        "Include Matching Saucer",
+        "Include Matching Saucer"
+      ],
+      "warn_saucer_spiral": [
+        "Vase + Saucer together automatically switch to Open Hollow Mesh on send/export.",
+        "Vase + Saucer together automatically switch to Open Hollow Mesh on send/export."
+      ],
+      "lbl_saucer_tex": [
+        "Match Vase Texture on Saucer",
+        "Match Vase Texture on Saucer"
+      ],
+      "btn_send_plater": [
+        "Send to OrcaSlicer Plater",
+        "Send to OrcaSlicer Plater"
+      ],
+      "btn_exp_3mf": [
+        "Export .3MF",
+        "Export .3MF"
+      ],
+      "btn_exp_stl": [
+        "Export .STL",
+        "Export .STL"
+      ],
+      "poly_circle": [
+        "Smooth Circle",
+        "Smooth Circle"
+      ],
+      "poly_sides_fmt": [
+        "{n}-Gon",
+        "{n}-Gon"
+      ],
+      "active_tex_fmt": [
+        "{n} active",
+        "{n} active"
+      ],
+      "bed_exceeded": [
+        "Exceeds printer build volume ({bx}×{by}×{bz} mm)!",
+        "Exceeds printer build volume ({bx}×{by}×{bz} mm)!"
+      ],
+      "btn_fit_printer": [
+        "Fit to Printer",
+        "Fit to Printer"
+      ],
+      "printer_sync_tip": [
+        "Click to sync active OrcaSlicer printer",
+        "Click to sync active OrcaSlicer printer"
+      ],
+      "toast_printer_synced": [
+        "Synced active printer: {name} ({dims})",
+        "Synced active printer: {name} ({dims})"
+      ],
+      "toast_fitted_printer": [
+        "Dimensions fitted to {name} build volume!",
+        "Dimensions fitted to {name} build volume!"
+      ],
+      "status_ok": [
+        "PRINTABLE",
+        "PRINTABLE"
+      ],
+      "status_warn": [
+        "WARNING",
+        "WARNING"
+      ],
+      "status_crit": [
+        "CRITICAL",
+        "CRITICAL"
+      ],
+      "toast_randomized": [
+        "Generated printable vase design!",
+        "Generated printable vase design!"
+      ],
+      "toast_preset_saved": [
+        "Preset saved!",
+        "Preset saved!"
+      ],
+      "toast_converted_curve": [
+        "Converted sliders to PCHIP Freeform Curve!",
+        "Converted sliders to PCHIP Freeform Curve!"
+      ],
+      "btn_off": [
+        "Off",
+        "Off"
+      ]
+    }
+  }
+}

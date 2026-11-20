@@ -10,21 +10,37 @@ const output = path.resolve(process.env.ORCA_I18N_OUTPUT || path.join(root, 'tes
 fs.mkdirSync(output, {recursive:true});
 const python = process.env.ORCA_TEST_PYTHON || process.env.PYTHON || 'python';
 const generate = spawnSync(python, ['-B', '-W', 'error', '-c', String.raw`
-import sys,json
+import sys,json,tempfile,shutil
+from pathlib import Path
+from unittest.mock import patch
 sys.path.insert(0,'src')
 from vase_studio.studio_ui import get_studio_html
 from vase_studio.schema import DEFAULT_PARAMS
 from vase_studio.locale_catalog import locale_vocabulary
+from vase_studio import language_packs
 packets=[]
 for mode in ('page','dock'):
  html=get_studio_html(mode,{'lang':'pt','user_presets':[{'id':'user_i18n','name':'Custom Ω 日本語','category':'user','params':DEFAULT_PARAMS}]})
  html=html.replace('  bootStudioUI();','  window.__vaseQA = {state:state, localizedWarning:localizedWarning};\n  bootStudioUI();')
  packets.append({'mode':mode,'html':html})
-print(json.dumps({'packets':packets,'vocabulary':locale_vocabulary()},ensure_ascii=False))
+dynamic=[]
+with tempfile.TemporaryDirectory() as temporary:
+ folder=Path(temporary)/'locales'
+ shutil.copytree('src/vase_studio/locales',folder)
+ extra_code='nl' if 'nl' not in locale_vocabulary() else 'qaa'
+ extra={'schema_version':1,'code':extra_code,'native_name':'Nederlands','direction':'ltr','order':7,
+        'translations':{'Total Height':'Hoogte','Preset Gallery':'Galerij','ui:sec_presets::Preset Gallery':'Modellenbibliotheek'}}
+ (folder/(extra_code+'.json')).write_text(json.dumps(extra),encoding='utf8')
+ with patch.object(language_packs,'__file__',str(Path(temporary)/'language_packs.py')):
+  for mode in ('page','dock'):
+   html=get_studio_html(mode,{'lang':extra_code+'-NL'})
+   html=html.replace('  bootStudioUI();','  window.__vaseQA = {state:state, localizedWarning:localizedWarning};\n  bootStudioUI();')
+   dynamic.append({'mode':mode,'html':html,'code':extra_code,'expected_count':len(locale_vocabulary())})
+print(json.dumps({'packets':packets,'vocabulary':locale_vocabulary(),'locales':list(locale_vocabulary()),'dynamic':dynamic},ensure_ascii=False))
 `], {cwd:root,encoding:'utf8',maxBuffer:16*1024*1024});
 if (generate.status !== 0) throw Error(generate.stderr || generate.stdout);
 const generated = JSON.parse(generate.stdout);
-const report = {ok:false, locales:['pt','en','es','it','fr','de','ja'], checks:[], consoleErrors:[], limitations:'Isolated Chromium; no native OrcaSlicer or native speaker certification.'};
+const report = {ok:false, locales:generated.locales, checks:[], dynamicDataOnly:[], consoleErrors:[], limitations:'Isolated Chromium; no native OrcaSlicer or native speaker certification.'};
 
 (async function() {
   const browser = await chromium.launch({headless:true, executablePath:process.env.ORCA_CHROMIUM_EXECUTABLE || undefined});
@@ -60,9 +76,9 @@ const report = {ok:false, locales:['pt','en','es','it','fr','de','ja'], checks:[
         assert.equal(snapshot.params,before,'Changing language modified manufacturing params');
         assert(snapshot.custom,'Personal preset title changed');
         if (generated.vocabulary[code]) {
-          assert.equal(snapshot.height,generated.vocabulary[code]['Total Height']);
-          assert.equal(snapshot.send,generated.vocabulary[code]['Send to OrcaSlicer Plater']);
-          assert.equal(snapshot.warning,generated.vocabulary[code]['Height ({a} mm) exceeds printer Z limit ({b} mm).'].replace('{a}','310.5').replace('{b}','250'));
+          assert.equal(snapshot.height,generated.vocabulary[code]['Total Height'] || 'Total Height');
+          assert.equal(snapshot.send,generated.vocabulary[code]['ui:btn_send_plater::Send to OrcaSlicer Plater'] || generated.vocabulary[code]['Send to OrcaSlicer Plater'] || 'Send to OrcaSlicer Plater');
+          assert.equal(snapshot.warning,(generated.vocabulary[code]['Height ({a} mm) exceeds printer Z limit ({b} mm).'] || 'Height ({a} mm) exceeds printer Z limit ({b} mm).').replace('{a}','310.5').replace('{b}','250'));
         }
         assert.equal(snapshot.messages.at(-1).lang,code);
         // Runtime UI callbacks preserve the selected language and all names.
@@ -100,11 +116,33 @@ const report = {ok:false, locales:['pt','en','es','it','fr','de','ja'], checks:[
       await page.screenshot({path:path.join(output,`${packet.mode}-italian.png`)});
       await context.close();
     }
+    for (const packet of generated.dynamic) {
+      const context = await browser.newContext({viewport:packet.mode==='dock'?{width:420,height:1000}:{width:1600,height:900}});
+      const page = await context.newPage();
+      page.on('pageerror',error=>report.consoleErrors.push(String(error)));
+      await page.evaluate(()=>{
+        window.__messages=[];
+        window.orca={postMessage(message){window.__messages.push(message);},onMessage(callback){window.__hostCallback=callback;}};
+      });
+      await page.setContent(packet.html,{waitUntil:'load'});
+      assert.equal(await page.locator('html').getAttribute('lang'),packet.code);
+      assert.equal(await page.locator('html').getAttribute('dir'),'ltr');
+      assert.equal(await page.locator('#lang-select option').count(),packet.expected_count);
+      assert.equal(await page.locator('[data-spec-label="height_mm"]').textContent(),'Hoogte');
+      assert.equal(await page.locator('[data-i18n="sec_presets"]').textContent(),'Modellenbibliotheek');
+      assert.equal(await page.locator('[data-i18n="btn_send_plater"]').first().textContent(),'Send to OrcaSlicer Plater');
+      await page.locator('#lang-select').selectOption('en');
+      await page.locator('#lang-select').selectOption(packet.code);
+      assert.equal(await page.locator('[data-spec-label="height_mm"]').textContent(),'Hoogte');
+      await page.screenshot({path:path.join(output,`${packet.mode}-data-only-dutch.png`)});
+      report.dynamicDataOnly.push({mode:packet.mode,language:packet.code,host_region_fallback:true,context_override:true,english_fallback:true,added_json_only:true});
+      await context.close();
+    }
     assert.equal(report.consoleErrors.length,0,report.consoleErrors.join('\n'));
     report.ok=true;
   } finally {
     await browser.close();
     fs.writeFileSync(path.join(output,'report.json'),JSON.stringify(report,null,2)+'\n');
   }
-  console.log(JSON.stringify({ok:report.ok,cases:report.checks.length,consoleErrors:report.consoleErrors.length}));
+  console.log(JSON.stringify({ok:report.ok,cases:report.checks.length,dynamicCases:report.dynamicDataOnly.length,consoleErrors:report.consoleErrors.length}));
 })().catch(error=>{console.error(error);process.exitCode=1;});

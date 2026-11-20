@@ -31,6 +31,8 @@ The header now provides seven fully offline interface languages: **Português, E
 
 O cabeçalho agora oferece sete idiomas offline. A escolha é salva e sincronizada entre aba e painel; sem escolha manual, segue o idioma do OrcaSlicer. Os textos foram preparados com terminologia de impressão 3D e ainda aceitam revisão de falantes nativos. Os manuais completos continuam em PT/EN.
 
+Each language is now an independent JSON file. Add one file under `src/vase_studio/locales/` and rebuild: both standalone installers and the wheel discover it automatically, with regional matching and English fallback. See [adding language packs / adicionar idiomas](docs/LANGUAGE_PACKS.md).
+
 The standalone installer stores the immutable HTML template with lossless standard-library compression; the wheel keeps readable source modules. Wireframe vertices are created/uploaded only while wireframe is enabled and released when it is disabled. All twelve published preset vases and the botanical saucer preserve the original vertex, triangle and normal bytes. See [languages and measured optimization](docs/MULTILINGUAL_AND_PERFORMANCE.md). Install one format only, activate it, close and reopen OrcaSlicer. No installer or test updates an existing Orca installation unless installation is explicitly requested.
 
 ## English Overview

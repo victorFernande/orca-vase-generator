@@ -1,0 +1,51 @@
+{
+  "version": "1.2.0",
+  "modular_base_commit": "63b72c9376f130b3ce06b54b1671ced029a9ce61",
+  "method": "Artifact byte sizes and SHA256 after moving unchanged translations to independently validated JSON packs; no new startup/FPS measurement. Earlier import samples are explicitly historical.",
+  "artifacts": {
+    "orca_vase_generator-1.2.0-py3-none-any.whl": {
+      "bytes": 168361,
+      "sha256": "9725524e1a7bfd68dbb40cec74953e7feb850581fadaedb079d8b3b33e58766e"
+    },
+    "orca_vase_generator.py": {
+      "bytes": 339529,
+      "sha256": "b04c43be0ce21f07ac1825aecb7ea270602a77465200f309770bea4540eb4103"
+    },
+    "orca_vase_generator_any.py": {
+      "bytes": 339529,
+      "sha256": "b04c43be0ce21f07ac1825aecb7ea270602a77465200f309770bea4540eb4103"
+    }
+  },
+  "published_1_1_1": {
+    "standalone_bytes": 481852,
+    "wheel_bytes": 123921
+  },
+  "prior_fixed_catalog_1_2_0": {
+    "standalone_bytes": 344637,
+    "standalone_sha256": "0398adda19533c3050af9050c783a46fe662acb5ba5e918ecfc5211031a18c8e",
+    "wheel_bytes": 144250
+  },
+  "production_json_packs": 7,
+  "json_bytes": 98531,
+  "common_loader_sha256": "765537ce2de4220e6328ba72f55b9662031af43da9462455641cacf5ece5eac9",
+  "tests": {
+    "full_python": 40,
+    "seconds": 28.048,
+    "skips": 0,
+    "browser_shipped_cases": 14,
+    "browser_temporary_extra_pack_cases": 2,
+    "browser_errors": 0,
+    "extra_pack_source_standalone_any_wheel": true,
+    "production_extra_fixture_shipped": false,
+    "future_partial_pack_full_ci": {
+      "ok": true,
+      "production_added_files": 1,
+      "partial_translation_keys": 1,
+      "full_python_tests": 40,
+      "browser_cases": 16,
+      "extra_fixture_cases": 2,
+      "source_edits_required": false
+    }
+  },
+  "geometry": "All39publishedmanufacturingarraydigestsunchanged; five manufacturing source files unchanged."
+}

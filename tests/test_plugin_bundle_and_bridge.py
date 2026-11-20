@@ -1555,7 +1555,7 @@ console.log(JSON.stringify({ ok: true, evaluator: evaluator.name + ' [' + evalua
             {"init_state", "analysis_result"},
         )
         init_msg = [m for m in ready_msgs if m.get("type") == "init_state"][0]
-        self.assertIn(init_msg.get("lang"), ("pt", "en"))
+        self.assertIn(init_msg.get("lang"), mod.supported_languages())
         self.assertIn(init_msg.get("theme"), ("dark", "light"))
         self.assertEqual(len(init_msg.get("builtin_presets", [])), 12)
         self.assertIsInstance(init_msg.get("params"), dict)
@@ -2509,7 +2509,7 @@ console.log(JSON.stringify({
             mock.patch.object(self._mock_mods["orca.host"], "app_language", return_value="en_US"),
         ):
             ctx_en = mod._SHARED_CONTROLLER.read_host_context()
-            self.assertEqual(ctx_en["lang"], "en")
+            self.assertEqual(ctx_en["lang"], mod.normalize_language("en_US"))
             self.assertFalse(ctx_en["theme_explicit"])
 
         # 5. Official `orca.host.ui.push_notification(NotificationLevel, text)` 2-arg signature

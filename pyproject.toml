@@ -20,7 +20,7 @@ dependencies = [
 where = ["src"]
 
 [tool.setuptools.package-data]
-vase_studio = ["icon.svg"]
+vase_studio = ["icon.svg", "locales/*.json"]
 
 [tool.orcaslicer.plugin]
 id = "orca-vase-studio"

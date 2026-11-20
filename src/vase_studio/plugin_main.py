@@ -1684,7 +1684,7 @@ class VaseStudioController:
                     cx = host_ctx["bed_x"] / 2.0
                     cy = host_ctx["bed_y"] / 2.0
 
-                    vase_label = str(params.get("name") or ("Vaso" if lang == "pt" else "Vase"))
+                    vase_label = str(params.get("name") or translate_text("Vase", lang))
 
                     if include_saucer:
                         saucer_mesh = generate_saucer_mesh(effective_params)
@@ -1694,7 +1694,7 @@ class VaseStudioController:
                         total_w = 2.0 * vase_rx + gap_mm + 2.0 * saucer_rx
                         vase_pos = (round(cx - total_w / 2.0 + vase_rx, 2), round(cy, 2), 0.0)
                         saucer_pos = (round(cx + total_w / 2.0 - saucer_rx, 2), round(cy, 2), 0.0)
-                        saucer_label = "Prato" if lang == "pt" else translate_text("Saucer", lang)
+                        saucer_label = translate_text("Saucer", lang)
                         items = [
                             (vase_label, vase_mesh, vase_pos),
                             (saucer_label, saucer_mesh, saucer_pos),
@@ -1731,22 +1731,9 @@ class VaseStudioController:
                     and params.get("print_mode") == "spiral_vase"
                     and effective_params.get("print_mode") == "shelled_hollow"
                 ):
-                    open_mouth_note = (
-                        f" (boca aberta oca {effective_params['wall_thickness_mm']:.1f} mm)"
-                        if lang == "pt"
-                        else f" (open-mouthed {effective_params['wall_thickness_mm']:.1f} mm shell)"
-                    )
+                    open_mouth_note = translate_text(" (open-mouthed {mm} mm shell)", lang).replace("{mm}", f"{effective_params['wall_thickness_mm']:.1f}")
 
-                ok_msg = (
-                    f"Arquivo exportado com sucesso: {Path(paths[0]).name}{open_mouth_note}"
-                    if lang == "pt"
-                    else f"Exported successfully: {Path(paths[0]).name}{open_mouth_note}"
-                )
-                if lang not in ("pt", "en"):
-                    note = ""
-                    if open_mouth_note:
-                        note = translate_text(" (open-mouthed {mm} mm shell)", lang).replace("{mm}", f"{effective_params['wall_thickness_mm']:.1f}")
-                    ok_msg = translate_text("Exported successfully: {name}", lang).replace("{name}", Path(paths[0]).name) + note
+                ok_msg = translate_text("Exported successfully: {name}", lang).replace("{name}", Path(paths[0]).name) + open_mouth_note
                 send_fn(
                     {
                         "type": "action_result",
@@ -1865,21 +1852,9 @@ class VaseStudioController:
 
                 saucer_spiral_note = ""
                 if include_saucer and params.get("print_mode") == "spiral_vase":
-                    saucer_spiral_note = (
-                        " (Convertido para Vaso Oco Aberto para fatiar vaso + prato juntos.)"
-                        if lang == "pt"
-                        else " (Converted to open hollow shell to slice vase + saucer together.)"
-                    )
+                    saucer_spiral_note = translate_text(" (Converted to open hollow shell to slice vase + saucer together.)", lang)
 
-                msg_text = (
-                    f"Enviado para a mesa do OrcaSlicer ({len(stl_paths)} objeto(s)).{saucer_spiral_note}"
-                    if lang == "pt"
-                    else f"Sent to OrcaSlicer Plater ({len(stl_paths)} object(s)).{saucer_spiral_note}"
-                )
-                if lang not in ("pt", "en"):
-                    msg_text = translate_text("Sent to OrcaSlicer Plater ({n} object(s)).", lang).replace("{n}", str(len(stl_paths)))
-                    if saucer_spiral_note:
-                        msg_text += translate_text(" (Converted to open hollow shell to slice vase + saucer together.)", lang)
+                msg_text = translate_text("Sent to OrcaSlicer Plater ({n} object(s)).", lang).replace("{n}", str(len(stl_paths))) + saucer_spiral_note
                 self._notify_host_toast(msg_text)
 
                 send_fn(
@@ -1918,13 +1893,7 @@ class VaseStudioController:
                     except Exception:
                         pass
 
-                msg_text = (
-                    f"Pasta de exportação: {export_dir}"
-                    if lang == "pt"
-                    else f"Exports folder: {export_dir}"
-                )
-                if lang not in ("pt", "en"):
-                    msg_text = translate_text("Exports folder: {path}", lang).replace("{path}", str(export_dir))
+                msg_text = translate_text("Exports folder: {path}", lang).replace("{path}", str(export_dir))
                 send_fn(
                     {
                         "type": "action_result",
