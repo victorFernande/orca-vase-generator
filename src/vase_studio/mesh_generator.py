@@ -28,6 +28,7 @@ except ModuleNotFoundError:
     import numpy as np
 
 from .schema import normalize_params
+from .geometric_patterns import geometric_displacement
 
 
 @dataclass
@@ -288,6 +289,10 @@ def _compute_texture_displacement(
         n = _value_noise_3d(cx, cy, cz, octaves, seed)
         val = (1.0 - 2.0 * np.abs(n - 0.5)) if ridge else (2.0 * (n - 0.5))
         dr += float(cel["depth_mm"]) * val
+
+    geo = textures.get("geometric")
+    if geo and geo["enabled"] and abs(geo["depth_mm"]) > 1e-9:
+        dr += geometric_displacement(z_norm_grid, theta_g, geo)
 
     return dr
 

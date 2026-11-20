@@ -16,6 +16,7 @@ from typing import Any
 from html import escape as _escape_language_label
 from .locale_catalog import locale_payload, discovered_language_packs
 from .language_packs import resolve_language
+from .geometric_patterns import GEOMETRIC_JS
 
 if "DEFAULT_PARAMS" not in globals():
     try:
@@ -1719,6 +1720,34 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
           </div>
 
           <!-- 1. Ribbed / Canelado (collapsed by default so Wall + Textures fit above the fold) -->
+          <div class="tex-card" data-tex-card="geometric">
+            <div class="tex-head" data-tex-toggle-expand="geometric">
+              <div class="tex-title-wrap"><span class="tex-chevron">▶</span> <span data-i18n="tex_geometric">Geometric Relief</span></div>
+              <label class="toggle-switch" onclick="event.stopPropagation();"><input id="chk-tex-geometric" type="checkbox" /><span class="toggle-track"></span></label>
+            </div>
+            <div class="tex-body">
+              <label class="ctrl-label" for="sel-geometric-pattern" data-i18n="lbl_geometric_pattern">Sidewall Pattern</label>
+              <select id="sel-geometric-pattern" class="vp-select">
+                <option value="diamond" data-i18n="pattern_diamond">Diamond Facets</option>
+                <option value="leaf_scales" data-i18n="pattern_leaf_scales">Leaf Scales</option>
+                <option value="crater_cells" data-i18n="pattern_crater_cells">Crater Cells</option>
+                <option value="folded_petals" data-i18n="pattern_folded_petals">Folded Petals</option>
+                <option value="spiral_bloom" data-i18n="pattern_spiral_bloom">Spiral Bloom</option>
+                <option value="ripple" data-i18n="pattern_ripple">Ripple Rings</option>
+                <option value="coral" data-i18n="pattern_coral">Coral Lattice</option>
+              </select>
+              <div data-slider="textures.geometric.depth_mm"></div>
+              <div data-slider="textures.geometric.cells_around"></div>
+              <div data-slider="textures.geometric.cells_vertical"></div>
+              <div data-slider="textures.geometric.twist_deg"></div>
+              <div data-slider="textures.geometric.phase_deg"></div>
+              <div data-slider="textures.geometric.strength_bottom"></div>
+              <div data-slider="textures.geometric.strength_middle"></div>
+              <div data-slider="textures.geometric.strength_top"></div>
+              <div class="helper-note" data-i18n="hint_geometric">Relief is part of the wall. Combine layers or disable other textures for a clean pattern.</div>
+            </div>
+          </div>
+
           <div class="tex-card" data-tex-card="ribbed">
             <div class="tex-head" data-tex-toggle-expand="ribbed">
               <div class="tex-title-wrap">
@@ -1945,6 +1974,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     top_fade_mm: 6.0,
     global_twist_deg: 0.0,
     textures: {
+      geometric: {enabled: false, pattern: "leaf_scales", depth_mm: 3.0, cells_around: 14, cells_vertical: 10, twist_deg: 0, phase_deg: 0, strength_bottom: 1, strength_middle: 1, strength_top: 1},
       ribbed: {
         enabled: false,
         depth_mm: 2.6,
@@ -2088,6 +2118,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     const wavSrc = (texSrc.waves && typeof texSrc.waves === "object") ? texSrc.waves : {};
     const oriSrc = (texSrc.origami && typeof texSrc.origami === "object") ? texSrc.origami : {};
     const celSrc = (texSrc.cellular && typeof texSrc.cellular === "object") ? texSrc.cellular : {};
+    const geoSrc = (texSrc.geometric && typeof texSrc.geometric === "object") ? texSrc.geometric : {};
     const drnSrc = (src.drainage && typeof src.drainage === "object") ? src.drainage : {};
     const sauSrc = (src.saucer && typeof src.saucer === "object") ? src.saucer : {};
 
@@ -2120,6 +2151,18 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       top_fade_mm: clampFloat(src.top_fade_mm, 6.0, 0.0, 60.0),
       global_twist_deg: clampFloat(src.global_twist_deg, 0.0, -720.0, 720.0),
       textures: {
+        geometric: {
+          enabled: toBool(geoSrc.enabled, false),
+          pattern: ["diamond", "leaf_scales", "crater_cells", "folded_petals", "spiral_bloom", "ripple", "coral"].includes(geoSrc.pattern) ? geoSrc.pattern : "leaf_scales",
+          depth_mm: clampFloat(geoSrc.depth_mm, 3, -8, 8),
+          cells_around: clampInt(geoSrc.cells_around, 14, 3, 36),
+          cells_vertical: clampInt(geoSrc.cells_vertical, 10, 2, 24),
+          twist_deg: clampFloat(geoSrc.twist_deg, 0, -720, 720),
+          phase_deg: clampFloat(geoSrc.phase_deg, 0, 0, 360),
+          strength_bottom: clampFloat(geoSrc.strength_bottom, 1, 0, 2),
+          strength_middle: clampFloat(geoSrc.strength_middle, 1, 0, 2),
+          strength_top: clampFloat(geoSrc.strength_top, 1, 0, 2)
+        },
         ribbed: {
           enabled: toBool(ribSrc.enabled, false),
           depth_mm: clampFloat(ribSrc.depth_mm, 2.6, -15.0, 15.0),
@@ -2382,6 +2425,8 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     return total / Math.max(ampSum, 1e-9);
   }
 
+  __GEOMETRIC_JS__
+
   function computeTextureDisplacementScalar(z, zNorm, theta, thetaG, textures, globalTwistRad) {
     let dr = 0.0;
 
@@ -2454,6 +2499,10 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       dr += Number(cel.depth_mm) * val;
     }
 
+    const geo = textures.geometric;
+    if (geo && geo.enabled && Math.abs(geo.depth_mm) > 1e-9) {
+      dr += geometricDisplacement(zNorm, thetaG, geo);
+    }
     return dr;
   }
 
@@ -2702,6 +2751,15 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     { path: "bottom_fade_mm", min: 0, max: 60, step: 1, unit: "mm", en: "Bottom Texture Fade" },
     { path: "top_fade_mm", min: 0, max: 60, step: 1, unit: "mm", en: "Top Texture Fade" },
     { path: "global_twist_deg", min: -720, max: 720, step: 5, unit: "°", en: "Global Helical Twist" },
+
+    { path: "textures.geometric.depth_mm", min: -8, max: 8, step: 0.1, unit: "mm", en: "Relief Depth" },
+    { path: "textures.geometric.cells_around", min: 3, max: 36, step: 1, unit: "", en: "Pattern Columns" },
+    { path: "textures.geometric.cells_vertical", min: 2, max: 24, step: 1, unit: "", en: "Pattern Rows" },
+    { path: "textures.geometric.twist_deg", min: -720, max: 720, step: 5, unit: "°", en: "Pattern Twist" },
+    { path: "textures.geometric.phase_deg", min: 0, max: 360, step: 5, unit: "°", en: "Pattern Phase" },
+    { path: "textures.geometric.strength_bottom", min: 0, max: 2, step: 0.05, unit: "×", en: "Bottom Relief Strength" },
+    { path: "textures.geometric.strength_middle", min: 0, max: 2, step: 0.05, unit: "×", en: "Middle Relief Strength" },
+    { path: "textures.geometric.strength_top", min: 0, max: 2, step: 0.05, unit: "×", en: "Top Relief Strength" },
 
     { path: "textures.ribbed.depth_mm", min: -15, max: 15, step: 0.2, unit: "mm", en: "Rib Depth" },
     { path: "textures.ribbed.count", min: 3, max: 180, step: 1, unit: "un", en: "Rib Count (Density)" },
@@ -3380,7 +3438,8 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       (t.ribbed.enabled && Math.abs(t.ribbed.depth_mm) > 0.05) ||
       (t.waves.enabled && Math.abs(t.waves.depth_mm) > 0.05) ||
       (t.origami.enabled && Math.abs(t.origami.depth_mm) > 0.05) ||
-      (t.cellular.enabled && Math.abs(t.cellular.depth_mm) > 0.05)
+      (t.cellular.enabled && Math.abs(t.cellular.depth_mm) > 0.05) ||
+      (t.geometric.enabled && Math.abs(t.geometric.depth_mm) > 0.05 && Math.max(t.geometric.strength_bottom, t.geometric.strength_middle, t.geometric.strength_top) > 0)
     );
   }
 
@@ -5113,9 +5172,17 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
 
   function fitCameraToVase() {
     const h = state.params.height_mm;
-    const maxD = Math.max(state.params.base_diameter_mm, state.params.belly_diameter_mm, state.params.neck_diameter_mm);
-    camera.target = [0.0, 0.0, h * 0.46];
-    camera.distance = Math.max(170.0, Math.max(h * 1.65, maxD * 2.25));
+    const dims = state.clientMetrics.dims;
+    const canvas = document.getElementById("gl-canvas");
+    const aspect = canvas && canvas.clientHeight > 0 ? canvas.clientWidth / canvas.clientHeight : 1;
+    const halfVertical = 19 * DEG2RAD;
+    const halfHorizontal = Math.atan(Math.tan(halfVertical) * Math.max(0.05, aspect));
+    const halfFov = Math.min(halfVertical, halfHorizontal);
+    // A bounding sphere fits every camera angle, including custom profiles and
+    // relief extending beyond the nominal silhouette. Leave space for the HUD.
+    const radius = Math.hypot(dims[0], dims[1], dims[2]) * 0.5;
+    camera.target = [0.0, 0.0, h * 0.5];
+    camera.distance = Math.max(170.0, radius / Math.sin(halfFov) * 1.15);
     requestRender();
   }
 
@@ -5953,10 +6020,11 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
       if (t.waves.enabled) c++;
       if (t.origami.enabled) c++;
       if (t.cellular.enabled) c++;
+      if (t.geometric.enabled) c++;
       activeTexBadge.textContent = tr("active_tex_fmt").replace("{n}", String(c));
     }
 
-    const texNames = ["ribbed", "waves", "origami", "cellular"];
+    const texNames = ["ribbed", "waves", "origami", "cellular", "geometric"];
     for (let i = 0; i < texNames.length; i++) {
       const k = texNames[i];
       const card = document.querySelector('[data-tex-card="' + k + '"]');
@@ -6087,6 +6155,9 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     setChk("chk-tex-waves", state.params.textures.waves.enabled);
     setChk("chk-tex-origami", state.params.textures.origami.enabled);
     setChk("chk-tex-cellular", state.params.textures.cellular.enabled);
+    setChk("chk-tex-geometric", state.params.textures.geometric.enabled);
+    const geoSelect = document.getElementById("sel-geometric-pattern");
+    if (geoSelect) geoSelect.value = state.params.textures.geometric.pattern;
     setChk("chk-cel-ridge", state.params.textures.cellular.ridge_mode);
     setChk("chk-stl-open-hollow", state.params.stl_always_open_hollow);
     setChk("chk-auto-slicer", state.params.auto_configure_slicer);
@@ -6196,7 +6267,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
           state.includeSaucer = true;
         }
         // Expand enabled texture cards automatically
-        const texKeys = ["ribbed", "waves", "origami", "cellular"];
+        const texKeys = ["ribbed", "waves", "origami", "cellular", "geometric"];
         for (let t = 0; t < texKeys.length; t++) {
           const tk = texKeys[t];
           const tc = document.querySelector('[data-tex-card="' + tk + '"]');
@@ -6811,6 +6882,15 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     bindTexChk("chk-tex-waves", "waves");
     bindTexChk("chk-tex-origami", "origami");
     bindTexChk("chk-tex-cellular", "cellular");
+    bindTexChk("chk-tex-geometric", "geometric");
+    on("sel-geometric-pattern", "change", function (e) {
+      pushUndoSnapshot(state.params);
+      state.params.textures.geometric.pattern = e.target.value;
+      state.params.textures.geometric.enabled = true;
+      syncControlsFromState();
+      rebuildScene(false);
+      scheduleHostAnalyze();
+    });
 
     on("chk-cel-ridge", "change", function (e) {
       pushUndoSnapshot(state.params);
@@ -7024,6 +7104,7 @@ def get_studio_html(mode: str = "page", initial_context: dict[str, Any] | None =
     }
 
     html = _STUDIO_UI_HTML_TEMPLATE
+    html = html.replace("__GEOMETRIC_JS__", GEOMETRIC_JS)
     html = html.replace("__VASE_LOCALE_PACKS__", _studio_ui_safe_json(locale_payload(packs)))
     options = "".join('<option value="' + _escape_language_label(code, quote=True) + '">' + _escape_language_label(pack["native_name"]) + '</option>' for code, pack in packs.items())
     html = html.replace("__LANGUAGE_OPTIONS__", options)

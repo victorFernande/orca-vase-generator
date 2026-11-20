@@ -337,7 +337,7 @@ class TestGeometryManifold(unittest.TestCase):
         self.assertAlmostEqual(float(DEFAULT_PARAMS["bottom_thickness_mm"]), 3.2, places=4)
         self.assertEqual(
             set(DEFAULT_PARAMS["textures"].keys()),
-            {"ribbed", "waves", "origami", "cellular"},
+            {"ribbed", "waves", "origami", "cellular", "geometric"},
         )
 
         # Deep copy isolation

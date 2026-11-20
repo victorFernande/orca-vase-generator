@@ -216,6 +216,24 @@
     "Sent to OrcaSlicer Plater ({n} object(s)).": "Sent to OrcaSlicer Plater ({n} object(s)).",
     "Exports folder: {path}": "Exports folder: {path}",
     " (open-mouthed {mm} mm shell)": " (open-mouthed {mm} mm shell)",
-    " (Converted to open hollow shell to slice vase + saucer together.)": " (Converted to open hollow shell to slice vase + saucer together.)"
+    " (Converted to open hollow shell to slice vase + saucer together.)": " (Converted to open hollow shell to slice vase + saucer together.)",
+    "Geometric Relief": "Geometric Relief",
+    "Sidewall Pattern": "Sidewall Pattern",
+    "Diamond Facets": "Diamond Facets",
+    "Leaf Scales": "Leaf Scales",
+    "Crater Cells": "Crater Cells",
+    "Folded Petals": "Folded Petals",
+    "Spiral Bloom": "Spiral Bloom",
+    "Ripple Rings": "Ripple Rings",
+    "Coral Lattice": "Coral Lattice",
+    "Relief is part of the wall. Combine layers or disable other textures for a clean pattern.": "Relief is part of the wall. Combine layers or disable other textures for a clean pattern.",
+    "Relief Depth": "Relief Depth",
+    "Pattern Columns": "Pattern Columns",
+    "Pattern Rows": "Pattern Rows",
+    "Pattern Twist": "Pattern Twist",
+    "Pattern Phase": "Pattern Phase",
+    "Bottom Relief Strength": "Bottom Relief Strength",
+    "Middle Relief Strength": "Middle Relief Strength",
+    "Top Relief Strength": "Top Relief Strength"
   }
 }

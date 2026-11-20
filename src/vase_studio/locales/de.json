@@ -216,6 +216,24 @@
     "Sent to OrcaSlicer Plater ({n} object(s)).": "An OrcaSlicer-Druckplatte gesendet ({n} Objekte).",
     "Exports folder: {path}": "Exportordner: {path}",
     " (open-mouthed {mm} mm shell)": " (offene Hülle mit {mm} mm)",
-    " (Converted to open hollow shell to slice vase + saucer together.)": " (Für gemeinsames Slicing von Vase und Untersetzer in offene Hülle umgewandelt.)"
+    " (Converted to open hollow shell to slice vase + saucer together.)": " (Für gemeinsames Slicing von Vase und Untersetzer in offene Hülle umgewandelt.)",
+    "Geometric Relief": "Geometrisches Relief",
+    "Sidewall Pattern": "Seitenwandmuster",
+    "Diamond Facets": "Rautenfacetten",
+    "Leaf Scales": "Blattschuppen",
+    "Crater Cells": "Kraterzellen",
+    "Folded Petals": "Gefaltete Blütenblätter",
+    "Spiral Bloom": "Spiralblüte",
+    "Ripple Rings": "Wellenringe",
+    "Coral Lattice": "Korallengitter",
+    "Relief is part of the wall. Combine layers or disable other textures for a clean pattern.": "Das Relief ist Teil der Wand. Ebenen kombinieren oder andere Texturen für ein klares Muster deaktivieren.",
+    "Relief Depth": "Relieftiefe",
+    "Pattern Columns": "Musterspalten",
+    "Pattern Rows": "Musterreihen",
+    "Pattern Twist": "Musterverdrehung",
+    "Pattern Phase": "Musterphase",
+    "Bottom Relief Strength": "Reliefstärke unten",
+    "Middle Relief Strength": "Reliefstärke in der Mitte",
+    "Top Relief Strength": "Reliefstärke oben"
   }
 }

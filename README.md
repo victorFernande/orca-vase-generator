@@ -2,7 +2,7 @@
   <img src="assets/icon.jpg" alt="Orca Vase Studio" width="210" />
 </p>
 
-<h1 align="center">Orca Vase Studio (<code>v1.2.0</code>)</h1>
+<h1 align="center">Orca Vase Studio (<code>v1.3.0</code>)</h1>
 
 <p align="center">
   <strong>Native Parametric 3D Vase &amp; Botanical Planter Studio Inside OrcaSlicer 2.5.1+</strong><br/>
@@ -25,6 +25,17 @@
 
 ---
 
+## Version 1.3.0 · Padrões geométricos / Geometric patterns
+
+Sete novos relevos de parede: **losangos, escamas, crateras, pétalas dobradas,
+flor em espiral, anéis e coral**, com repetição, torção e intensidades
+independentes na base, meio e topo. Disponíveis na aba e no painel lateral,
+nos sete idiomas. Os quatro efeitos anteriores continuam combináveis.
+
+Seven new sidewall reliefs with signed depth, repetition, twist and independent
+bottom/middle/top strength. Existing preset geometry stays unchanged when the
+layer is disabled. See [usage, provenance and validation](docs/GEOMETRIC_PATTERNS.md).
+
 ## Version 1.2.0 · Idiomas e otimização
 
 The header now provides seven fully offline interface languages: **Português, English, Español, Italiano, Français, Deutsch and 日本語**. The host language is detected automatically; an explicit selection is saved and shared between the main tab and dock. Built-in preset descriptions, parameter names, warnings and export messages are translated. Personal names, printer profiles, filenames and manufacturing values are preserved. Unsupported system languages use English. Technical errors from the engine remain verbatim when there is no translated message.
@@ -37,15 +48,15 @@ The standalone installer stores the immutable HTML template with lossless standa
 
 ## English Overview
 
-**Orca Vase Studio (`orca-vase-studio` v1.2.0)** is a self-contained, single-file native Python plugin for **OrcaSlicer 2.5.1+** that embeds an interactive **WebGL2 + 2D PCHIP Curve** parametric studio right inside the slicer. Design sculptural vases, thick-walled ceramic vessels (`0.8–25.0 mm`), and botanical planters with drainage holes and matching drip saucers — then inject them directly onto your active OrcaSlicer build plate in **1 click** with automatic slicer configuration.
+**Orca Vase Studio (`orca-vase-studio` v1.3.0)** is a self-contained, single-file native Python plugin for **OrcaSlicer 2.5.1+** that embeds an interactive **WebGL2 + 2D PCHIP Curve** parametric studio right inside the slicer. Design sculptural vases, thick-walled ceramic vessels (`0.8–25.0 mm`), and botanical planters with drainage holes and matching drip saucers — then inject them directly onto your active OrcaSlicer build plate in **1 click** with automatic slicer configuration.
 
-### Key Highlights (`v1.2.0`)
+### Key Highlights (`v1.3.0`)
 
 - **Dual Native OrcaSlicer Integration:**
   - **Top-Bar Studio Tab (`Gerador de Vasos`):** Full 3-column workspace right beside *Prepare / Preview / Device*.
   - **Right-Docked Side Panel (`Orca Vase Studio - Painel Lateral`):** Compact tabbed studio docked directly next to the 3D Plater (*File → Plugins*).
 - **Parametric Sliders + 2D PCHIP Freeform Curve Editor:** Sculpt via dimensional sliders and 3–24-sided polygonal cross-sections, or convert in 1 click to a smooth monotonic 2D PCHIP curve with interactive knot editing.
-- **4 Combinable Dimensional Surface Textures:** Stack **Ribbed / Fluted**, **Organic Waves**, **Origami Diamond (Yoshimura)**, and **Cellular / Coral 3D** with exact millimeter depth, density, spacing, sharpness, helical twist (`±720°`), and smooth bottom/top fade zones (`< 1e-12 mm` JS-to-Python math parity).
+- **5 Combinable Surface Layers:** Stack **Ribbed / Fluted**, **Organic Waves**, **Origami Diamond (Yoshimura)**, **Cellular / Coral 3D**, and **Geometric Relief** with exact millimeter depth, density, spacing, sharpness, helical twist (`±720°`), and smooth bottom/top fade zones (`< 1e-12 mm` JS-to-Python math parity).
 - **`🔬 X-Ray / Wall` Mode, Live `mm` CAD Calipers & Horizontal `Z` Slice:** Translucent dual-pass X-Ray shader, projected CAD callouts (`Ø Outer`, `Ø Bore`, `Wall`, `Bottom`), vertical `Y` profile cut, horizontal `Z` plan slice (`5%–100%`), and real-time Overhang Heatmap (`°`).
 - **True Open-Mouth Hollow Shells (`0.8–25.0 mm`) + Protected Spiral Vase Mode:** Generates watertight 2-manifold open-mouthed hollow meshes by default, plus single-extrusion Spiral Mode with an automatic `.STL` open-mouth guard (`stl_always_open_hollow`).
 - **Drainage Holes & Matching Saucer:** 1–9 bottom drainage holes (through-floor tunnels in hollow mode or smart blind base cavities in Spiral Vase mode!) + custom-fitted textured drip saucer with raised inner ribs.
@@ -64,15 +75,15 @@ The standalone installer stores the immutable HTML template with lossless standa
 
 ## Visão Geral (Português PT-BR)
 
-O **Orca Vase Studio (`orca-vase-studio` v1.2.0)** é um plugin nativo em Python de **arquivo único autossuficiente** para o **OrcaSlicer 2.5.1+** que adiciona um estúdio paramétrico 3D interativo (**WebGL2 + Curva Livre 2D PCHIP**, 100% offline) dentro do próprio fatiador. Crie vasos decorativos, peças cerâmicas de parede espessa (`0,8–25,0 mm`) e cachepôs com furos de drenagem e pratinho coletor, enviando tudo em **1 clique** direto para a mesa (*Plater*) com ajuste automático do fatiamento.
+O **Orca Vase Studio (`orca-vase-studio` v1.3.0)** é um plugin nativo em Python de **arquivo único autossuficiente** para o **OrcaSlicer 2.5.1+** que adiciona um estúdio paramétrico 3D interativo (**WebGL2 + Curva Livre 2D PCHIP**, 100% offline) dentro do próprio fatiador. Crie vasos decorativos, peças cerâmicas de parede espessa (`0,8–25,0 mm`) e cachepôs com furos de drenagem e pratinho coletor, enviando tudo em **1 clique** direto para a mesa (*Plater*) com ajuste automático do fatiamento.
 
-### Principais Recursos (`v1.2.0`)
+### Principais Recursos (`v1.3.0`)
 
 - **Dupla Integração Nativa no OrcaSlicer:**
   - **Aba Superior (`Gerador de Vasos`):** Estúdio amplo em 3 colunas ao lado de *Preparar / Visualizar / Dispositivo*.
   - **Painel Lateral Acoplado (`Orca Vase Studio - Painel Lateral`):** Painel compacto acoplado à direita da mesa 3D (*Arquivo → Plugins*).
 - **Silhueta Paramétrica + Curva Livre 2D (PCHIP):** Modele por sliders e seções poligonais (3 a 24 lados) ou converta em 1 clique para uma curva livre PCHIP sem oscilações indesejadas.
-- **4 Camadas Combináveis de Textura Dimensional:** Combine **Canelado / Frisos**, **Ondas Orgânicas**, **Origami Diamante (Yoshimura)** e **Celular / Coral 3D** com controle exato de profundidade (`mm`), densidade, espaçamento, nitidez, torção helicoidal (`±720°`) e suavização na base/topo.
+- **5 Camadas Combináveis de Textura Dimensional:** Combine **Canelado / Frisos**, **Ondas Orgânicas**, **Origami Diamante (Yoshimura)** **Celular / Coral 3D** e **Relevo geométrico** com controle exato de profundidade (`mm`), densidade, espaçamento, nitidez, torção helicoidal (`±720°`) e suavização na base/topo.
 - **Modo `🔬 Raio-X / Parede`, Calibre CAD em `mm` & Fatia Horizontal `Z`:** Veja a cavidade oca e o fundo por dentro, confira cotas reais projetadas (`Ø Externo`, `Ø Furo`, `Parede` e `Fundo`), use o Corte Vertical (`Perfil Y`), a Fatia Horizontal (`Planta Z` de `5%` a `100%`) e o Mapa de Overhang (`°`).
 - **Vaso Oco Real com Boca Aberta (`0,8–25,0 mm`) + Modo Espiral Protegido:** Malhas 2-manifold estanques com abertura real no topo por padrão e trava inteligente (`Manter boca aberta ao exportar .STL`) para nunca fechar o furo de um `.STL` acidentalmente.
 - **Furos de Drenagem & Pratinho Coletor:** De 1 a 9 furos de drenagem (túneis reais no vaso oco ou cavidades cegas inteligentes nas camadas sólidas do Modo Espiral!) + pratinho sob medida com nervuras internas e textura coordenada.
@@ -132,9 +143,9 @@ orca-vase-generator/
 │       ├── plugin_main.py         # Native `orca` bridge + auto-materialized SVG icon + WM_COPYDATA IPC
 │       └── icon.svg               # Source 64x64 vector tab icon
 ├── dist/
-│   ├── orca_vase_generator.py     # Ready-to-distribute PEP 723 single-file plugin bundle (v1.2.0)
+│   ├── orca_vase_generator.py     # Ready-to-distribute PEP 723 single-file plugin bundle (v1.3.0)
 │   ├── orca_vase_generator_any.py # Universal `_any` PEP 723 bundle for OrcaCloud publishing
-│   └── orca_vase_generator-1.2.0-py3-none-any.whl
+│   └── orca_vase_generator-1.3.0-py3-none-any.whl
 └── tests/                         # 26/26 topology, 3MF/STL, JS-Python parity & bridge QA tests
 ```
 

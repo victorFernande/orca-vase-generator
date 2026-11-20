@@ -216,6 +216,24 @@
     "Sent to OrcaSlicer Plater ({n} object(s)).": "Enviado a la mesa de OrcaSlicer ({n} objetos).",
     "Exports folder: {path}": "Carpeta de exportación: {path}",
     " (open-mouthed {mm} mm shell)": " (pared abierta de {mm} mm)",
-    " (Converted to open hollow shell to slice vase + saucer together.)": " (Convertido a hueco abierto para laminar vaso y plato juntos.)"
+    " (Converted to open hollow shell to slice vase + saucer together.)": " (Convertido a hueco abierto para laminar vaso y plato juntos.)",
+    "Geometric Relief": "Relieve geométrico",
+    "Sidewall Pattern": "Patrón lateral",
+    "Diamond Facets": "Facetas de rombos",
+    "Leaf Scales": "Escamas de hojas",
+    "Crater Cells": "Celdas con cráter",
+    "Folded Petals": "Pétalos plegados",
+    "Spiral Bloom": "Flor en espiral",
+    "Ripple Rings": "Anillos ondulados",
+    "Coral Lattice": "Trama de coral",
+    "Relief is part of the wall. Combine layers or disable other textures for a clean pattern.": "El relieve forma parte de la pared. Combina capas o desactiva otras texturas para un patrón limpio.",
+    "Relief Depth": "Profundidad del relieve",
+    "Pattern Columns": "Columnas del patrón",
+    "Pattern Rows": "Filas del patrón",
+    "Pattern Twist": "Torsión del patrón",
+    "Pattern Phase": "Fase del patrón",
+    "Bottom Relief Strength": "Intensidad en la base",
+    "Middle Relief Strength": "Intensidad en el centro",
+    "Top Relief Strength": "Intensidad en la parte superior"
   }
 }

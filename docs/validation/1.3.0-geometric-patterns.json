@@ -1,0 +1,575 @@
+{
+  "version": "1.3.0",
+  "scope": "local Python full-resolution hollow mesh, not native WebView/FPS or physical printing",
+  "resolution": [
+    240,
+    220
+  ],
+  "patterns": [
+    {
+      "pattern": "diamond",
+      "milliseconds": [
+        75.97,
+        82.15,
+        85.2
+      ],
+      "median_ms": 82.15,
+      "triangles": 209760
+    },
+    {
+      "pattern": "leaf_scales",
+      "milliseconds": [
+        83.33,
+        84.23,
+        94.69
+      ],
+      "median_ms": 84.23,
+      "triangles": 209760
+    },
+    {
+      "pattern": "crater_cells",
+      "milliseconds": [
+        80.05,
+        80.55,
+        89.05
+      ],
+      "median_ms": 80.55,
+      "triangles": 209760
+    },
+    {
+      "pattern": "folded_petals",
+      "milliseconds": [
+        95.66,
+        83.77,
+        88.24
+      ],
+      "median_ms": 88.24,
+      "triangles": 209760
+    },
+    {
+      "pattern": "spiral_bloom",
+      "milliseconds": [
+        98.35,
+        83.37,
+        82.12
+      ],
+      "median_ms": 83.37,
+      "triangles": 209760
+    },
+    {
+      "pattern": "ripple",
+      "milliseconds": [
+        89.16,
+        82.85,
+        82.65
+      ],
+      "median_ms": 82.85,
+      "triangles": 209760
+    },
+    {
+      "pattern": "coral",
+      "milliseconds": [
+        76.81,
+        79.1,
+        74.67
+      ],
+      "median_ms": 76.81,
+      "triangles": 209760
+    }
+  ],
+  "artifacts": {
+    "orca_vase_generator-1.3.0-py3-none-any.whl": {
+      "bytes": 174594,
+      "sha256": "b7c727fe16aa1e2123d2c1c8c6fac95d6589952197390e6a33d5ae5bd1781f1e"
+    },
+    "orca_vase_generator.py": {
+      "bytes": 349911,
+      "sha256": "435f8248fda21bd1dcf58fed9765558c617fbef3249b8864bb25c29e2e5acd4e"
+    },
+    "orca_vase_generator_any.py": {
+      "bytes": 349911,
+      "sha256": "435f8248fda21bd1dcf58fed9765558c617fbef3249b8864bb25c29e2e5acd4e"
+    }
+  },
+  "wheel_members": [
+    "vase_studio/__init__.py",
+    "vase_studio/language_packs.py",
+    "vase_studio/locale_catalog.py",
+    "vase_studio/geometric_patterns.py",
+    "vase_studio/schema.py",
+    "vase_studio/mesh_generator.py",
+    "vase_studio/printability.py",
+    "vase_studio/exporters.py",
+    "vase_studio/presets_catalog.py",
+    "vase_studio/studio_ui.py",
+    "vase_studio/plugin_main.py",
+    "vase_studio/icon.svg",
+    "vase_studio/locales/de.json",
+    "vase_studio/locales/en.json",
+    "vase_studio/locales/es.json",
+    "vase_studio/locales/fr.json",
+    "vase_studio/locales/it.json",
+    "vase_studio/locales/ja.json",
+    "vase_studio/locales/pt.json",
+    "orca_vase_generator-1.3.0.dist-info/LICENSE",
+    "orca_vase_generator-1.3.0.dist-info/METADATA",
+    "orca_vase_generator-1.3.0.dist-info/WHEEL",
+    "orca_vase_generator-1.3.0.dist-info/top_level.txt",
+    "orca_vase_generator-1.3.0.dist-info/RECORD"
+  ],
+  "ui": {
+    "ok": true,
+    "cases": [
+      {
+        "mode": "page",
+        "pattern": "diamond",
+        "gl": true,
+        "tris": 211200,
+        "selectAndTwoRequestsMs": 248
+      },
+      {
+        "mode": "page",
+        "pattern": "leaf_scales",
+        "gl": true,
+        "tris": 211200,
+        "selectAndTwoRequestsMs": 237
+      },
+      {
+        "mode": "page",
+        "pattern": "crater_cells",
+        "gl": true,
+        "tris": 211200,
+        "selectAndTwoRequestsMs": 244
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "gl": true,
+        "tris": 211200,
+        "selectAndTwoRequestsMs": 262
+      },
+      {
+        "mode": "page",
+        "pattern": "spiral_bloom",
+        "gl": true,
+        "tris": 211200,
+        "selectAndTwoRequestsMs": 206
+      },
+      {
+        "mode": "page",
+        "pattern": "ripple",
+        "gl": true,
+        "tris": 211200,
+        "selectAndTwoRequestsMs": 197
+      },
+      {
+        "mode": "page",
+        "pattern": "coral",
+        "gl": true,
+        "tris": 211200,
+        "selectAndTwoRequestsMs": 194
+      },
+      {
+        "mode": "dock",
+        "pattern": "diamond",
+        "gl": true,
+        "tris": 211200,
+        "selectAndTwoRequestsMs": 249
+      },
+      {
+        "mode": "dock",
+        "pattern": "leaf_scales",
+        "gl": true,
+        "tris": 211200,
+        "selectAndTwoRequestsMs": 231
+      },
+      {
+        "mode": "dock",
+        "pattern": "crater_cells",
+        "gl": true,
+        "tris": 211200,
+        "selectAndTwoRequestsMs": 219
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "gl": true,
+        "tris": 211200,
+        "selectAndTwoRequestsMs": 192
+      },
+      {
+        "mode": "dock",
+        "pattern": "spiral_bloom",
+        "gl": true,
+        "tris": 211200,
+        "selectAndTwoRequestsMs": 189
+      },
+      {
+        "mode": "dock",
+        "pattern": "ripple",
+        "gl": true,
+        "tris": 211200,
+        "selectAndTwoRequestsMs": 189
+      },
+      {
+        "mode": "dock",
+        "pattern": "coral",
+        "gl": true,
+        "tris": 211200,
+        "selectAndTwoRequestsMs": 189
+      }
+    ],
+    "errors": [],
+    "exports": [
+      {
+        "mode": "page",
+        "pattern": "diamond",
+        "format": "stl",
+        "bytes": 10488084,
+        "surfaceParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "diamond",
+        "format": "3mf",
+        "bytes": 2095067,
+        "surfaceParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "leaf_scales",
+        "format": "stl",
+        "bytes": 10488084,
+        "surfaceParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "leaf_scales",
+        "format": "3mf",
+        "bytes": 2101528,
+        "surfaceParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "crater_cells",
+        "format": "stl",
+        "bytes": 10488084,
+        "surfaceParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "crater_cells",
+        "format": "3mf",
+        "bytes": 2102383,
+        "surfaceParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "bytes": 10488084,
+        "surfaceParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "bytes": 2100867,
+        "surfaceParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "spiral_bloom",
+        "format": "stl",
+        "bytes": 10488084,
+        "surfaceParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "spiral_bloom",
+        "format": "3mf",
+        "bytes": 2386245,
+        "surfaceParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "ripple",
+        "format": "stl",
+        "bytes": 10488084,
+        "surfaceParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "ripple",
+        "format": "3mf",
+        "bytes": 2300337,
+        "surfaceParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "coral",
+        "format": "stl",
+        "bytes": 10488084,
+        "surfaceParity": true
+      },
+      {
+        "mode": "page",
+        "pattern": "coral",
+        "format": "3mf",
+        "bytes": 2388123,
+        "surfaceParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "diamond",
+        "format": "stl",
+        "bytes": 10488084,
+        "surfaceParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "diamond",
+        "format": "3mf",
+        "bytes": 2095057,
+        "surfaceParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "leaf_scales",
+        "format": "stl",
+        "bytes": 10488084,
+        "surfaceParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "leaf_scales",
+        "format": "3mf",
+        "bytes": 2101525,
+        "surfaceParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "crater_cells",
+        "format": "stl",
+        "bytes": 10488084,
+        "surfaceParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "crater_cells",
+        "format": "3mf",
+        "bytes": 2102377,
+        "surfaceParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "stl",
+        "bytes": 10488084,
+        "surfaceParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "folded_petals",
+        "format": "3mf",
+        "bytes": 2100869,
+        "surfaceParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "spiral_bloom",
+        "format": "stl",
+        "bytes": 10488084,
+        "surfaceParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "spiral_bloom",
+        "format": "3mf",
+        "bytes": 2386245,
+        "surfaceParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "ripple",
+        "format": "stl",
+        "bytes": 10488084,
+        "surfaceParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "ripple",
+        "format": "3mf",
+        "bytes": 2300333,
+        "surfaceParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "coral",
+        "format": "stl",
+        "bytes": 10488084,
+        "surfaceParity": true
+      },
+      {
+        "mode": "dock",
+        "pattern": "coral",
+        "format": "3mf",
+        "bytes": 2388126,
+        "surfaceParity": true
+      }
+    ],
+    "limitations": "Isolated Chromium and real Python controller. No native OrcaSlicer or physical print validation."
+  },
+  "previous_preset_arrays": "Exact published mesh hashes checked by test_multilingual.TestMultilingual.test_all_published_manufacturing_arrays_remain_identical",
+  "python_tests": {
+    "count": 46,
+    "warnings_as_errors": true,
+    "passed": true
+  },
+  "multilingual_ui": {
+    "ok": true,
+    "locales": [
+      "pt",
+      "en",
+      "es",
+      "it",
+      "fr",
+      "de",
+      "ja"
+    ],
+    "checks": [
+      {
+        "mode": "page",
+        "language": "pt",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "page",
+        "language": "en",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "page",
+        "language": "es",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "page",
+        "language": "it",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "page",
+        "language": "fr",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "page",
+        "language": "de",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "page",
+        "language": "ja",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "dock",
+        "language": "pt",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "dock",
+        "language": "en",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "dock",
+        "language": "es",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "dock",
+        "language": "it",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "dock",
+        "language": "fr",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "dock",
+        "language": "de",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      },
+      {
+        "mode": "dock",
+        "language": "ja",
+        "params_unchanged": true,
+        "personal_title_preserved": true,
+        "warning_numbers_preserved": true,
+        "export_request": true
+      }
+    ],
+    "dynamicDataOnly": [
+      {
+        "mode": "page",
+        "language": "nl",
+        "host_region_fallback": true,
+        "context_override": true,
+        "english_fallback": true,
+        "added_json_only": true
+      },
+      {
+        "mode": "dock",
+        "language": "nl",
+        "host_region_fallback": true,
+        "context_override": true,
+        "english_fallback": true,
+        "added_json_only": true
+      }
+    ],
+    "consoleErrors": [],
+    "limitations": "Isolated Chromium; no native OrcaSlicer or native speaker certification."
+  }
+}

@@ -216,6 +216,24 @@
     "Sent to OrcaSlicer Plater ({n} object(s)).": "OrcaSlicerへ送信しました（{n}オブジェクト）。",
     "Exports folder: {path}": "書き出しフォルダー：{path}",
     " (open-mouthed {mm} mm shell)": "（開口した壁厚{mm} mm）",
-    " (Converted to open hollow shell to slice vase + saucer together.)": "（花瓶と受け皿を同時にスライスするため開口した中空に変換しました。）"
+    " (Converted to open hollow shell to slice vase + saucer together.)": "（花瓶と受け皿を同時にスライスするため開口した中空に変換しました。）",
+    "Geometric Relief": "幾何学レリーフ",
+    "Sidewall Pattern": "側面パターン",
+    "Diamond Facets": "ひし形の面",
+    "Leaf Scales": "葉のうろこ",
+    "Crater Cells": "クレーターセル",
+    "Folded Petals": "折り花びら",
+    "Spiral Bloom": "らせんの花",
+    "Ripple Rings": "波紋リング",
+    "Coral Lattice": "サンゴ格子",
+    "Relief is part of the wall. Combine layers or disable other textures for a clean pattern.": "レリーフは壁面の一部です。レイヤーを組み合わせるか、他のテクスチャをオフにしてパターンを際立たせます。",
+    "Relief Depth": "レリーフの深さ",
+    "Pattern Columns": "パターンの列数",
+    "Pattern Rows": "パターンの行数",
+    "Pattern Twist": "パターンのねじれ",
+    "Pattern Phase": "パターンの位相",
+    "Bottom Relief Strength": "底部の強度",
+    "Middle Relief Strength": "中央部の強度",
+    "Top Relief Strength": "上部の強度"
   }
 }
