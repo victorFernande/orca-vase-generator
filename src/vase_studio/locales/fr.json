@@ -256,6 +256,9 @@
     "Curled ribbons have steep overhangs. Inspect the sliced preview and adjust curl, cooling or supports as needed.": "Les rubans courbés présentent des surplombs prononcés. Vérifiez l’aperçu tranché et adaptez la courbure, le refroidissement ou les supports.",
     "Bottom Ribbon Strength": "Intensité des rubans à la base",
     "Middle Ribbon Strength": "Intensité des rubans au milieu",
-    "Top Ribbon Strength": "Intensité des rubans en haut"
+    "Top Ribbon Strength": "Intensité des rubans en haut",
+    "Ribbon Flattening": "Aplatissement des rubans",
+    "Brings folds closer to the cup without thinning the ribbons. Steep overhangs may remain; check the sliced preview.": "Rapproche les plis du vase sans amincir les rubans. Des surplombs importants peuvent subsister ; vérifiez l’aperçu après découpage.",
+    "Flattening pinches a ribbon fold. Reduce flattening or thickness, or increase ribbon width.": "L’aplatissement comprime trop un pli. Réduisez l’aplatissement ou l’épaisseur, ou augmentez la largeur du ruban."
   }
 }

@@ -1,4 +1,4 @@
-# Quick User Manual — Orca Vase Studio (`v1.3.0`)
+# Quick User Manual — Orca Vase Studio (`v1.3.1`)
 
 The language selector in the header offers Português, English, Español, Italiano, Français, Deutsch and 日本語. Your choice is saved and synchronized between page and dock; see [languages and optimization](MULTILINGUAL_AND_PERFORMANCE.md).
 
@@ -32,7 +32,7 @@ Orca Vase Studio provides **two synchronized workspaces** tailored to how you li
 
 | Workspace | Where to open it | Best for |
 | :--- | :--- | :--- |
-| **Full Top-Bar Tab (`Gerador de Vasos`)** | Top navigation bar right beside *Prepare / Preview / Device* | Full-screen **3-column design studio**: Preset Gallery & 2D Silhouette on the left, interactive 3D WebGL2 Viewport in the center, and Textures + Wall controls on the right. |
+| **Full Top-Bar Tab (`Vase Studio`)** | Top navigation bar right beside *Prepare / Preview / Device* | Full-screen **3-column design studio**: Preset Gallery & 2D Silhouette on the left, interactive 3D WebGL2 Viewport in the center, and Textures + Wall controls on the right. |
 | **Right-Docked Side Panel (`Orca Vase Studio - Painel Lateral`)** | Menu **File → Plugins → Orca Vase Studio - Painel Lateral** | Opens a sleek compact panel docked right beside OrcaSlicer's 3D Plater with quick tabs (**Shape**, **Textures**, **Wall & Print**, **Presets**) — great for iterating right next to your build plate! |
 
 > **Tip:** The top studio bar also gives you an editable **Vase Name**, a live **Active Printer / Nozzle pill** read directly from OrcaSlicer, instant **EN / PT** language toggle, light/dark theme switcher, and the **Surprise Me** button for one-click printable inspiration.
@@ -68,6 +68,13 @@ width, thickness, curl, overlap, stretch and stagger; select Draft, Normal,
 Fine or Adaptive quality. Fine is the final default. Spiral mode and other
 textures are unavailable for this style. Inspect the overlapping solids in
 the sliced preview; the estimate includes overlap volume.
+
+**Ribbon Flattening (0–60%)** brings the folds closer to the cup without
+reducing their existing thickness. Start at 30–50%; 0% preserves the 1.3.0
+shape. Also reduce **Ribbon Width** for smaller leaves. If a fold becomes
+pinched, reduce flattening/thickness or increase width. Steep overhangs may
+remain: inspect each sliced layer and assess cooling and supports.
+[Details and limitations](RIBBON_FLATTENING.md).
 
 
 You can enable **any single texture or stack all four simultaneously** — radial displacements are summed in exact millimeters with `< 1e-12 mm` parity between the WebGL2 preview and the exported 2-manifold mesh!

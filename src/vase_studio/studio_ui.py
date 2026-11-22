@@ -1753,6 +1753,8 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
                 <div data-slider="textures.geometric.ribbon_width_mm"></div>
                 <div data-slider="textures.geometric.ribbon_thickness_mm"></div>
                 <div data-slider="textures.geometric.ribbon_curl_deg"></div>
+                <div data-slider="textures.geometric.ribbon_flatten_pct"></div>
+                <div class="helper-note" data-i18n="hint_ribbon_flatten">Brings folds closer to the cup without thinning the ribbons. Steep overhangs may remain; check the sliced preview.</div>
                 <div data-slider="textures.geometric.ribbon_overlap_mm"></div>
                 <div data-slider="textures.geometric.ribbon_stretch_pct"></div>
                 <div data-slider="textures.geometric.ribbon_stagger"></div>
@@ -1991,7 +1993,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     top_fade_mm: 6.0,
     global_twist_deg: 0.0,
     textures: {
-      geometric: {enabled: false, pattern: "leaf_scales", depth_mm: 3.0, cells_around: 14, cells_vertical: 10, twist_deg: 0, phase_deg: 0, strength_bottom: 1, strength_middle: 1, strength_top: 1, ribbon_width_mm: 34, ribbon_thickness_mm: 1.2, ribbon_curl_deg: 382, ribbon_overlap_mm: 1.4, ribbon_stretch_pct: 8, ribbon_stagger: 0.5, ribbon_quality: "fine"},
+      geometric: {enabled: false, pattern: "leaf_scales", depth_mm: 3.0, cells_around: 14, cells_vertical: 10, twist_deg: 0, phase_deg: 0, strength_bottom: 1, strength_middle: 1, strength_top: 1, ribbon_width_mm: 34, ribbon_thickness_mm: 1.2, ribbon_curl_deg: 382, ribbon_flatten_pct: 0, ribbon_overlap_mm: 1.4, ribbon_stretch_pct: 8, ribbon_stagger: 0.5, ribbon_quality: "fine"},
       ribbed: {
         enabled: false,
         depth_mm: 2.6,
@@ -2182,6 +2184,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
           ribbon_width_mm: clampFloat(geoSrc.ribbon_width_mm,34,8,80),
           ribbon_thickness_mm: clampFloat(geoSrc.ribbon_thickness_mm,1.2,0.4,4),
           ribbon_curl_deg: clampFloat(geoSrc.ribbon_curl_deg,382,180,430),
+          ribbon_flatten_pct: clampFloat(geoSrc.ribbon_flatten_pct,0,0,60),
           ribbon_overlap_mm: clampFloat(geoSrc.ribbon_overlap_mm,1.4,0,4),
           ribbon_stretch_pct: clampFloat(geoSrc.ribbon_stretch_pct,8,0,25),
           ribbon_stagger: clampFloat(geoSrc.ribbon_stagger,0.5,0,1),
@@ -2789,6 +2792,7 @@ body[data-mode="dock"][data-dock-tab="print"] #card-textures {
     { path: "textures.geometric.ribbon_width_mm", min: 8, max: 80, step: 0.5, unit: "mm", en: "Ribbon Width" },
     { path: "textures.geometric.ribbon_thickness_mm", min: 0.4, max: 4, step: 0.1, unit: "mm", en: "Ribbon Thickness" },
     { path: "textures.geometric.ribbon_curl_deg", min: 180, max: 430, step: 1, unit: "°", en: "Ribbon Curl" },
+    { path: "textures.geometric.ribbon_flatten_pct", min: 0, max: 60, step: 5, unit: "%", en: "Ribbon Flattening" },
     { path: "textures.geometric.ribbon_overlap_mm", min: 0, max: 4, step: 0.1, unit: "mm", en: "Ribbon Overlap" },
     { path: "textures.geometric.ribbon_stretch_pct", min: 0, max: 25, step: 1, unit: "%", en: "Ribbon Stretch" },
     { path: "textures.geometric.ribbon_stagger", min: 0, max: 1, step: 0.05, unit: "", en: "Ribbon Stagger" },

@@ -104,6 +104,14 @@ def build_ribbon_mesh(params: dict, profile_radii, interactive: bool = False):
         radial += 0.35 * g["ribbon_overlap_mm"] * blend * np.tanh((0.5 - q) * 7) * np.abs(2 * q - 1) ** 1.8
         center = 2 * math.pi * strip / count + twist * t + phase
         radius = radii[:, None] + radial
+        if g.get("ribbon_flatten_pct", 0) > 0:
+            # Compress distance from the actual cylindrical profile, including
+            # tangential reach. Offset the skins afterwards to retain thickness.
+            rho = np.hypot(radius, tangent)
+            target = radii[:, None] + (rho - radii[:, None]) * (1 - g["ribbon_flatten_pct"] / 100)
+            scale = target / rho
+            radius = radius * scale
+            tangent = tangent * scale
         mid = np.stack((radius * np.cos(center) - tangent * np.sin(center),
                         radius * np.sin(center) + tangent * np.cos(center),
                         np.broadcast_to(t * params["height_mm"], radius.shape)), axis=-1)
@@ -125,6 +133,11 @@ def build_ribbon_mesh(params: dict, profile_radii, interactive: bool = False):
             np.clip(face[:, :, 2], 0, params["height_mm"], out=face[:, :, 2])
             face[0, :, 2] = 0
             face[-1, :, 2] = params["height_mm"]
+        if g.get("ribbon_flatten_pct", 0) > 0:
+            tangent_edges = np.diff(mid, axis=1)
+            for face in (front, back):
+                if np.any(np.sum(np.diff(face, axis=1) * tangent_edges, axis=-1) < -1e-10):
+                    raise ValueError("Flattening pinches a ribbon fold. Reduce flattening or thickness, or increase ribbon width.")
         verts = np.concatenate((front.reshape(-1, 3), back.reshape(-1, 3)))
         vertices.append(verts)
         triangles.append(strip_tris + vertex_offset)
@@ -160,10 +173,15 @@ RIBBON_JS = r"""
         const cc=Math.cos(center),ss=Math.sin(center);
         for(let iu=0;iu<=nu;iu++) {
           const q=iu/nu,theta=(q-0.5)*sweep,localRadius=baseRadius+g.ribbon_overlap_mm*blend*(0.5-q);
-          const tangent=localRadius*Math.sin(theta);
+          let tangent=localRadius*Math.sin(theta);
           let radial=baseRadius-localRadius*Math.cos(theta);
           radial+=0.35*g.ribbon_overlap_mm*blend*Math.tanh((0.5-q)*7)*Math.abs(2*q-1)**1.8;
-          const radius=profileRadii[iz]+radial,k=iz*(nu+1)+iu;
+          let radius=profileRadii[iz]+radial;
+          if((g.ribbon_flatten_pct||0)>0) {
+            const rho=Math.hypot(radius,tangent),target=profileRadii[iz]+(rho-profileRadii[iz])*(1-g.ribbon_flatten_pct/100),scale=target/rho;
+            radius*=scale;tangent*=scale;
+          }
+          const k=iz*(nu+1)+iu;
           mid[k*3]=radius*cc-tangent*ss;mid[k*3+1]=radius*ss+tangent*cc;mid[k*3+2]=t*p.height_mm;
           let edge=Math.max(0,Math.min(1,Math.min(q,1-q)/0.12));edge=edge*edge*(3-2*edge);
           thickness[k]=g.ribbon_thickness_mm/(1+g.ribbon_stretch_pct/100*blend)*(0.35+0.65*edge);
@@ -183,6 +201,16 @@ RIBBON_JS = r"""
           const sign=side===0?1:-1,out=(offset+side*perSide+k)*3;
           positions[out]=mid[k*3]+sign*nx*h;positions[out+1]=mid[k*3+1]+sign*ny*h;
           positions[out+2]=iz===0?0:(iz===nz?p.height_mm:Math.max(0,Math.min(p.height_mm,mid[k*3+2]+sign*nzv*h)));
+        }
+      }
+      if((g.ribbon_flatten_pct||0)>0) {
+        for(let iz=0;iz<=nz;iz++) for(let iu=0;iu<nu;iu++) {
+          const a=(iz*(nu+1)+iu)*3,b=a+3;
+          for(let side=0;side<2;side++) {
+            const out=(offset+side*perSide)*3;
+            const dot=(positions[out+b]-positions[out+a])*(mid[b]-mid[a])+(positions[out+b+1]-positions[out+a+1])*(mid[b+1]-mid[a+1])+(positions[out+b+2]-positions[out+a+2])*(mid[b+2]-mid[a+2]);
+            if(dot < -1e-10) throw Error('Flattening pinches a ribbon fold. Reduce flattening or thickness, or increase ribbon width.');
+          }
         }
       }
       const at=(iz,iu)=>offset+iz*(nu+1)+iu;

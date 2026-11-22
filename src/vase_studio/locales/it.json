@@ -256,6 +256,9 @@
     "Curled ribbons have steep overhangs. Inspect the sliced preview and adjust curl, cooling or supports as needed.": "I nastri arricciati presentano forti sporgenze. Controlla l’anteprima dello slicing e regola curvatura, raffreddamento o supporti se necessario.",
     "Bottom Ribbon Strength": "Intensità dei nastri alla base",
     "Middle Ribbon Strength": "Intensità dei nastri al centro",
-    "Top Ribbon Strength": "Intensità dei nastri in alto"
+    "Top Ribbon Strength": "Intensità dei nastri in alto",
+    "Ribbon Flattening": "Appiattimento dei nastri",
+    "Brings folds closer to the cup without thinning the ribbons. Steep overhangs may remain; check the sliced preview.": "Avvicina le pieghe al vaso senza assottigliare i nastri. Possono rimanere forti sporgenze; controlla l’anteprima di slicing.",
+    "Flattening pinches a ribbon fold. Reduce flattening or thickness, or increase ribbon width.": "L’appiattimento comprime troppo una piega. Riduci l’appiattimento o lo spessore, oppure aumenta la larghezza del nastro."
   }
 }

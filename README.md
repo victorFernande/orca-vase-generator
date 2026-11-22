@@ -2,7 +2,7 @@
   <img src="assets/icon.jpg" alt="Orca Vase Studio" width="210" />
 </p>
 
-<h1 align="center">Orca Vase Studio (<code>v1.3.0</code>)</h1>
+<h1 align="center">Orca Vase Studio (<code>v1.3.1</code>)</h1>
 
 <p align="center">
   <strong>Native Parametric 3D Vase &amp; Botanical Planter Studio Inside OrcaSlicer 2.5.1+</strong><br/>
@@ -24,6 +24,18 @@
 </p>
 
 ---
+
+## Version 1.3.1 · Fitas mais próximas do vaso / Closer-fitting ribbons
+
+**Achatamento das fitas (0–60%)** aproxima as dobras do corpo do vaso,
+mantendo a espessura existente. Comece em 30–50% e confira a prévia fatiada.
+0% preserva a forma publicada na versão 1.3.0. Combinações que comprimam
+demais as dobras são bloqueadas com uma indicação de ajuste.
+
+**Ribbon Flattening (0–60%)** brings folds closer to the cup while preserving
+their existing thickness. Start at 30–50% and inspect the sliced preview.
+This reduces projection; steep overhangs can remain. Physical printing has
+not been validated. See [controls and measured limitations](docs/RIBBON_FLATTENING.md).
 
 ## Version 1.3.0 · Padrões geométricos / Geometric patterns
 
@@ -52,12 +64,12 @@ The standalone installer stores the immutable HTML template with lossless standa
 
 ## English Overview
 
-**Orca Vase Studio (`orca-vase-studio` v1.3.0)** is a self-contained, single-file native Python plugin for **OrcaSlicer 2.5.1+** that embeds an interactive **WebGL2 + 2D PCHIP Curve** parametric studio right inside the slicer. Design sculptural vases, thick-walled ceramic vessels (`0.8–25.0 mm`), and botanical planters with drainage holes and matching drip saucers — then inject them directly onto your active OrcaSlicer build plate in **1 click** with automatic slicer configuration.
+**Orca Vase Studio (`orca-vase-studio` v1.3.1)** is a self-contained, single-file native Python plugin for **OrcaSlicer 2.5.1+** that embeds an interactive **WebGL2 + 2D PCHIP Curve** parametric studio right inside the slicer. Design sculptural vases, thick-walled ceramic vessels (`0.8–25.0 mm`), and botanical planters with drainage holes and matching drip saucers — then inject them directly onto your active OrcaSlicer build plate in **1 click** with automatic slicer configuration.
 
-### Key Highlights (`v1.3.0`)
+### Key Highlights (`v1.3.1`)
 
 - **Dual Native OrcaSlicer Integration:**
-  - **Top-Bar Studio Tab (`Gerador de Vasos`):** Full 3-column workspace right beside *Prepare / Preview / Device*.
+  - **Top-Bar Studio Tab (`Vase Studio`):** Full 3-column workspace right beside *Prepare / Preview / Device*.
   - **Right-Docked Side Panel (`Orca Vase Studio - Painel Lateral`):** Compact tabbed studio docked directly next to the 3D Plater (*File → Plugins*).
 - **Parametric Sliders + 2D PCHIP Freeform Curve Editor:** Sculpt via dimensional sliders and 3–24-sided polygonal cross-sections, or convert in 1 click to a smooth monotonic 2D PCHIP curve with interactive knot editing.
 - **5 Combinable Surface Layers:** Stack **Ribbed / Fluted**, **Organic Waves**, **Origami Diamond (Yoshimura)**, **Cellular / Coral 3D**, and **Geometric Relief** with exact millimeter depth, density, spacing, sharpness, helical twist (`±720°`), and smooth bottom/top fade zones (`< 1e-12 mm` JS-to-Python math parity).
@@ -79,12 +91,12 @@ The standalone installer stores the immutable HTML template with lossless standa
 
 ## Visão Geral (Português PT-BR)
 
-O **Orca Vase Studio (`orca-vase-studio` v1.3.0)** é um plugin nativo em Python de **arquivo único autossuficiente** para o **OrcaSlicer 2.5.1+** que adiciona um estúdio paramétrico 3D interativo (**WebGL2 + Curva Livre 2D PCHIP**, 100% offline) dentro do próprio fatiador. Crie vasos decorativos, peças cerâmicas de parede espessa (`0,8–25,0 mm`) e cachepôs com furos de drenagem e pratinho coletor, enviando tudo em **1 clique** direto para a mesa (*Plater*) com ajuste automático do fatiamento.
+O **Orca Vase Studio (`orca-vase-studio` v1.3.1)** é um plugin nativo em Python de **arquivo único autossuficiente** para o **OrcaSlicer 2.5.1+** que adiciona um estúdio paramétrico 3D interativo (**WebGL2 + Curva Livre 2D PCHIP**, 100% offline) dentro do próprio fatiador. Crie vasos decorativos, peças cerâmicas de parede espessa (`0,8–25,0 mm`) e cachepôs com furos de drenagem e pratinho coletor, enviando tudo em **1 clique** direto para a mesa (*Plater*) com ajuste automático do fatiamento.
 
-### Principais Recursos (`v1.3.0`)
+### Principais Recursos (`v1.3.1`)
 
 - **Dupla Integração Nativa no OrcaSlicer:**
-  - **Aba Superior (`Gerador de Vasos`):** Estúdio amplo em 3 colunas ao lado de *Preparar / Visualizar / Dispositivo*.
+  - **Aba Superior (`Vase Studio`):** Estúdio amplo em 3 colunas ao lado de *Preparar / Visualizar / Dispositivo*.
   - **Painel Lateral Acoplado (`Orca Vase Studio - Painel Lateral`):** Painel compacto acoplado à direita da mesa 3D (*Arquivo → Plugins*).
 - **Silhueta Paramétrica + Curva Livre 2D (PCHIP):** Modele por sliders e seções poligonais (3 a 24 lados) ou converta em 1 clique para uma curva livre PCHIP sem oscilações indesejadas.
 - **5 Camadas Combináveis de Textura Dimensional:** Combine **Canelado / Frisos**, **Ondas Orgânicas**, **Origami Diamante (Yoshimura)** **Celular / Coral 3D** e **Relevo geométrico** com controle exato de profundidade (`mm`), densidade, espaçamento, nitidez, torção helicoidal (`±720°`) e suavização na base/topo.
@@ -98,7 +110,7 @@ O **Orca Vase Studio (`orca-vase-studio` v1.3.0)** é um plugin nativo em Python
 
 1. Baixe o arquivo único **`dist/orca_vase_generator.py`** (ou na aba [**Releases do GitHub**](https://github.com/victorFernande/orca-vase-generator/releases)).
 2. No **OrcaSlicer 2.5.1+**, acesse **Arquivo → Plugins → Instalar plugin local...** e escolha `orca_vase_generator.py`.
-3. Ative **Orca Vase Studio** em **Plugins → Gerenciar Plugins**, aprove as permissões locais da pasta do plugin e clique na aba **Gerador de Vasos**!
+3. Ative **Orca Vase Studio** em **Plugins → Gerenciar Plugins**, aprove as permissões locais da pasta do plugin e clique na aba **Vase Studio**!
 
 👉 **Guia completo passo a passo:** [**Mini Manual de Uso (`docs/MANUAL_PT-BR.md`)**](docs/MANUAL_PT-BR.md)
 

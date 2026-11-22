@@ -50,7 +50,7 @@ MODULE_ORDER: list[str] = [
     "plugin_main.py",
 ]
 
-DEFAULT_PLUGIN_VERSION = "1.3.0"
+DEFAULT_PLUGIN_VERSION = "1.3.1"
 PLUGIN_VERSION = os.environ.get("ORCA_PLUGIN_VERSION", "").strip().lstrip("v") or DEFAULT_PLUGIN_VERSION
 
 PEP723_HEADER = f"""\
@@ -562,7 +562,7 @@ def verify_bundle_smoke(bundle_path: Path) -> None:
 
             page_cap = mod.VaseStudioPageCapability()
             dock_cap = mod.VaseStudioDockCapability()
-            assert page_cap.get_name() == "Gerador de Vasos"
+            assert page_cap.get_name() == "Vase Studio"
             assert dock_cap.get_name() == "Orca Vase Studio - Painel Lateral"
 
             # Direct temporary storage during smoke check (and verify standalone icon auto-materialization!)

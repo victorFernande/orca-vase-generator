@@ -256,6 +256,9 @@
     "Curled ribbons have steep overhangs. Inspect the sliced preview and adjust curl, cooling or supports as needed.": "巻いたリボンには急なオーバーハングがあります。スライス表示を確認し、必要に応じて巻き角度、冷却、サポートを調整してください。",
     "Bottom Ribbon Strength": "底部のリボン強度",
     "Middle Ribbon Strength": "中央部のリボン強度",
-    "Top Ribbon Strength": "上部のリボン強度"
+    "Top Ribbon Strength": "上部のリボン強度",
+    "Ribbon Flattening": "リボンの平坦化",
+    "Brings folds closer to the cup without thinning the ribbons. Steep overhangs may remain; check the sliced preview.": "リボンの厚さを保ったまま折り目を花瓶に近づけます。急なオーバーハングが残る場合があるため、スライス後のプレビューを確認してください。",
+    "Flattening pinches a ribbon fold. Reduce flattening or thickness, or increase ribbon width.": "平坦化により折り目がつぶれます。平坦化または厚さを減らすか、リボンの幅を広げてください。"
   }
 }

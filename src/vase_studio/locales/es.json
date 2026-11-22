@@ -256,6 +256,9 @@
     "Curled ribbons have steep overhangs. Inspect the sliced preview and adjust curl, cooling or supports as needed.": "Las cintas enrolladas tienen voladizos pronunciados. Revisa la vista laminada y ajusta la curvatura, la refrigeración o los soportes según sea necesario.",
     "Bottom Ribbon Strength": "Intensidad de las cintas en la base",
     "Middle Ribbon Strength": "Intensidad de las cintas en el centro",
-    "Top Ribbon Strength": "Intensidad de las cintas en la parte superior"
+    "Top Ribbon Strength": "Intensidad de las cintas en la parte superior",
+    "Ribbon Flattening": "Aplanamiento de las cintas",
+    "Brings folds closer to the cup without thinning the ribbons. Steep overhangs may remain; check the sliced preview.": "Acerca los pliegues al vaso sin adelgazar las cintas. Pueden quedar voladizos pronunciados; revisa la vista previa del laminado.",
+    "Flattening pinches a ribbon fold. Reduce flattening or thickness, or increase ribbon width.": "El aplanamiento comprime demasiado un pliegue. Reduce el aplanamiento o el grosor, o aumenta el ancho de la cinta."
   }
 }
