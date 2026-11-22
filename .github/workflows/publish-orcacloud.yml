@@ -48,6 +48,7 @@ jobs:
       group: orcacloud-publish
       cancel-in-progress: false
     permissions:
+      actions: read # Read CI approval for the exact released commit.
       contents: write # Attach the successful publication receipt to the release.
       id-token: write
     env:

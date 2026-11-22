@@ -95,6 +95,26 @@ def announce(message: str):
             stream.write(message + "\n")
 
 
+def upload(meta: dict, package: Path, token: str, folder: Path) -> dict:
+    """Use the documented curl client, with credentials on stdin, not argv/disk."""
+    if not re.fullmatch(r"[A-Za-z0-9_.-]+", token):
+        raise ValueError("Invalid OIDC credential encoding")
+    boundary, payload = multipart(meta, package.name, package.read_bytes())
+    body, response = folder / "multipart.bin", folder / "response.json"
+    body.write_bytes(payload)  # Contains only the public release file and notes.
+    result = subprocess.run([
+        "curl", "--silent", "--show-error", "--request", "POST",
+        "--header", "Content-Type: multipart/form-data; boundary=" + boundary,
+        "--data-binary", "@" + str(body), "--output", str(response),
+        "--write-out", "%{http_code}", "--config", "-", API],
+        input=f'header = "Authorization: Bearer {token}"\n',
+        text=True, capture_output=True, check=True)
+    text = response.read_text(encoding="utf8")
+    if result.stdout.strip() != "201":
+        raise RuntimeError(f"OrcaCloud HTTP {result.stdout.strip()}: " + text.replace(token, "[redacted]")[:2000])
+    return json.loads(text)
+
+
 def main():
     if os.environ.get("GITHUB_ACTIONS") != "true":
         raise RuntimeError("Publication must run inside GitHub Actions")
@@ -132,9 +152,7 @@ def main():
         oidc_url = os.environ["ACTIONS_ID_TOKEN_REQUEST_URL"] + "&audience=orcacloud"
         token = request_json(urllib.request.Request(oidc_url, headers={
             "Authorization": "Bearer " + os.environ["ACTIONS_ID_TOKEN_REQUEST_TOKEN"]}))["value"]
-        boundary, payload = multipart(meta, filename, package.read_bytes())
-        result = request_json(urllib.request.Request(API, data=payload, method="POST", headers={
-            "Authorization": "Bearer " + token, "Content-Type": "multipart/form-data; boundary=" + boundary}), expected_status=201)
+        result = upload(meta, package, token, folder)
         if result.get("id") != cloud_id or result.get("version") != meta["version"]:
             raise ValueError("OrcaCloud did not confirm the expected plugin and version")
         receipt = {"repository": repo, "version": meta["version"], "sha256": digest,
