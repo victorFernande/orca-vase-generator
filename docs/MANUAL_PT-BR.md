@@ -32,7 +32,7 @@ O Orca Vase Studio oferece **dois modos de trabalho sincronizados** para combina
 
 | Modo | Onde encontrar | Quando usar |
 | :--- | :--- | :--- |
-| **Aba Superior Completa (`Gerador de Vasos`)** | Na barra superior do OrcaSlicer, ao lado de *Preparar / Visualizar / Dispositivo* | Ideal para criar do zero em tela ampla de **3 colunas**: Galeria & Silhueta à esquerda, Viewport 3D interativo ao centro e Texturas + Parede à direita. |
+| **Aba Superior Completa (`Vase Studio`)** | Na barra superior do OrcaSlicer, ao lado de *Preparar / Visualizar / Dispositivo* | Ideal para criar do zero em tela ampla de **3 colunas**: Galeria & Silhueta à esquerda, Viewport 3D interativo ao centro e Texturas + Parede à direita. |
 | **Painel Lateral (`Orca Vase Studio - Painel Lateral`)** | Menu **Arquivo → Plugins → Orca Vase Studio - Painel Lateral** | Abre um estúdio compacto acoplado à direita da bandeja 3D (*Plater*) com abas rápidas (**Forma**, **Texturas**, **Impressão**, **Presets**) — ótimo para ajustar medidas olhando para a mesa! |
 
 > **Dica:** Na barra superior do estúdio você também encontra o campo de **Nome do Vaso**, o indicador da sua **impressora/bico ativos** lidos automaticamente do OrcaSlicer, alternância de idioma (**PT / EN**), tema claro/escuro e o botão **Surpreenda-me** para gerar designs inéditos instantaneamente.

@@ -6113,14 +6113,14 @@ def _apply_capability_config_to_controller(
 
 
 class VaseStudioPageCapability(orca.pages.PagesPluginCapabilityBase):
-    """Full-screen top-bar tab (`Gerador de Vasos`) beside Prepare / Preview / Device."""
+    """Full-screen top-bar tab (`Vase Studio`) beside Prepare / Preview / Device."""
 
     def __init__(self, controller: VaseStudioController | None = None) -> None:
         super().__init__()
         self._controller = controller or _SHARED_CONTROLLER
 
     def get_name(self) -> str:
-        return "Gerador de Vasos"
+        return "Vase Studio"
 
     def get_default_config(self) -> dict[str, Any]:
         return {

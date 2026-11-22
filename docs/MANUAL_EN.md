@@ -32,7 +32,7 @@ Orca Vase Studio provides **two synchronized workspaces** tailored to how you li
 
 | Workspace | Where to open it | Best for |
 | :--- | :--- | :--- |
-| **Full Top-Bar Tab (`Gerador de Vasos`)** | Top navigation bar right beside *Prepare / Preview / Device* | Full-screen **3-column design studio**: Preset Gallery & 2D Silhouette on the left, interactive 3D WebGL2 Viewport in the center, and Textures + Wall controls on the right. |
+| **Full Top-Bar Tab (`Vase Studio`)** | Top navigation bar right beside *Prepare / Preview / Device* | Full-screen **3-column design studio**: Preset Gallery & 2D Silhouette on the left, interactive 3D WebGL2 Viewport in the center, and Textures + Wall controls on the right. |
 | **Right-Docked Side Panel (`Orca Vase Studio - Painel Lateral`)** | Menu **File → Plugins → Orca Vase Studio - Painel Lateral** | Opens a sleek compact panel docked right beside OrcaSlicer's 3D Plater with quick tabs (**Shape**, **Textures**, **Wall & Print**, **Presets**) — great for iterating right next to your build plate! |
 
 > **Tip:** The top studio bar also gives you an editable **Vase Name**, a live **Active Printer / Nozzle pill** read directly from OrcaSlicer, instant **EN / PT** language toggle, light/dark theme switcher, and the **Surprise Me** button for one-click printable inspiration.

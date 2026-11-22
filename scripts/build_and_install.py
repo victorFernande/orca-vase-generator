@@ -562,7 +562,7 @@ def verify_bundle_smoke(bundle_path: Path) -> None:
 
             page_cap = mod.VaseStudioPageCapability()
             dock_cap = mod.VaseStudioDockCapability()
-            assert page_cap.get_name() == "Gerador de Vasos"
+            assert page_cap.get_name() == "Vase Studio"
             assert dock_cap.get_name() == "Orca Vase Studio - Painel Lateral"
 
             # Direct temporary storage during smoke check (and verify standalone icon auto-materialization!)

@@ -69,7 +69,7 @@ The standalone installer stores the immutable HTML template with lossless standa
 ### Key Highlights (`v1.3.1`)
 
 - **Dual Native OrcaSlicer Integration:**
-  - **Top-Bar Studio Tab (`Gerador de Vasos`):** Full 3-column workspace right beside *Prepare / Preview / Device*.
+  - **Top-Bar Studio Tab (`Vase Studio`):** Full 3-column workspace right beside *Prepare / Preview / Device*.
   - **Right-Docked Side Panel (`Orca Vase Studio - Painel Lateral`):** Compact tabbed studio docked directly next to the 3D Plater (*File → Plugins*).
 - **Parametric Sliders + 2D PCHIP Freeform Curve Editor:** Sculpt via dimensional sliders and 3–24-sided polygonal cross-sections, or convert in 1 click to a smooth monotonic 2D PCHIP curve with interactive knot editing.
 - **5 Combinable Surface Layers:** Stack **Ribbed / Fluted**, **Organic Waves**, **Origami Diamond (Yoshimura)**, **Cellular / Coral 3D**, and **Geometric Relief** with exact millimeter depth, density, spacing, sharpness, helical twist (`±720°`), and smooth bottom/top fade zones (`< 1e-12 mm` JS-to-Python math parity).
@@ -96,7 +96,7 @@ O **Orca Vase Studio (`orca-vase-studio` v1.3.1)** é um plugin nativo em Python
 ### Principais Recursos (`v1.3.1`)
 
 - **Dupla Integração Nativa no OrcaSlicer:**
-  - **Aba Superior (`Gerador de Vasos`):** Estúdio amplo em 3 colunas ao lado de *Preparar / Visualizar / Dispositivo*.
+  - **Aba Superior (`Vase Studio`):** Estúdio amplo em 3 colunas ao lado de *Preparar / Visualizar / Dispositivo*.
   - **Painel Lateral Acoplado (`Orca Vase Studio - Painel Lateral`):** Painel compacto acoplado à direita da mesa 3D (*Arquivo → Plugins*).
 - **Silhueta Paramétrica + Curva Livre 2D (PCHIP):** Modele por sliders e seções poligonais (3 a 24 lados) ou converta em 1 clique para uma curva livre PCHIP sem oscilações indesejadas.
 - **5 Camadas Combináveis de Textura Dimensional:** Combine **Canelado / Frisos**, **Ondas Orgânicas**, **Origami Diamante (Yoshimura)** **Celular / Coral 3D** e **Relevo geométrico** com controle exato de profundidade (`mm`), densidade, espaçamento, nitidez, torção helicoidal (`±720°`) e suavização na base/topo.
@@ -110,7 +110,7 @@ O **Orca Vase Studio (`orca-vase-studio` v1.3.1)** é um plugin nativo em Python
 
 1. Baixe o arquivo único **`dist/orca_vase_generator.py`** (ou na aba [**Releases do GitHub**](https://github.com/victorFernande/orca-vase-generator/releases)).
 2. No **OrcaSlicer 2.5.1+**, acesse **Arquivo → Plugins → Instalar plugin local...** e escolha `orca_vase_generator.py`.
-3. Ative **Orca Vase Studio** em **Plugins → Gerenciar Plugins**, aprove as permissões locais da pasta do plugin e clique na aba **Gerador de Vasos**!
+3. Ative **Orca Vase Studio** em **Plugins → Gerenciar Plugins**, aprove as permissões locais da pasta do plugin e clique na aba **Vase Studio**!
 
 👉 **Guia completo passo a passo:** [**Mini Manual de Uso (`docs/MANUAL_PT-BR.md`)**](docs/MANUAL_PT-BR.md)
 

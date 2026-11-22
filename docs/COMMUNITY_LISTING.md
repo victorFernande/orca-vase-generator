@@ -63,7 +63,7 @@ Estúdio 3D nativo de vasos e cachepôs para OrcaSlicer: curva 2D PCHIP, 4 textu
 ```markdown
 ### Orca Vase Studio — Estúdio Paramétrico 3D de Vasos & Cachepôs dentro do OrcaSlicer
 
-Crie vasos decorativos, peças cerâmicas de parede espessa e cachepôs funcionais para jardinagem sem sair do **OrcaSlicer 2.5.1+**. O **Orca Vase Studio** roda 100% offline em 60 FPS (WebGL2 + motor matemático NumPy 2-manifold estanque) tanto como **Aba Superior (`Gerador de Vasos`)** quanto como **Painel Lateral acoplado à direita da mesa 3D**.
+Crie vasos decorativos, peças cerâmicas de parede espessa e cachepôs funcionais para jardinagem sem sair do **OrcaSlicer 2.5.1+**. O **Orca Vase Studio** roda 100% offline em 60 FPS (WebGL2 + motor matemático NumPy 2-manifold estanque) tanto como **Aba Superior (`Vase Studio`)** quanto como **Painel Lateral acoplado à direita da mesa 3D**.
 
 #### Destaques Principais
 
@@ -94,7 +94,7 @@ Fala, pessoal! Acabei de lançar o **Orca Vase Studio (`v1.1.1`)**, um plugin na
 📦 **Instalação em 10 segundos (Arquivo Único!):**
 1. Baixe apenas o arquivo `orca_vase_generator.py` na aba Releases do GitHub (o ícone vetorial da aba já vem embutido dentro dele!).
 2. No OrcaSlicer 2.5.1+, vá em **Arquivo → Plugins → Instalar plugin local...** (*File → Plugins → Install local plugin...*) e selecione `orca_vase_generator.py`.
-3. Ative em **Plugins → Gerenciar Plugins** e clique na nova aba superior **Gerador de Vasos**!
+3. Ative em **Plugins → Gerenciar Plugins** e clique na nova aba superior **Vase Studio**!
 
 🔗 **Download & Código-Fonte (MIT):** https://github.com/victorFernande/orca-vase-generator
 
@@ -122,7 +122,7 @@ Native 3D vase & planter studio inside OrcaSlicer: 2D PCHIP curve editor, 4 comb
 ```markdown
 ### Orca Vase Studio — Parametric 3D Vase & Planter Design Studio Inside OrcaSlicer
 
-Design sculptural vases, thick-walled ceramic vessels, and functional botanical planters without ever leaving **OrcaSlicer 2.5.1+**. **Orca Vase Studio** runs 100% offline at 60 FPS (WebGL2 viewport + watertight 2-manifold NumPy geometry engine) as both a full **Top-Bar Studio Tab (`Gerador de Vasos`)** and a **Right-Docked Side Panel** directly beside your 3D Plater.
+Design sculptural vases, thick-walled ceramic vessels, and functional botanical planters without ever leaving **OrcaSlicer 2.5.1+**. **Orca Vase Studio** runs 100% offline at 60 FPS (WebGL2 viewport + watertight 2-manifold NumPy geometry engine) as both a full **Top-Bar Studio Tab (`Vase Studio`)** and a **Right-Docked Side Panel** directly beside your 3D Plater.
 
 #### Key Capabilities
 
