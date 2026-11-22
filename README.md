@@ -1,4 +1,7 @@
 <p align="center">
+
+**1.3.2: publicação automática / automatic publishing.** Publicar uma release no GitHub envia o pacote verificado ao OrcaCloud, após aprovação da CI. Corrigido o envio de notas com Unicode e ponto e vírgula. O fluxo usa credenciais temporárias e verifica o pacote publicado. / Publishing a GitHub release uploads the verified package to OrcaCloud after CI approval.
+
   <img src="assets/icon.jpg" alt="Orca Vase Studio" width="210" />
 </p>
 
@@ -66,7 +69,7 @@ The standalone installer stores the immutable HTML template with lossless standa
 
 **Orca Vase Studio (`orca-vase-studio` v1.3.1)** is a self-contained, single-file native Python plugin for **OrcaSlicer 2.5.1+** that embeds an interactive **WebGL2 + 2D PCHIP Curve** parametric studio right inside the slicer. Design sculptural vases, thick-walled ceramic vessels (`0.8–25.0 mm`), and botanical planters with drainage holes and matching drip saucers — then inject them directly onto your active OrcaSlicer build plate in **1 click** with automatic slicer configuration.
 
-### Key Highlights (`v1.3.1`)
+### Key Highlights (`v1.3.2`)
 
 - **Dual Native OrcaSlicer Integration:**
   - **Top-Bar Studio Tab (`Vase Studio`):** Full 3-column workspace right beside *Prepare / Preview / Device*.
@@ -93,7 +96,7 @@ The standalone installer stores the immutable HTML template with lossless standa
 
 O **Orca Vase Studio (`orca-vase-studio` v1.3.1)** é um plugin nativo em Python de **arquivo único autossuficiente** para o **OrcaSlicer 2.5.1+** que adiciona um estúdio paramétrico 3D interativo (**WebGL2 + Curva Livre 2D PCHIP**, 100% offline) dentro do próprio fatiador. Crie vasos decorativos, peças cerâmicas de parede espessa (`0,8–25,0 mm`) e cachepôs com furos de drenagem e pratinho coletor, enviando tudo em **1 clique** direto para a mesa (*Plater*) com ajuste automático do fatiamento.
 
-### Principais Recursos (`v1.3.1`)
+### Principais Recursos (`v1.3.2`)
 
 - **Dupla Integração Nativa no OrcaSlicer:**
   - **Aba Superior (`Vase Studio`):** Estúdio amplo em 3 colunas ao lado de *Preparar / Visualizar / Dispositivo*.

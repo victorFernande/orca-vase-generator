@@ -1,4 +1,4 @@
-# Quick User Manual — Orca Vase Studio (`v1.3.1`)
+# Quick User Manual — Orca Vase Studio (`v1.3.2`)
 
 The language selector in the header offers Português, English, Español, Italiano, Français, Deutsch and 日本語. Your choice is saved and synchronized between page and dock; see [languages and optimization](MULTILINGUAL_AND_PERFORMANCE.md).
 

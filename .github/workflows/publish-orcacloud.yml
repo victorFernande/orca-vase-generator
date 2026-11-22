@@ -3,15 +3,6 @@ name: Publish to OrcaCloud
 on:
   release:
     types: [published]
-  workflow_run:
-    workflows: ["CI & Release Bundles"]
-    types: [completed]
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: Published release tag to recover (for example v1.4.1)
-        required: true
-        type: string
   pull_request:
     paths:
       - .github/workflows/publish-orcacloud.yml
@@ -36,14 +27,10 @@ jobs:
       - run: python -B -W error -m unittest discover -s scripts -p test_orcacloud_publish.py -v
 
   publish:
-    if: >-
-      github.event_name == 'release' || github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' &&
-      github.event.workflow_run.head_repository.full_name == github.repository &&
-      startsWith(github.event.workflow_run.head_branch, 'v'))
+    if: github.event_name == 'release'
     name: Publish verified release (OIDC)
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 150
     concurrency:
       group: orcacloud-publish
       cancel-in-progress: false
@@ -54,7 +41,7 @@ jobs:
     env:
       PYTHONUTF8: "1"
       GH_TOKEN: ${{ github.token }}
-      RELEASE_TAG: ${{ inputs.tag || github.event.release.tag_name || github.event.workflow_run.head_branch }}
+      RELEASE_TAG: ${{ github.event.release.tag_name }}
       PLUGIN_FILE: orca_vase_generator_any.py
       PLUGIN_ID: orca-vase-studio
       PLUGIN_NAME: Orca Vase Studio
@@ -62,7 +49,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: main
+          ref: ${{ github.event.release.tag_name }}
           persist-credentials: false
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:

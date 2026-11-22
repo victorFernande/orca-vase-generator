@@ -16,7 +16,7 @@ from .plugin_main import (
     VaseStudioPageCapability,
 )
 
-__version__ = "1.3.1"
+__version__ = "1.3.2"
 
 __all__ = [
     "SCHEMA_VERSION",
