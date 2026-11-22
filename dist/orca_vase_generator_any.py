@@ -7,7 +7,7 @@
 # name = "Orca Vase Studio"
 # description = "Parametric 3D Vase & Planter Studio with X-Ray Wall Calipers & 1-Click Plater | Estudio 3D de Vasos e Cachepos"
 # author = "Orca Vase Studio"
-# version = "1.3.1"
+# version = "1.3.2"
 # ///
 
 from __future__ import annotations

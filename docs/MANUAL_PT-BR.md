@@ -1,4 +1,4 @@
-# Mini Manual de Uso — Orca Vase Studio (`v1.3.1`)
+# Mini Manual de Uso — Orca Vase Studio (`v1.3.2`)
 
 O seletor do cabeçalho oferece Português, English, Español, Italiano, Français, Deutsch e 日本語. A escolha é salva e sincronizada entre aba e painel; veja [idiomas e otimização](MULTILINGUAL_AND_PERFORMANCE.md).
 

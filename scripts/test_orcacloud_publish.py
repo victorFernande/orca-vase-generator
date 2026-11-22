@@ -74,18 +74,19 @@ class PublisherTests(unittest.TestCase):
                     verify_asset(asset, path, metadata("v1.4.1", ""), "gear-id", name)
 
     def test_incomplete_ci_never_requests_credentials_or_downloads_a_package(self):
-        env = {"GITHUB_ACTIONS": "true", "GITHUB_REPOSITORY": "owner/repo", "RELEASE_TAG": "v1.4.1",
+        env = {"GITHUB_ACTIONS": "true", "GITHUB_EVENT_NAME": "release", "CI_WAIT_SECONDS": "0", "GITHUB_REPOSITORY": "owner/repo", "RELEASE_TAG": "v1.4.1",
                "PLUGIN_FILE": "test_any.py", "PLUGIN_ID": "test-plugin", "CLOUD_PLUGIN_ID": "cloud-id"}
         replies = [json.dumps({"tagName": "v1.4.1", "isDraft": False, "body": "notes", "assets": []}),
                    json.dumps({"sha": "abc"}), json.dumps({"workflow_runs": []})]
         with patch.dict(publisher.os.environ, env, clear=True), patch.object(publisher, "gh", side_effect=replies) as cli, \
              patch.object(publisher, "request_json") as network, patch.object(publisher, "announce"):
-            publisher.main()
+            with self.assertRaisesRegex(RuntimeError, 'No successful CI'):
+                publisher.main()
             self.assertEqual(cli.call_count, 3)
             network.assert_not_called()
 
     def test_confirmed_upload_writes_a_receipt_and_a_replay_never_uploads_again(self):
-        env = {"GITHUB_ACTIONS": "true", "GITHUB_REPOSITORY": "owner/repo", "RELEASE_TAG": "v1.4.1",
+        env = {"GITHUB_ACTIONS": "true", "GITHUB_EVENT_NAME": "release", "GITHUB_REPOSITORY": "owner/repo", "RELEASE_TAG": "v1.4.1",
                "PLUGIN_FILE": "test_any.py", "PLUGIN_ID": "test-plugin", "CLOUD_PLUGIN_ID": "cloud-id",
                "ACTIONS_ID_TOKEN_REQUEST_URL": "https://example.invalid/?request=1",
                "ACTIONS_ID_TOKEN_REQUEST_TOKEN": "test-placeholder", "GITHUB_RUN_ID": "123"}
@@ -94,12 +95,18 @@ class PublisherTests(unittest.TestCase):
         release = {"tagName": "v1.4.1", "isDraft": False, "body": "Unicode 日本語; filename=x", "assets": [
             {"name": "test_any.py", "digest": digest}]}
         receipt = {}
+        release_views = 0
 
         def cli(*args):
+            nonlocal release_views
             if args[:2] == ("release", "view"):
+                release_views += 1
+                if release_views == 1:
+                    # The CI attachment job has not finished at release.published.
+                    return json.dumps({**release, "assets": []})
                 return json.dumps(release)
             if args[0] == "api":
-                return json.dumps({"workflow_runs": [{"head_sha": "abc", "event": "push", "status": "completed", "conclusion": "success"}]}
+                return json.dumps({"workflow_runs": [{"head_sha": "abc", "head_branch": "v1.4.1", "event": "push", "status": "completed", "conclusion": "success"}]}
                                   if "workflow" in args[1] else {"sha": "abc"})
             if args[:2] == ("release", "download"):
                 folder = Path(args[args.index("--dir") + 1])
@@ -156,6 +163,23 @@ class PublisherTests(unittest.TestCase):
             with patch.object(publisher.subprocess, "run", side_effect=curl):
                 result = publisher.upload(metadata("v1.4.1", "日本語; filename=x"), package, "test-placeholder", folder)
                 self.assertEqual(result["version"], "1.4.1")
+
+    def test_release_context_is_required_before_accessing_services(self):
+        with patch.dict(publisher.os.environ, {"GITHUB_ACTIONS": "true", "GITHUB_EVENT_NAME": "workflow_dispatch"}, clear=True), \
+             patch.object(publisher, "gh") as cli, patch.object(publisher, "request_json") as network:
+            with self.assertRaisesRegex(RuntimeError, 'release-triggered'):
+                publisher.main()
+            cli.assert_not_called()
+            network.assert_not_called()
+
+    def test_release_job_waits_for_running_ci_without_replacing_its_oidc_context(self):
+        pending = {"head_sha": "abc", "head_branch": "v1.4.1", "event": "push", "status": "in_progress", "conclusion": None}
+        success = {**pending, "status": "completed", "conclusion": "success"}
+        main_success = {**success, "head_branch": "main"}
+        with patch.object(publisher, "gh", side_effect=[json.dumps({"workflow_runs": [main_success, pending]}), json.dumps({"workflow_runs": [success]})]), \
+             patch.object(publisher.time, "sleep") as sleep:
+            publisher.wait_for_ci("owner/repo", "abc", "v1.4.1", timeout=10, interval=0)
+            self.assertEqual(sleep.call_count, 1)
 
 
 if __name__ == "__main__":

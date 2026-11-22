@@ -12,6 +12,7 @@ from pathlib import Path
 import re
 import subprocess
 import tempfile
+import time
 import tomllib
 import urllib.error
 import urllib.request
@@ -68,6 +69,23 @@ def ci_approved(runs: list[dict], sha: str) -> bool:
                and r.get("status") == "completed" and r.get("conclusion") == "success" for r in runs)
 
 
+def wait_for_ci(repo: str, sha: str, tag: str | None = None, timeout: float = 7200, interval: float = 30):
+    deadline = time.monotonic() + timeout
+    while True:
+        runs = json.loads(gh("api", f"repos/{repo}/actions/workflows/ci.yml/runs?head_sha={sha}&per_page=100"))["workflow_runs"]
+        matching = [r for r in runs if r.get("head_sha") == sha and r.get("event") == "push"]
+        if tag is not None:
+            matching = [r for r in matching if r.get("head_branch") == tag]
+        if ci_approved(matching, sha):
+            return
+        if matching and all(r.get("status") == "completed" for r in matching):
+            raise RuntimeError("CI did not approve the released commit; fix it before retrying publication")
+        if time.monotonic() >= deadline:
+            raise RuntimeError("No successful CI on the released commit before the publication deadline")
+        print("Waiting for CI approval of the released commit...", flush=True)
+        time.sleep(interval)
+
+
 def receipt_matches(receipt: dict, repo: str, meta: dict, digest: str, cloud_id: str) -> bool:
     return (receipt.get("repository") == repo and receipt.get("version") == meta["version"]
             and receipt.get("sha256") == digest and receipt.get("plugin_id") == cloud_id)
@@ -118,6 +136,8 @@ def upload(meta: dict, package: Path, token: str, folder: Path) -> dict:
 def main():
     if os.environ.get("GITHUB_ACTIONS") != "true":
         raise RuntimeError("Publication must run inside GitHub Actions")
+    if os.environ.get("GITHUB_EVENT_NAME") != "release":
+        raise RuntimeError("OrcaCloud requires a release-triggered workflow; rerun its release publication job")
     repo, tag = os.environ["GITHUB_REPOSITORY"], os.environ["RELEASE_TAG"]
     filename, plugin_id, cloud_id = (os.environ[k] for k in ("PLUGIN_FILE", "PLUGIN_ID", "CLOUD_PLUGIN_ID"))
     if Path(filename).name != filename or not filename.endswith("_any.py"):
@@ -131,10 +151,12 @@ def main():
         return
     meta = metadata(tag, release.get("body") or "")
     sha = json.loads(gh("api", f"repos/{repo}/commits/{tag}"))["sha"]
-    runs = json.loads(gh("api", f"repos/{repo}/actions/workflows/ci.yml/runs?head_sha={sha}&per_page=100"))["workflow_runs"]
-    if not ci_approved(runs, sha):
-        announce(f"{tag}: waiting for successful CI on the released commit; workflow_run will retry.")
-        return
+    wait_for_ci(repo, sha, tag, timeout=float(os.environ.get("CI_WAIT_SECONDS", "7200")))
+    # CI may have attached the distribution files while this release job waited.
+    release = json.loads(gh("release", "view", tag, "--repo", repo, "--json", "tagName,isDraft,body,assets"))
+    if release["tagName"] != tag or release["isDraft"]:
+        raise ValueError("Release changed or became a draft while awaiting CI")
+    meta = metadata(tag, release.get("body") or "")
     assets = [a for a in release["assets"] if a["name"] == filename]
     if len(assets) != 1:
         raise ValueError("Release must contain exactly one universal plugin asset")
