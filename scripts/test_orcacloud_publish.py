@@ -110,16 +110,19 @@ class PublisherTests(unittest.TestCase):
             return ""
 
         with patch.dict(publisher.os.environ, env, clear=True), patch.object(publisher, "gh", side_effect=cli), \
-             patch.object(publisher, "request_json", side_effect=[{"value": "test-placeholder"}, {"id": "cloud-id", "version": "1.4.1"}]) as network, \
+             patch.object(publisher, "request_json", return_value={"value": "test-placeholder"}) as network, \
+             patch.object(publisher, "upload", return_value={"id": "cloud-id", "version": "1.4.1"}) as remote_upload, \
              patch.object(publisher, "announce"):
             publisher.main()
-            self.assertEqual(network.call_count, 2)
-            self.assertEqual(network.call_args.kwargs["expected_status"], 201)
+            self.assertEqual(network.call_count, 1)
+            self.assertEqual(remote_upload.call_count, 1)
             self.assertEqual(receipt["sha256"], digest)
             release["assets"].append({"name": publisher.RECEIPT})
             network.reset_mock()
+            remote_upload.reset_mock()
             publisher.main()
             network.assert_not_called()
+            remote_upload.assert_not_called()
 
     def test_http_failure_never_exposes_a_reflected_credential(self):
         request = publisher.urllib.request.Request("https://example.invalid", headers={"Authorization": "Bearer test-placeholder"})
@@ -135,6 +138,24 @@ class PublisherTests(unittest.TestCase):
         with patch.object(publisher.urllib.request, "urlopen", return_value=response):
             with self.assertRaisesRegex(RuntimeError, 'Expected HTTP 201'):
                 publisher.request_json(publisher.urllib.request.Request("https://example.invalid"), expected_status=201)
+
+    def test_documented_transport_keeps_credentials_out_of_arguments_and_disk(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            folder = Path(temporary)
+            package = folder / "test_any.py"
+            package.write_bytes(b"# public package")
+
+            def curl(command, **options):
+                self.assertNotIn("test-placeholder", " ".join(command))
+                self.assertIn('Authorization: Bearer test-placeholder', options["input"])
+                self.assertEqual(command[command.index("--config") + 1], "-")
+                self.assertNotIn(b"test-placeholder", (folder / "multipart.bin").read_bytes())
+                (folder / "response.json").write_text('{"id":"cloud-id","version":"1.4.1"}', encoding="utf8")
+                return publisher.subprocess.CompletedProcess(command, 0, "201", "")
+
+            with patch.object(publisher.subprocess, "run", side_effect=curl):
+                result = publisher.upload(metadata("v1.4.1", "日本語; filename=x"), package, "test-placeholder", folder)
+                self.assertEqual(result["version"], "1.4.1")
 
 
 if __name__ == "__main__":
