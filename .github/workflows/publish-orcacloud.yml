@@ -56,6 +56,7 @@ jobs:
       RELEASE_TAG: ${{ inputs.tag || github.event.release.tag_name || github.event.workflow_run.head_branch }}
       PLUGIN_FILE: orca_vase_generator_any.py
       PLUGIN_ID: orca-vase-studio
+      PLUGIN_NAME: Orca Vase Studio
       CLOUD_PLUGIN_ID: 51603699-f020-468b-b722-595265e8a0a5
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

@@ -45,7 +45,7 @@ def multipart(meta: dict, filename: str, content: bytes) -> tuple[str, bytes]:
     return boundary, prefix + content + f"\r\n--{boundary}--\r\n".encode("ascii")
 
 
-def verify_asset(asset: dict, path: Path, meta: dict, plugin_id: str) -> str:
+def verify_asset(asset: dict, path: Path, meta: dict, plugin_id: str, plugin_name: str | None = None) -> str:
     if path.name != asset["name"] or not path.name.endswith("_any.py"):
         raise ValueError("Expected the universal _any.py release asset")
     content = path.read_bytes()
@@ -56,7 +56,9 @@ def verify_asset(asset: dict, path: Path, meta: dict, plugin_id: str) -> str:
     block = text.split("# /// script\n", 1)[1].split("# ///", 1)[0]
     pep = tomllib.loads("\n".join(line.removeprefix("# ").removeprefix("#") for line in block.splitlines()))
     plugin = pep["tool"]["orcaslicer"]["plugin"]
-    if plugin["version"] != meta["version"] or plugin["id"] != plugin_id:
+    identity_matches = (plugin.get("id") == plugin_id if plugin.get("id")
+                        else bool(plugin_name) and plugin.get("name") == plugin_name)
+    if plugin["version"] != meta["version"] or not identity_matches:
         raise ValueError("Release tag, package version or plugin identity does not match")
     return digest
 
@@ -79,6 +81,10 @@ def request_json(request: urllib.request.Request, expected_status: int = 200) ->
             return json.load(response)
     except urllib.error.HTTPError as error:
         details = error.read().decode("utf8", errors="replace")[:2000]
+        authorization = request.get_header("Authorization") or ""
+        if authorization:
+            details = details.replace(authorization, "[redacted]")
+            details = details.replace(authorization.removeprefix("Bearer "), "[redacted]")
         raise RuntimeError(f"HTTP {error.code}: {details}") from None
 
 
@@ -116,7 +122,7 @@ def main():
         folder = Path(temporary)
         gh("release", "download", tag, "--repo", repo, "--pattern", filename, "--dir", temporary)
         package = folder / filename
-        digest = verify_asset(assets[0], package, meta, plugin_id)
+        digest = verify_asset(assets[0], package, meta, plugin_id, os.environ.get("PLUGIN_NAME"))
         if any(a["name"] == RECEIPT for a in release["assets"]):
             gh("release", "download", tag, "--repo", repo, "--pattern", RECEIPT, "--dir", temporary)
             receipt = json.loads((folder / RECEIPT).read_text(encoding="utf8"))

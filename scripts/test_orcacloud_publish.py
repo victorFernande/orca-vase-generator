@@ -1,5 +1,6 @@
 """Offline publisher regressions: no credentials, uploads, or external services."""
 import hashlib
+import io
 import json
 from email import policy
 from email.parser import BytesParser
@@ -61,6 +62,17 @@ class PublisherTests(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertFalse(receipt_matches({**receipt, key: "other"}, "owner/repo", metadata("v1.4.1", ""), "sha256:abc", "cloud-id"))
 
+    def test_legacy_name_only_manifest_requires_the_explicit_expected_name(self):
+        content = b'# /// script\n# [tool.orcaslicer.plugin]\n# version = "1.4.1"\n# name = "Orca Gear Studio"\n# ///\n'
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "gear_any.py"
+            path.write_bytes(content)
+            asset = {"name": path.name, "digest": "sha256:" + hashlib.sha256(content).hexdigest()}
+            self.assertEqual(verify_asset(asset, path, metadata("v1.4.1", ""), "gear-id", "Orca Gear Studio"), asset["digest"])
+            for name in (None, "Another plugin"):
+                with self.assertRaises(ValueError):
+                    verify_asset(asset, path, metadata("v1.4.1", ""), "gear-id", name)
+
     def test_incomplete_ci_never_requests_credentials_or_downloads_a_package(self):
         env = {"GITHUB_ACTIONS": "true", "GITHUB_REPOSITORY": "owner/repo", "RELEASE_TAG": "v1.4.1",
                "PLUGIN_FILE": "test_any.py", "PLUGIN_ID": "test-plugin", "CLOUD_PLUGIN_ID": "cloud-id"}
@@ -108,6 +120,21 @@ class PublisherTests(unittest.TestCase):
             network.reset_mock()
             publisher.main()
             network.assert_not_called()
+
+    def test_http_failure_never_exposes_a_reflected_credential(self):
+        request = publisher.urllib.request.Request("https://example.invalid", headers={"Authorization": "Bearer test-placeholder"})
+        error = publisher.urllib.error.HTTPError(request.full_url, 401, "rejected", {}, io.BytesIO(b'Bearer test-placeholder'))
+        with patch.object(publisher.urllib.request, "urlopen", side_effect=error):
+            with self.assertRaisesRegex(RuntimeError, r"HTTP 401: \[redacted\]") as caught:
+                publisher.request_json(request)
+            self.assertNotIn("test-placeholder", str(caught.exception))
+
+    def test_publication_requires_http_created_not_merely_a_json_response(self):
+        response = io.BytesIO(b'{"id":"cloud-id","version":"1.4.1"}')
+        response.status = 200
+        with patch.object(publisher.urllib.request, "urlopen", return_value=response):
+            with self.assertRaisesRegex(RuntimeError, 'Expected HTTP 201'):
+                publisher.request_json(publisher.urllib.request.Request("https://example.invalid"), expected_status=201)
 
 
 if __name__ == "__main__":
