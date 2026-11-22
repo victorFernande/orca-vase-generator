@@ -1,0 +1,114 @@
+"""Offline publisher regressions: no credentials, uploads, or external services."""
+import hashlib
+import json
+from email import policy
+from email.parser import BytesParser
+from pathlib import Path
+import tempfile
+import unittest
+from unittest.mock import patch
+
+import orcacloud_publish as publisher
+from orcacloud_publish import ci_approved, metadata, multipart, receipt_matches, verify_asset
+
+
+class PublisherTests(unittest.TestCase):
+    def test_unicode_and_curl_form_metacharacters_survive_the_real_multipart_parser(self):
+        body = 'Português 日本語; type=text/plain; filename=x; @file, "aspas"\n' * 150
+        meta = metadata("v1.4.1", body)
+        boundary, encoded = multipart(meta, "plugin_any.py", b"# plugin\n")
+        message = BytesParser(policy=policy.default).parsebytes(
+            f"Content-Type: multipart/form-data; boundary={boundary}\r\nMIME-Version: 1.0\r\n\r\n".encode() + encoded)
+        parts = list(message.iter_parts())
+        self.assertEqual(len(parts), 2)
+        self.assertEqual(json.loads(parts[0].get_content()), meta)
+        self.assertEqual(meta["changelog"], body[:4000])
+        self.assertEqual(parts[1].get_payload(decode=True), b"# plugin\n")
+        self.assertEqual(parts[1].get_filename(), "plugin_any.py")
+
+    def test_only_successful_push_ci_on_the_exact_release_commit_authorizes_publication(self):
+        run = {"head_sha": "abc", "event": "push", "status": "completed", "conclusion": "success"}
+        self.assertTrue(ci_approved([run], "abc"))
+        for key, value in (("head_sha", "other"), ("event", "pull_request"),
+                           ("status", "in_progress"), ("conclusion", "failure")):
+            self.assertFalse(ci_approved([{**run, key: value}], "abc"))
+        self.assertFalse(ci_approved([], "abc"))
+
+    def test_tag_validation_blocks_command_options_and_api_path_injection(self):
+        for tag in ("--repo", "main", "v1.2.3/../../main", "v1.2.3\n", "v01.2.3"):
+            with self.assertRaises(ValueError):
+                metadata(tag, "notes")
+        self.assertEqual(metadata("v1.4.1", "notes")["version"], "1.4.1")
+
+    def test_release_bytes_version_and_identity_must_match_before_upload(self):
+        content = b'# /// script\n# [tool.orcaslicer.plugin]\n# version = "1.4.1"\n# id = "test-plugin"\n# ///\n'
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "test_any.py"
+            path.write_bytes(content)
+            digest = "sha256:" + hashlib.sha256(content).hexdigest()
+            asset = {"name": path.name, "digest": digest}
+            self.assertEqual(verify_asset(asset, path, metadata("v1.4.1", ""), "test-plugin"), digest)
+            for meta, identity, bad_asset in ((metadata("v1.4.2", ""), "test-plugin", asset),
+                                              (metadata("v1.4.1", ""), "other-plugin", asset),
+                                              (metadata("v1.4.1", ""), "test-plugin", {**asset, "digest": "bad"})):
+                with self.assertRaises(ValueError):
+                    verify_asset(bad_asset, path, meta, identity)
+
+    def test_receipt_never_skips_another_plugin_version_or_package(self):
+        receipt = {"repository": "owner/repo", "version": "1.4.1", "sha256": "sha256:abc", "plugin_id": "cloud-id"}
+        self.assertTrue(receipt_matches(receipt, "owner/repo", metadata("v1.4.1", ""), "sha256:abc", "cloud-id"))
+        for key in receipt:
+            with self.subTest(key=key):
+                self.assertFalse(receipt_matches({**receipt, key: "other"}, "owner/repo", metadata("v1.4.1", ""), "sha256:abc", "cloud-id"))
+
+    def test_incomplete_ci_never_requests_credentials_or_downloads_a_package(self):
+        env = {"GITHUB_ACTIONS": "true", "GITHUB_REPOSITORY": "owner/repo", "RELEASE_TAG": "v1.4.1",
+               "PLUGIN_FILE": "test_any.py", "PLUGIN_ID": "test-plugin", "CLOUD_PLUGIN_ID": "cloud-id"}
+        replies = [json.dumps({"tagName": "v1.4.1", "isDraft": False, "body": "notes", "assets": []}),
+                   json.dumps({"sha": "abc"}), json.dumps({"workflow_runs": []})]
+        with patch.dict(publisher.os.environ, env, clear=True), patch.object(publisher, "gh", side_effect=replies) as cli, \
+             patch.object(publisher, "request_json") as network, patch.object(publisher, "announce"):
+            publisher.main()
+            self.assertEqual(cli.call_count, 3)
+            network.assert_not_called()
+
+    def test_confirmed_upload_writes_a_receipt_and_a_replay_never_uploads_again(self):
+        env = {"GITHUB_ACTIONS": "true", "GITHUB_REPOSITORY": "owner/repo", "RELEASE_TAG": "v1.4.1",
+               "PLUGIN_FILE": "test_any.py", "PLUGIN_ID": "test-plugin", "CLOUD_PLUGIN_ID": "cloud-id",
+               "ACTIONS_ID_TOKEN_REQUEST_URL": "https://example.invalid/?request=1",
+               "ACTIONS_ID_TOKEN_REQUEST_TOKEN": "test-placeholder", "GITHUB_RUN_ID": "123"}
+        content = b'# /// script\n# [tool.orcaslicer.plugin]\n# version = "1.4.1"\n# id = "test-plugin"\n# ///\n'
+        digest = "sha256:" + hashlib.sha256(content).hexdigest()
+        release = {"tagName": "v1.4.1", "isDraft": False, "body": "Unicode 日本語; filename=x", "assets": [
+            {"name": "test_any.py", "digest": digest}]}
+        receipt = {}
+
+        def cli(*args):
+            if args[:2] == ("release", "view"):
+                return json.dumps(release)
+            if args[0] == "api":
+                return json.dumps({"workflow_runs": [{"head_sha": "abc", "event": "push", "status": "completed", "conclusion": "success"}]}
+                                  if "workflow" in args[1] else {"sha": "abc"})
+            if args[:2] == ("release", "download"):
+                folder = Path(args[args.index("--dir") + 1])
+                name = args[args.index("--pattern") + 1]
+                (folder / name).write_bytes(content if name == "test_any.py" else json.dumps(receipt).encode())
+            if args[:2] == ("release", "upload"):
+                receipt.update(json.loads(Path(args[3]).read_text(encoding="utf8")))
+            return ""
+
+        with patch.dict(publisher.os.environ, env, clear=True), patch.object(publisher, "gh", side_effect=cli), \
+             patch.object(publisher, "request_json", side_effect=[{"value": "test-placeholder"}, {"id": "cloud-id", "version": "1.4.1"}]) as network, \
+             patch.object(publisher, "announce"):
+            publisher.main()
+            self.assertEqual(network.call_count, 2)
+            self.assertEqual(network.call_args.kwargs["expected_status"], 201)
+            self.assertEqual(receipt["sha256"], digest)
+            release["assets"].append({"name": publisher.RECEIPT})
+            network.reset_mock()
+            publisher.main()
+            network.assert_not_called()
+
+
+if __name__ == "__main__":
+    unittest.main()
