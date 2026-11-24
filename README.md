@@ -1,5 +1,7 @@
 <p align="center">
 
+**1.3.3: dez idiomas / ten languages.** Русский, Čeština e 简体中文 adicionados aos pacotes modulares offline. [Changelog em dez idiomas](CHANGELOG.md).
+
 **1.3.2: publicação automática / automatic publishing.** Publicar uma release no GitHub envia o pacote verificado ao OrcaCloud, após aprovação da CI. Corrigido o envio de notas com Unicode e ponto e vírgula. O fluxo usa credenciais temporárias e verifica o pacote publicado. / Publishing a GitHub release uploads the verified package to OrcaCloud after CI approval.
 
   <img src="assets/icon.jpg" alt="Orca Vase Studio" width="210" />
@@ -45,7 +47,7 @@ not been validated. See [controls and measured limitations](docs/RIBBON_FLATTENI
 Sete novos estilos de superfície: **losangos, escamas, crateras, pétalas dobradas,
 flor em espiral, anéis e coral**, com repetição, torção e intensidades
 independentes na base, meio e topo. Disponíveis na aba e no painel lateral,
-nos sete idiomas. Os quatro efeitos anteriores continuam combináveis.
+nos dez idiomas. Os quatro efeitos anteriores continuam combináveis.
 
 Folded Petals uses actual curled ribbons around a hollow cup, with width,
 thickness, curl, overlap, stretch and four quality levels. The other six
@@ -57,9 +59,9 @@ layer is disabled. See [usage, provenance and validation](docs/GEOMETRIC_PATTERN
 
 ## Version 1.2.0 · Idiomas e otimização
 
-The header now provides seven fully offline interface languages: **Português, English, Español, Italiano, Français, Deutsch and 日本語**. The host language is detected automatically; an explicit selection is saved and shared between the main tab and dock. Built-in preset descriptions, parameter names, warnings and export messages are translated. Personal names, printer profiles, filenames and manufacturing values are preserved. Unsupported system languages use English. Technical errors from the engine remain verbatim when there is no translated message.
+The header now provides ten fully offline interface languages: **Português, English, Español, Italiano, Français, Deutsch, 日本語, Русский, Čeština and 简体中文**. The host language is detected automatically; an explicit selection is saved and shared between the main tab and dock. Built-in preset descriptions, parameter names, warnings and export messages are translated. Personal names, printer profiles, filenames and manufacturing values are preserved. Unsupported system languages use English. Technical errors from the engine remain verbatim when there is no translated message.
 
-O cabeçalho agora oferece sete idiomas offline. A escolha é salva e sincronizada entre aba e painel; sem escolha manual, segue o idioma do OrcaSlicer. Os textos foram preparados com terminologia de impressão 3D e ainda aceitam revisão de falantes nativos. Os manuais completos continuam em PT/EN.
+O cabeçalho agora oferece dez idiomas offline. A escolha é salva e sincronizada entre aba e painel; sem escolha manual, segue o idioma do OrcaSlicer. Os textos foram preparados com terminologia de impressão 3D e ainda aceitam revisão de falantes nativos. Os manuais completos continuam em PT/EN.
 
 Each language is now an independent JSON file. Add one file under `src/vase_studio/locales/` and rebuild: both standalone installers and the wheel discover it automatically, with regional matching and English fallback. See [adding language packs / adicionar idiomas](docs/LANGUAGE_PACKS.md).
 

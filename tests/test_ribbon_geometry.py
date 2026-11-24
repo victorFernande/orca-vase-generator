@@ -160,7 +160,7 @@ class TestRibbonGeometry(unittest.TestCase):
     def test_three_distribution_formats_generate_ribbons_without_source_checkout(self):
         root = Path(__file__).resolve().parents[1]
         artifacts = [root / 'dist/orca_vase_generator.py', root / 'dist/orca_vase_generator_any.py',
-                     root / 'dist/orca_vase_generator-1.3.2-py3-none-any.whl']
+                     root / 'dist/orca_vase_generator-1.3.3-py3-none-any.whl']
         code = r'''
 import sys,importlib.util,zipfile
 from pathlib import Path
@@ -169,7 +169,7 @@ if p.suffix=='.whl':
  sys.path.insert(0,str(p))
  import vase_studio as api
  from vase_studio.studio_ui import get_studio_html
- assert api.__version__=='1.3.2'
+ assert api.__version__=='1.3.3'
  with zipfile.ZipFile(p) as z:
   notice=z.read('vase_studio/ribbon_geometry.py').decode()
   assert 'Copyright (c) 2026 Dante x' in notice and 'Permission is hereby granted' in notice

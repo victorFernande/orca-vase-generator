@@ -40,6 +40,7 @@ print(json.dumps({'packets':packets,'vocabulary':locale_vocabulary(),'locales':l
 `], {cwd:root,encoding:'utf8',maxBuffer:16*1024*1024});
 if (generate.status !== 0) throw Error(generate.stderr || generate.stdout);
 const generated = JSON.parse(generate.stdout);
+for(const code of ['ru','cs','zh'])assert(generated.locales.includes(code),'missing published language '+code);
 const report = {ok:false, locales:generated.locales, checks:[], dynamicDataOnly:[], consoleErrors:[], limitations:'Isolated Chromium; no native OrcaSlicer or native speaker certification.'};
 
 (async function() {
@@ -90,6 +91,7 @@ const report = {ok:false, locales:generated.locales, checks:[], dynamicDataOnly:
         assert.equal(action.params.name,JSON.parse(before).name);
         await page.evaluate(()=>window.__hostCallback({type:'action_result',ok:true,action:'export_file',message:'QA export'}));
         report.checks.push({mode:packet.mode,language:code,params_unchanged:true,personal_title_preserved:true,warning_numbers_preserved:true,export_request:true});
+        if(['ru','cs','zh'].includes(code))await page.screenshot({path:path.join(output,code+'-'+packet.mode+'.png')});
       }
       // A real number edit survives a locale switch, and Undo restores it.
       const height = page.locator('[data-slider="height_mm"] input[type="number"]');
